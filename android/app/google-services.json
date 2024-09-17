@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "543499541523",
+    "project_id": "agman-5ba42",
+    "storage_bucket": "agman-5ba42.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543499541523:android:dc61f2b8c253684ca6f3e6",
+        "android_client_info": {
+          "package_name": "com.example.agman"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_refT7z8ufO40geefyX-xU-G2SoaceEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
