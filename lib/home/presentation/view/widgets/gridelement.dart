@@ -5,8 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class Gridelement extends StatelessWidget {
   final String text;
   final String image;
+  final String true_false;
   void Function()? onTap;
-  Gridelement({super.key, required this.text, required this.image, this.onTap});
+  Gridelement(
+      {super.key,
+      required this.text,
+      required this.image,
+      this.onTap,
+      required this.true_false});
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -26,7 +32,7 @@ class Gridelement extends StatelessWidget {
                   fit: BoxFit.scaleDown,
                   child: Image.asset(
                     fit: BoxFit.scaleDown,
-                    "assets/images/newone.png",
+                    true_false,
                     width: MediaQuery.sizeOf(context).width <= 200
                         ? 10.w
                         : MediaQuery.sizeOf(context).width <= 700

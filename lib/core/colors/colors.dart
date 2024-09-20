@@ -6,13 +6,13 @@ abstract class appcolors {
   static const Color primarycolor = Color(0xffFF9700);
   static const Color dropcolor = Color(0xff535C91);
   static const Color drofpcolor = Color.fromARGB(255, 52, 61, 109);
-  static const Color maincolors = Color(0xff7F3DFF);
   static Color transcolors = Color(0xff0077FF);
   static Color lighttext = Color(0xff91919F);
   static Color lightgrey = Color(0xff91919F).withOpacity(0.2);
   static Color lightgrey2 = Color(0xff91919F).withOpacity(0.8);
   static Color textform = Color(0xffF1F1FA);
   static Color incomecolor = Color(0xff00A86B);
+  static Color injeccolor = Color(0xff00A86B);
   static Color expensecolor = Color(0xffFD3C4A);
   static Color lightyellow = Color(0xffFCEED4);
   static Color lightblue = Color(0xffDFDFDF);

@@ -63,6 +63,8 @@ dependencies:
   internet_connection_checker: ^2.0.0
   flutter_screenutil: ^5.9.3
   easy_localization: ^3.0.7
+  avatar_glow: ^3.0.1
+  dropdown_search: ^5.0.6
 
 
 

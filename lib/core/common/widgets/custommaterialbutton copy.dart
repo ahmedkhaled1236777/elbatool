@@ -22,7 +22,8 @@ class custommaterialbutton extends StatelessWidget {
     return Container(
       height: 56,
       decoration: BoxDecoration(
-          color: appcolors.maincolors, borderRadius: BorderRadius.circular(10)),
+          color: appcolors.primarycolor,
+          borderRadius: BorderRadius.circular(10)),
       child: MaterialButton(
         padding: EdgeInsets.symmetric(
             vertical: MediaQuery.of(context).size.width > 950 ? 20 : 15),

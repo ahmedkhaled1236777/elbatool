@@ -48,7 +48,7 @@ class _AppbarhomeState extends State<Appbarhome> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           CircleAvatar(
-            backgroundColor: appcolors.maincolors,
+            backgroundColor: appcolors.maincolor,
             radius: 36,
             child: CircleAvatar(
               backgroundColor: Colors.white,
@@ -98,7 +98,7 @@ class _AppbarhomeState extends State<Appbarhome> {
                     children: [
                       Icon(
                         Icons.calendar_month,
-                        color: appcolors.maincolors,
+                        color: appcolors.maincolor,
                       ),
                       SizedBox(
                         width: 4,
@@ -121,7 +121,7 @@ class _AppbarhomeState extends State<Appbarhome> {
               onPressed: () {},
               icon: Icon(
                 Icons.notifications,
-                color: appcolors.maincolors,
+                color: appcolors.maincolor,
               ))
         ],
       ),

@@ -11,7 +11,7 @@ class custommaterialbutton extends StatelessWidget {
   custommaterialbutton({
     super.key,
     this.onPressed,
-    this.color = appcolors.maincolors,
+    this.color = appcolors.maincolor,
     required this.button_name,
   });
 

@@ -37,7 +37,7 @@ class noaccount extends StatelessWidget {
                 style: TextStyle(
                     fontFamily: apptexts.appfonfamily,
                     fontSize: 13,
-                    color: appcolors.maincolors),
+                    color: appcolors.maincolor),
               )),
         ],
       ),
