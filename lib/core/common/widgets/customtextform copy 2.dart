@@ -15,6 +15,7 @@ class customtextform extends StatelessWidget {
   int? maxlines;
   bool? readonly;
   String? suffixtext;
+  Widget? prefixicon;
   void Function(String)? onChanged;
 
   List<TextInputFormatter>? inputFormatters;
@@ -27,6 +28,7 @@ class customtextform extends StatelessWidget {
       required this.hintText,
       this.obscureText = false,
       this.val,
+      this.prefixicon,
       this.suffixIcon});
 
   @override
@@ -54,6 +56,7 @@ class customtextform extends StatelessWidget {
           style: TextStyle(fontSize: 12.5),
           controller: controller,
           decoration: InputDecoration(
+              prefixIcon: this.prefixicon,
               contentPadding: EdgeInsets.all(18),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(13),

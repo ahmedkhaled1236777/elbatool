@@ -1,5 +1,5 @@
 import 'package:agman/core/colors/colors.dart';
-import 'package:agman/features/injection/models/productionmodel.dart';
+import 'package:agman/features/injection/data/models/productionmodel.dart';
 import 'package:flutter/material.dart';
 
 class Productionitem extends StatelessWidget {

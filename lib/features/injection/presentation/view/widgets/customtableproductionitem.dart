@@ -6,14 +6,13 @@ class customtableproductionsitem extends StatelessWidget {
   final String machinenumber;
   final String productname;
   final String productquantity;
-
+  final TextStyle textStyle;
   Widget delet;
-  TextStyle textStyle =
-      TextStyle(fontSize: 12, fontFamily: "cairo", color: appcolors.maincolor);
 
   customtableproductionsitem({
     super.key,
     required this.worker,
+    required this.textStyle,
     required this.machinenumber,
     required this.productname,
     required this.productquantity,

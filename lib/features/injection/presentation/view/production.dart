@@ -1,8 +1,9 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
+import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
-import 'package:agman/features/injection/models/productionmodel.dart';
+import 'package:agman/features/injection/data/models/productionmodel.dart';
 import 'package:agman/features/injection/presentation/view/addproduction.dart';
 import 'package:agman/features/injection/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/injection/presentation/view/widgets/customtableproductionitem.dart';
@@ -17,36 +18,8 @@ class production extends StatefulWidget {
 }
 
 class _productionState extends State<production> {
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
-
-  TextEditingController workername = TextEditingController();
-
-  TextEditingController machinenumber = TextEditingController();
-
-  TextEditingController cycletime = TextEditingController();
-
-  TextEditingController numberofpieces = TextEditingController();
-
-  TextEditingController workhours = TextEditingController();
-
-  TextEditingController counterstart = TextEditingController();
-
-  TextEditingController counterend = TextEditingController();
-
-  TextEditingController realprodcountity = TextEditingController();
-
-  TextEditingController expectedprod = TextEditingController();
-
-  TextEditingController scrapcountity = TextEditingController();
-
-  TextEditingController proddivision = TextEditingController();
-
-  TextEditingController machinestop = TextEditingController();
-  TextEditingController shift = TextEditingController();
-
   TextEditingController notes = TextEditingController(text: "لا يوجد");
 
-  String? x;
   final productionheader = [
     "رقم الماكينه",
     "اسم العامل",
@@ -128,6 +101,8 @@ class _productionState extends State<production> {
                   child: Row(
                       children: productionheader
                           .map((e) => customheadertable(
+                                textStyle:
+                                    Styles.getheadertextstyle(context: context),
                                 title: e,
                                 flex: e == "تحديد" ||
                                         e == "حذف" ||
@@ -186,6 +161,8 @@ class _productionState extends State<production> {
                                         });
                                   },
                                   child: customtableproductionsitem(
+                                      textStyle: Styles.gettabletextstyle(
+                                          context: context),
                                       worker: 'احمد',
                                       machinenumber: "2",
                                       productname: "دواسه",

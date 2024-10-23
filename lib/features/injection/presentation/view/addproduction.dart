@@ -22,8 +22,6 @@ class _addreportState extends State<addreport> {
 
   TextEditingController cycletime = TextEditingController();
 
-  TextEditingController numberofpieces = TextEditingController();
-
   TextEditingController workhours = TextEditingController();
 
   TextEditingController counterstart = TextEditingController();
@@ -32,14 +30,6 @@ class _addreportState extends State<addreport> {
 
   TextEditingController realprodcountity = TextEditingController();
 
-  TextEditingController expectedprod = TextEditingController();
-
-  TextEditingController scrapcountity = TextEditingController();
-
-  TextEditingController proddivision = TextEditingController();
-  TextEditingController storequantity = TextEditingController();
-
-  TextEditingController machinestop = TextEditingController();
   TextEditingController shift = TextEditingController();
 
   TextEditingController notes = TextEditingController(text: "لا يوجد");
@@ -188,14 +178,6 @@ class _addreportState extends State<addreport> {
                               height: 10,
                             ),
                             custommytextform(
-                                controller: numberofpieces,
-                                hintText: "عدد القطع",
-                                val: "برجاء ادخال عدد القطع",
-                                keyboardType: TextInputType.number),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
                                 controller: workhours,
                                 hintText: "عدد ساعات التشغيل",
                                 val: "برجاء ادخال عدد ساعات التشغيل",
@@ -216,104 +198,6 @@ class _addreportState extends State<addreport> {
                                 hintText: "نهاية العداد",
                                 val: "برجاء ادخال نهاية العداد",
                                 keyboardType: TextInputType.number),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                                onChanged: (val) {
-                                  if (val.isEmpty) {
-                                    expectedprod.clear();
-                                    scrapcountity.clear();
-                                    proddivision.clear();
-                                    machinestop.clear();
-                                  } else {
-                                    expectedprod.text =
-                                        ((double.parse(workhours.text) *
-                                                    60 *
-                                                    60 *
-                                                    double.parse(
-                                                        numberofpieces.text)) /
-                                                double.parse(cycletime.text))
-                                            .round()
-                                            .toString();
-                                    scrapcountity.text = (((double.parse(
-                                                        counterend.text) -
-                                                    double.parse(
-                                                        counterstart.text)) *
-                                                double.parse(
-                                                    numberofpieces.text)) -
-                                            double.parse(val))
-                                        .round()
-                                        .toString();
-                                    proddivision.text = (double.parse(
-                                                expectedprod.text) -
-                                            ((double.parse(counterend.text) -
-                                                    double.parse(
-                                                        counterstart.text)) *
-                                                double.parse(
-                                                    numberofpieces.text)))
-                                        .round()
-                                        .toString();
-                                    machinestop.text =
-                                        ((double.parse(proddivision.text) *
-                                                    int.parse(cycletime.text)) /
-                                                (60 *
-                                                    double.parse(
-                                                        numberofpieces.text)))
-                                            .round()
-                                            .toString();
-                                  }
-                                  setState(() {});
-                                },
-                                controller: realprodcountity,
-                                hintText: "كمية الانتاج الفعلي",
-                                val: "برجاء كمية الانتاج الفعلي",
-                                keyboardType: TextInputType.number),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                              keyboardType: TextInputType.number,
-                              controller: storequantity,
-                              hintText: "كمية الانتاج المسلمه للمخزن",
-                              val: "برجاء ادخال كمية الانتاج المسلمه للمخزن",
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                              readonly: true,
-                              controller: expectedprod,
-                              hintText: "كمية الانتاج المتوقع",
-                              val: "برجاء ادخال كمية الانتاج المتوقع",
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                              readonly: true,
-                              controller: scrapcountity,
-                              hintText: "كمية الهالك",
-                              val: "برجاء ادخال كمية الهالك",
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                              readonly: true,
-                              controller: proddivision,
-                              hintText: "الفاقد في الانتاج",
-                              val: "برجاء ادخال كمية الفقد في الانتاج",
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
-                              readonly: true,
-                              controller: machinestop,
-                              hintText: "وقت ايقاف الماكينه",
-                              val: "برجاء ادخال وقت ايقاف الماكينه",
-                            ),
                             const SizedBox(
                               height: 10,
                             ),

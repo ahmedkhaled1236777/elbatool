@@ -1,3 +1,3 @@
-abstract class apptexts{
-  static String appfonfamily="cairo";
+abstract class apptexts {
+  static String appfonfamily = "cairo";
 }

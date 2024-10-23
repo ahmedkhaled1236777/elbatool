@@ -42,7 +42,7 @@ class requestfailure extends failure {
         statuscode == 400 ||
         statuscode == 401 ||
         statuscode == 403) {
-      return requestfailure(error_message: respnse["message"]);
+      return requestfailure(error_message: respnse["data"][0]);
     } else if (statuscode == 404) {
       return requestfailure(error_message: "الصفحه غير موجوده");
     } else if (statuscode == 500)
@@ -50,6 +50,6 @@ class requestfailure extends failure {
       return requestfailure(error_message: "يوجد مشكله في السيرفر");
     else
       // ignore: curly_braces_in_flow_control_structures
-      return requestfailure(error_message: "برجاء المحاوله مرخ اخري");
+      return requestfailure(error_message: "برجاء المحاوله مره اخري");
   }
 }

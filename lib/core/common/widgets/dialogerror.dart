@@ -38,7 +38,9 @@ showdialogerror({required String error, required BuildContext context}) {
                         Text(
                           "! تنبيــــه",
                           style: const TextStyle(
-                              fontSize: 15, fontWeight: FontWeight.bold,fontFamily: "cairo"),
+                              fontSize: 15,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: "cairo"),
                           textAlign: TextAlign.center,
                         ),
                         SizedBox(
@@ -46,7 +48,8 @@ showdialogerror({required String error, required BuildContext context}) {
                         ),
                         Text(
                           error,
-                          style: const TextStyle(fontSize: 12,fontFamily: "cairo"),
+                          style: const TextStyle(
+                              fontSize: 12, fontFamily: "cairo"),
                           textAlign: TextAlign.center,
                         ),
                         const SizedBox(
@@ -85,8 +88,8 @@ showdialogerror({required String error, required BuildContext context}) {
                   child: CircleAvatar(
                     radius: 40,
                     backgroundColor: Colors.white,
-                    child:
-                        Lottie.asset(width: 78, height: 78, "assets/images/sasa.json"),
+                    child: Lottie.asset(
+                        width: 78, height: 78, "assets/images/sasa.json"),
                   ),
                   top: (MediaQuery.sizeOf(context).height - 125) / 2 - 70,
                 )

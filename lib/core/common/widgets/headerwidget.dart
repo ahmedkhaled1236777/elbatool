@@ -4,11 +4,12 @@ class customheadertable extends StatelessWidget {
   int flex;
   String? tabletormobile;
   final String title;
-   TextStyle textStyle=TextStyle(fontSize: 12,fontFamily: "cairo",color: Colors.white);
-  customheadertable(
-      {this.flex = 3,
-      required this.title,
-      this.tabletormobile,
+  final TextStyle textStyle;
+  customheadertable({
+    this.flex = 3,
+    required this.title,
+    this.tabletormobile,
+    required this.textStyle,
   });
   @override
   Widget build(BuildContext context) {

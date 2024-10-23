@@ -21,12 +21,15 @@ awsomdialogerror({
             alignment: Alignment.center,
             children: [
               AlertDialog(
-                insetPadding: EdgeInsets.only(left: 13,right: 12),
-                contentPadding: EdgeInsets.symmetric(horizontal: 0,vertical: 10),
+                insetPadding: EdgeInsets.only(left: 13, right: 12),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20)),
                 content: SizedBox(
-                  width:  MediaQuery.sizeOf(context).width>600?MediaQuery.sizeOf(context).width*0.25:MediaQuery.sizeOf(context).width,
+                  width: MediaQuery.sizeOf(context).width > 600
+                      ? MediaQuery.sizeOf(context).width * 0.25
+                      : MediaQuery.sizeOf(context).width,
                   height: 190,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -38,9 +41,9 @@ awsomdialogerror({
                       Text(
                         "! تنبيــــه",
                         style: const TextStyle(
-                                                                                        fontFamily: "cairo",
-
-                            fontSize: 15, fontWeight: FontWeight.bold),
+                            fontFamily: "cairo",
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
                         textAlign: TextAlign.center,
                       ),
                       SizedBox(
@@ -48,8 +51,10 @@ awsomdialogerror({
                       ),
                       Text(
                         tittle,
-                        style: const TextStyle(fontSize: 12           ,                                                   fontFamily: "cairo",
-),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontFamily: "cairo",
+                        ),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(
@@ -57,18 +62,14 @@ awsomdialogerror({
                       ),
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
-                        
                         child: Row(
-
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             SizedBox(
                               height: 50,
                               width: 100,
                               child: ElevatedButton(
-                                
-                                  style:  ButtonStyle(
-                                    
+                                  style: ButtonStyle(
                                     backgroundColor: MaterialStatePropertyAll(
                                         Color(0xffc21a15)),
                                   ),
@@ -78,9 +79,9 @@ awsomdialogerror({
                                   child: const Text(
                                     "الغاء",
                                     style: TextStyle(
-                                                                                                    fontFamily: "cairo",
-                              
-                                        fontSize: 12, color: Colors.white),
+                                        fontFamily: "cairo",
+                                        fontSize: 12,
+                                        color: Colors.white),
                                     textAlign: TextAlign.center,
                                   )),
                             ),
@@ -100,8 +101,8 @@ awsomdialogerror({
                 child: CircleAvatar(
                   radius: 40,
                   backgroundColor: Colors.white,
-                  child:
-                      Lottie.asset(width: 78, height: 78, "assets/images/sasa.json"),
+                  child: Lottie.asset(
+                      width: 78, height: 78, "assets/images/sasa.json"),
                 ),
               )
             ],

@@ -6,7 +6,7 @@ part 'date_state.dart';
 class DateCubit extends Cubit<DateState> {
   DateTime selectedDate = DateTime.now();
   String date1 =
-      '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
+      '${DateTime.now().year}-${DateTime.now().month < 10 ? "0${DateTime.now().month}" : DateTime.now().month}-${DateTime.now().day < 10 ? "0${DateTime.now().day}" : DateTime.now().day}';
   String date2 = "اختر التاريخ";
   String date7 = "اختر التاريخ";
   String date3 = "التاريخ من";
@@ -32,8 +32,8 @@ class DateCubit extends Cubit<DateState> {
 
     if (date != null) {
       selectedDate = date;
-      String month = date.month > 9 ? '${date.month}' : '${date.month}';
-      String day = date.day > 9 ? '${date.day}' : '${date.day}';
+      String month = date.month > 9 ? '${date.month}' : '0${date.month}';
+      String day = date.day > 9 ? '${date.day}' : '0${date.day}';
 
       date1 = '${date.year}-${month}-${day}';
     }
@@ -226,7 +226,7 @@ class DateCubit extends Cubit<DateState> {
 
   cleardates() {
     date1 =
-        '${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}';
+        '${DateTime.now().year}-${DateTime.now().month < 10 ? "0${DateTime.now().month}" : DateTime.now().month}-${DateTime.now().day < 10 ? "0${DateTime.now().day}" : DateTime.now().day}';
     date2 = "اختر التاريخ";
     date3 = "التاريخ من";
     date4 = "التاريخ الي";

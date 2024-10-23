@@ -114,11 +114,13 @@ class _AddgroupState extends State<Addgroup> {
                             if (state is AddGroupsFailure)
                               showtoast(
                                   message: state.error_message,
-                                  toaststate: Toaststate.error);
+                                  toaststate: Toaststate.error,
+                                  context: context);
                             if (state is AddGroupsSuccess) {
                               groupnumber.clear();
                               BlocProvider.of<GroupsCubit>(context).retsetdat();
                               showtoast(
+                                  context: context,
                                   message: state.success_message,
                                   toaststate: Toaststate.succes);
                             }
