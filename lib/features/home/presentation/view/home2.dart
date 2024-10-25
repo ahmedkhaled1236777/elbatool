@@ -7,6 +7,7 @@ import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/profile/profile.dart';
 import 'package:agman/features/components/presentation/views/components.dart';
 import 'package:agman/features/customers/presentation/view/customer.dart';
+import 'package:agman/features/users/presentation/views/widgets/employees.dart';
 import 'package:agman/features/injection/presentation/view/production.dart';
 import 'package:agman/features/home/presentation/view/widgets/gridelement.dart';
 import 'package:agman/features/materiales/presentation/views/material.dart';
@@ -50,9 +51,9 @@ class home2 extends StatelessWidget {
     },
     {
       "name": "المستخدمين",
-      "name-en": "usersش",
+      "name-en": "users",
       "image": "assets/images/team.png",
-      "page": Login()
+      "page": Employees()
     },
     {
       "name": "العملاء",
@@ -100,12 +101,6 @@ class home2 extends StatelessWidget {
       "name": "مخزن ادوات المصنع",
       "name-en": "stores",
       "image": "assets/images/wa.png",
-      "page": Login()
-    },
-    {
-      "name": "الحركه اليوميه",
-      "name-en": "daily",
-      "image": "assets/images/report.png",
       "page": Login()
     },
     {
@@ -164,7 +159,7 @@ class home2 extends StatelessWidget {
                   ),
                   Expanded(
                     child: Text(
-                      "احمد علام",
+                      cashhelper.getdata(key: "name"),
                       style: const TextStyle(
                         fontFamily: "cairo",
                         fontSize: 18,

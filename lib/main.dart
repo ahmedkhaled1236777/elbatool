@@ -5,31 +5,29 @@ import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
-import 'package:agman/features/customers/presentation/view/customer.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
-import 'package:agman/features/cvs/features/cvs.dart';
+import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
+import 'package:agman/features/users/presentation/viewmodel/addemployee/addemployee_cubit.dart';
+import 'package:agman/features/users/presentation/viewmodel/showemployeecuibt/employeecuibt.dart';
 import 'package:agman/features/materiales/data/repos/materialrepoimp.dart';
 import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
 import 'package:agman/features/molds/data/repos/moldrepoimp.dart';
 import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
-import 'package:agman/features/oldproj/group/data/repo/grouprepoimp.dart';
 
-import 'package:agman/features/oldproj/group/presentation/viewmodel/groups/groups_cubit.dart';
-import 'package:agman/features/oldproj/view/home.dart';
 import 'package:agman/features/orders/data/repos/orderrepoimp.dart';
 import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart';
 
-import 'package:agman/features/splash/splash.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 import 'package:agman/firebase_options.dart';
-import 'package:agman/features/home/presentation/view/home2.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 
@@ -37,7 +35,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Apiservice.initdio();
   await EasyLocalization.ensureInitialized();
-
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: DefaultSelectionStyle.defaultColor));
   await cashhelper.initcashhelper();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -64,6 +64,14 @@ class MyApp extends StatelessWidget {
         providers: [
           BlocProvider(
             create: (context) => DateCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                showemployeescuibt(employeerepo: emplyeerepoimplementaion()),
+          ),
+          BlocProvider(
+            create: (context) =>
+                AddemployeeCubit(addemployeerepo: emplyeerepoimplementaion()),
           ),
           BlocProvider(
             create: (context) => AuthCubit(Authrepoimp()),
@@ -96,7 +104,7 @@ class MyApp extends StatelessWidget {
             splitScreenMode: true,
             // Use builder only if you need to use library outside ScreenUtilInit context
             builder: (_, child) {
-              return MaterialApp(
+              return GetMaterialApp(
                 localizationsDelegates: context.localizationDelegates,
                 supportedLocales: context.supportedLocales,
                 locale: context.locale,
@@ -109,6 +117,6 @@ class MyApp extends StatelessWidget {
                 home: child,
               );
             },
-            child: home2()));
+            child: Login()));
   }
 }

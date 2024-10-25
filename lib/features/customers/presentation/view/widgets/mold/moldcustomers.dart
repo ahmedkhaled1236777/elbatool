@@ -32,8 +32,12 @@ class moldcustomers extends StatelessWidget {
                   .map((e) => customheadertable(
                         textStyle: Styles.getheadertextstyle(context: context),
                         title: e,
-                        flex:
-                            e == "تعديل" || e == "حذف" || e == "الجهه" ? 2 : 3,
+                        flex: e == "تعديل" ||
+                                e == "حذف" ||
+                                e == "الجهه" ||
+                                e == "تحديد"
+                            ? 2
+                            : 3,
                       ))
                   .toList()),
         ),
@@ -50,6 +54,10 @@ class moldcustomers extends StatelessWidget {
                             navigateto(
                                 context: context,
                                 page: Customerdesc(
+                                  checks:
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .moldchecks,
+                                  pagename: "mold",
                                   textStyle: Styles.gettabletextstyle(
                                       context: context),
                                   name: "MANUFACTURE",

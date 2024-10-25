@@ -10,12 +10,14 @@ class Customerusageitem extends StatelessWidget {
   final String pieceprice;
   final String total;
 
+  Widget estimate;
   Widget delet;
   final TextStyle textStyle;
 
   Customerusageitem({
     super.key,
     required this.type,
+    required this.estimate,
     required this.textStyle,
     required this.pieceprice,
     required this.desc,
@@ -75,6 +77,10 @@ class Customerusageitem extends StatelessWidget {
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),
+          Expanded(
+            flex: 2,
+            child: estimate,
+          ),
           Expanded(
             flex: 2,
             child: delet,

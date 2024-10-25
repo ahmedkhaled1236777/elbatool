@@ -24,7 +24,7 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold((failure) {
       emit(loginfailure(errormessage: failure.error_message));
     }, (success) {
-      cashhelper.setdata(key: "image", value: success.data!.image!);
+      cashhelper.setdata(key: "image", value: success.data!.image ?? "");
       cashhelper.setdata(key: "token", value: success.data!.token!);
       cashhelper.setdata(key: "name", value: success.data!.name!);
       cashhelper.setdata(key: "email", value: success.data!.email!);

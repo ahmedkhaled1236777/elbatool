@@ -19,12 +19,17 @@ class Customerdesc extends StatelessWidget {
   final String type;
   final String desc;
   final String name;
+  final String pagename;
+  List checks;
+
   final Widget page;
   final TextStyle textStyle;
 
   Customerdesc(
       {super.key,
       required this.quantity,
+      required this.checks,
+      required this.pagename,
       required this.textStyle,
       required this.name,
       required this.page,
@@ -40,6 +45,7 @@ class Customerdesc extends StatelessWidget {
     "الكميه",
     "سعر الوحده",
     "الاجمالي",
+    "تحديد",
     "حذف",
   ];
 
@@ -103,7 +109,9 @@ class Customerdesc extends StatelessWidget {
                             title: e,
                             textStyle:
                                 Styles.getheadertextstyle(context: context),
-                            flex: e == "تعديل" || e == "حذف" ? 2 : 3,
+                            flex: e == "تعديل" || e == "حذف" || e == "تحديد"
+                                ? 2
+                                : 3,
                           ))
                       .toList()),
             ),
@@ -135,21 +143,36 @@ class Customerdesc extends StatelessWidget {
                                           content: Customeritemdesc());
                                     });
                               },
-                              child: Customerusageitem(
-                                  textStyle: Styles.gettabletextstyle(
-                                      context: context),
-                                  date: "22/4/2024",
-                                  pieceprice: pieceprice,
-                                  type: type,
-                                  desc: desc,
-                                  quantity: quantity,
-                                  total: total,
-                                  delet: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        deleteicon,
-                                        color: Colors.red,
-                                      ))),
+                              child:
+                                  BlocBuilder<CustomersCubit, CustomersState>(
+                                builder: (context, state) {
+                                  return Customerusageitem(
+                                      estimate: Checkbox(
+                                          value: checks[i],
+                                          onChanged: (val) {
+                                            BlocProvider.of<CustomersCubit>(
+                                                    context)
+                                                .changechecbox(
+                                                    pagename: pagename,
+                                                    val: val!,
+                                                    index: i);
+                                          }),
+                                      textStyle: Styles.gettabletextstyle(
+                                          context: context),
+                                      date: "22/4/2024",
+                                      pieceprice: pieceprice,
+                                      type: type,
+                                      desc: desc,
+                                      quantity: quantity,
+                                      total: total,
+                                      delet: IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            deleteicon,
+                                            color: Colors.red,
+                                          )));
+                                },
+                              ),
                             ),
                         separatorBuilder: (context, i) => Divider(
                               color: Colors.grey,

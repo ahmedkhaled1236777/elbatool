@@ -6,5 +6,7 @@ abstract class urls {
   static const String raw_material_stores = "raw_material_stores";
   static const String stamps = "get-all-stamps";
   static const String addstamp = "stamps";
+  static const String adduser = "users";
+  static const String users = "users";
   static const String updateprofile = "auth/update-profile";
 }

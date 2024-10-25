@@ -9,3 +9,5 @@ class CustomersChangeType extends CustomersState {}
 class ChangeTypeState extends CustomersState {}
 
 class changepaymentState extends CustomersState {}
+
+class changechecboxstate extends CustomersState {}

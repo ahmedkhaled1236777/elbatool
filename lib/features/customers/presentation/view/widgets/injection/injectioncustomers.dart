@@ -31,8 +31,12 @@ class injectioncustomers extends StatelessWidget {
                   .map((e) => customheadertable(
                         textStyle: Styles.getheadertextstyle(context: context),
                         title: e,
-                        flex:
-                            e == "تعديل" || e == "حذف" || e == "الجهه" ? 2 : 3,
+                        flex: e == "تعديل" ||
+                                e == "حذف" ||
+                                e == "الجهه" ||
+                                e == "تحديد"
+                            ? 2
+                            : 3,
                       ))
                   .toList()),
         ),
@@ -49,6 +53,10 @@ class injectioncustomers extends StatelessWidget {
                             navigateto(
                                 context: context,
                                 page: Customerdesc(
+                                  checks:
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .injchecks,
+                                  pagename: "inj",
                                   textStyle: Styles.gettabletextstyle(
                                       context: context),
                                   name: "INJECTION",

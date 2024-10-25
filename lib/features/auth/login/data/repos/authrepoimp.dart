@@ -45,7 +45,7 @@ class Authrepoimp extends Authrepo {
     try {
       Response response = await Postdata.postdata(
           path: urls.logout, token: cashhelper.getdata(key: "token"));
-      if (response.statusCode == 200 && response.data["status"] == true) {
+      if (response.statusCode == 200 && response.data["status"] == 200) {
         return right("تم تسجيل الخروج");
       } else {
         if (response.data["data"] != null) {

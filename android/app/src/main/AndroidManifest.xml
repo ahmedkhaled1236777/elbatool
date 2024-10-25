@@ -3,7 +3,7 @@ package='com.example.agman'>
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <application
-        android:label="عجمان"
+        android:label="EL Senwar"
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon">
         <activity
