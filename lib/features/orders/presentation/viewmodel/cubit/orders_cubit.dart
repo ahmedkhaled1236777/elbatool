@@ -1,8 +1,9 @@
-import 'package:agman/features/orders/data/models/ordermodel/content.dart';
 import 'package:agman/features/orders/data/models/ordermodelrequest.dart';
+import 'package:agman/features/orders/data/models/ordermoves/datum.dart';
 import 'package:agman/features/orders/data/repos/orderrepoimp.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+
+import '../../../data/models/ordermodel/datum.dart';
 
 part 'orders_state.dart';
 
@@ -10,10 +11,28 @@ class OrdersCubit extends Cubit<OrdersState> {
   final orderrepoimp orderrepo;
   int page = 1;
   bool loading = false;
-  List<Content> data = [];
+  List<Datum> data = [];
+  List<Datummoves> datamoves = [];
+  List<String> orders = [];
+  Map<String, Map> orderid = {};
+  Map<String, String> ordermold = {};
+
   bool firstloading = false;
   Map<String, dynamic>? queryparms;
+  String ordername = "اختر الاوردر";
+
   OrdersCubit(this.orderrepo) : super(OrdersInitial());
+  changeorder(String value) {
+    ordername = value;
+    emit(changeorderstste());
+  }
+
+  resetorder() {
+    ordername = "اختر الاوردر";
+    ;
+    emit(changeorderstste());
+  }
+
   addorder({required Ordermodelrequest order}) async {
     emit(AddOrdersLoading());
     var result = await orderrepo.addorder(orderrequest: order);
@@ -24,36 +43,38 @@ class OrdersCubit extends Cubit<OrdersState> {
     });
   }
 
-  getorders({required int page}) async {
+  getorders() async {
     if (firstloading == false) emit(GetOrdersLoading());
-    this.page = 1;
-    var result = await orderrepo.getorders(page: page, queryparms: queryparms);
-    loading = true;
+    var result = await orderrepo.getorders(queryparms: queryparms);
     result.fold((failue) {
       emit(GetOrdersFailure(errormessage: failue.error_message));
     }, (success) {
-      if (success.data!.pagination!.links!.next == null) {
-        loading = false;
-      }
+      orders.clear();
       data.clear();
-      firstloading = true;
-      data.addAll(success.data!.content!);
+      success.data!.forEach((e) {
+        data.add(e);
+        orders.add(e.orderNum!);
+        ordermold.addAll({e.orderNum!: e.stampName!});
+        orderid.addAll({
+          e.orderNum!: {"id": e.id, "color": e.colorName, "mold": e.stampId}
+        });
+      });
       emit(GetOrdersSuccess(successmessage: ""));
     });
   }
 
-  getamoreorders() async {
-    page++;
-    var result = await orderrepo.getorders(page: page, queryparms: queryparms);
-    loading = true;
+  getordersmoves({required int id}) async {
+    emit(getordermovesloading());
+    var result = await orderrepo.getmoves(orderid: id);
     result.fold((failue) {
-      emit(GetOrdersFailure(errormessage: failue.error_message));
+      emit(getordermovesfailure(errormessage: failue.error_message));
     }, (success) {
-      if (success.data!.pagination!.links!.next == null) {
-        loading = false;
-      }
-      data.addAll(success.data!.content!);
-      emit(GetOrdersSuccess(successmessage: ""));
+      datamoves.clear();
+
+      success.data!.forEach((e) {
+        datamoves.add(e);
+      });
+      emit(getordermovessuccess(successmessage: ""));
     });
   }
 

@@ -16,9 +16,13 @@ abstract class Styles {
   static TextStyle textStyle13wdd = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,
-      fontSize: 3.3.sp.clamp(0, 3.3.sp));
+      fontFamily: "cairo",
+      fontSize: 3.6.sp.clamp(0, 3.6.sp));
   static TextStyle textStyle13wd = TextStyle(
-      color: Colors.white, fontWeight: FontWeight.bold, fontSize: 3.5.sp);
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 3.5.sp,
+      fontFamily: "cairo");
   static TextStyle textStyle14wm =
       TextStyle(color: Colors.white, fontWeight: FontWeight.w300, fontSize: 14);
   static TextStyle textStyle14wt = TextStyle(
@@ -38,9 +42,9 @@ abstract class Styles {
             .copyWith(fontSize: 3.3.sp, fontWeight: FontWeight.bold)
         : MediaQuery.of(context).size.width > 600
             ? Styles.textStyle12b
-                .copyWith(fontSize: 5.5.sp, fontWeight: FontWeight.bold)
+                .copyWith(fontSize: 6.sp, fontWeight: FontWeight.bold)
             : Styles.textStyle12b
-                .copyWith(fontSize: 9.8.sp, fontWeight: FontWeight.bold);
+                .copyWith(fontSize: 11.sp, fontWeight: FontWeight.bold);
   }
 
   static getheadertextstyle({required BuildContext context}) {
@@ -51,7 +55,7 @@ abstract class Styles {
             ? Styles.textStyle13wd
                 .copyWith(fontSize: 5.sp, fontWeight: FontWeight.bold)
             : Styles.textStyle13wd
-                .copyWith(fontSize: 10.sp, fontWeight: FontWeight.bold);
+                .copyWith(fontSize: 12.5.sp, fontWeight: FontWeight.bold);
   }
 
   static const TextStyle appbarstyle = TextStyle(

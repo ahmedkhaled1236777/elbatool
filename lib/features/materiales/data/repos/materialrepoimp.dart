@@ -18,11 +18,12 @@ class Materialrepoimp extends materialrepo {
           path: urls.raw_material_stores,
           token: cashhelper.getdata(key: "token"),
           data: material.tojson());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(response.data["message"]);
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -38,14 +39,15 @@ class Materialrepoimp extends materialrepo {
     try {
       Response response = await Getdata.getdata(
           token: cashhelper.getdata(key: "token"),
-          path: "raw_material_stores?page=${page}",
+          path: "materials",
           queryParameters: queryparms);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["status"] == true) {
         return right(Materialmodel.fromJson(response.data));
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -59,18 +61,20 @@ class Materialrepoimp extends materialrepo {
 
   @override
   Future<Either<failure, String>> deleteMaterial(
-      {required int Materialid}) async {
+      {required int Materialid, String? type}) async {
     try {
       Response response = await Deletedata.deletedata(
+        queryParameters: {"type": type},
         token: cashhelper.getdata(key: "token"),
-        path: "raw_material_stores/${Materialid}",
+        path: "materials/${Materialid}",
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right("تم حذف الاوردر بنجاح");
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -84,21 +88,22 @@ class Materialrepoimp extends materialrepo {
 
   @override
   Future<Either<failure, String>> editmaterial(
-      {required Materialmodelrequest material, required int id}) async {
+      {required double quantity, required int id, required String type}) async {
     try {
-      Response response = await Postdata.postdata(
-          path: "raw_material_stores/${id}",
+      Response response = await Putdata.putdata(
+          path: "materials/${id}",
           token: cashhelper.getdata(key: "token"),
-          data: {
-            "name": material.name,
-            "quantity": material.quantity,
-            "_method": material.type
+          queryParameters: {
+            "qty1": type == "pure" ? quantity : null,
+            "qt2": type == "kasr_elkasara" ? quantity : null,
+            "qt3": type == "el_mkhraz" ? quantity : null,
           });
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(response.data["message"]);
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }

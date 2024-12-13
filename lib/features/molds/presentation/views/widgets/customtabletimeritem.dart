@@ -5,6 +5,7 @@ class Customtablemolditem extends StatelessWidget {
   final String mold;
   final double time;
   final String weight;
+  final String numberofpieces;
 
   final Widget edit;
   final Widget delete;
@@ -17,6 +18,7 @@ class Customtablemolditem extends StatelessWidget {
       required this.time,
       required this.textStyle,
       required this.weight,
+      required this.numberofpieces,
       required this.edit,
       required this.delete});
 
@@ -33,6 +35,17 @@ class Customtablemolditem extends StatelessWidget {
             flex: 3,
             child: Text(
               mold,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            flex: 2,
+            child: Text(
+              numberofpieces,
               style: textStyle,
               textAlign: TextAlign.center,
             ),

@@ -1,6 +1,7 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 
 class addcomponent extends StatefulWidget {
@@ -25,7 +26,7 @@ class _addcomponentState extends State<addcomponent> {
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
               title: const Text(
-                "اضافة خامه",
+                "اضافة مكون",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "cairo",
@@ -66,6 +67,47 @@ class _addcomponentState extends State<addcomponent> {
                                 val: "برجاء ادخال اسم المكون",
                                 keyboardType: TextInputType.number),
                             const SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              color: Color(0xff535C91),
+                              child: Center(
+                                child: DropdownSearch<String>(
+                                  dropdownButtonProps:
+                                      DropdownButtonProps(color: Colors.white),
+                                  popupProps: PopupProps.menu(
+                                      showSelectedItems: true,
+                                      showSearchBox: true,
+                                      searchFieldProps: TextFieldProps()),
+                                  selectedItem: "اختر اللون",
+                                  items: [],
+                                  onChanged: (value) {},
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                          baseStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "cairo"),
+                                          textAlign: TextAlign.center,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            enabled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color(0xff535C91)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color(0xff535C91)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          )),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
                               height: 10,
                             ),
                             custommaterialbutton(

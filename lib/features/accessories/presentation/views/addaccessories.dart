@@ -1,7 +1,12 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/accessories/data/model/accessoriemodelrequest.dart';
+import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class addaccessories extends StatefulWidget {
   @override
@@ -12,6 +17,9 @@ class _addaccessoriesState extends State<addaccessories> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController accessoriesname = TextEditingController();
+  TextEditingController quantity = TextEditingController();
+  TextEditingController buymoney = TextEditingController();
+  TextEditingController sellmoney = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +33,7 @@ class _addaccessoriesState extends State<addaccessories> {
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
               title: const Text(
-                "اضافة خامه",
+                "اضافة اكسسوار",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "cairo",
@@ -61,16 +69,84 @@ class _addaccessoriesState extends State<addaccessories> {
                               height: 50,
                             ),
                             custommytextform(
-                                controller: accessoriesname,
-                                hintText: "اسم الخامه",
-                                val: "برجاء ادخال اسم الخامه",
+                              controller: accessoriesname,
+                              hintText: "اسم الاكسسوار",
+                              val: "برجاء ادخال اسم الاكسسوار",
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            custommytextform(
+                              controller: quantity,
+                              hintText: "الكميه",
+                              val: "برجاء ادخال الكميه",
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            custommytextform(
+                                controller: buymoney,
+                                hintText: "سعر الشراء",
+                                val: "برجاء ادخال سعر الشراء",
                                 keyboardType: TextInputType.number),
                             const SizedBox(
                               height: 10,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل الخامه",
-                              onPressed: () async {},
+                            custommytextform(
+                                controller: sellmoney,
+                                hintText: "ٍسعر البيع",
+                                val: "برجاء ادخال سعر البيع",
+                                keyboardType: TextInputType.number),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            BlocConsumer<plasticaccessoriesCubit,
+                                plasticaccessoriesState>(
+                              listener: (context, state) {
+                                if (state is addaccessoriefailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addaccessoriesuccess) {
+                                  quantity.clear();
+                                  accessoriesname.clear();
+                                  sellmoney.clear();
+                                  buymoney.clear();
+                                  BlocProvider.of<plasticaccessoriesCubit>(
+                                          context)
+                                      .getaccessories();
+
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is addaccessorieloading)
+                                  return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل اكسسوار",
+                                  onPressed: () async {
+                                    if (formkey.currentState!.validate())
+                                      BlocProvider.of<plasticaccessoriesCubit>(
+                                              context)
+                                          .addaccessorie(
+                                              accessorie:
+                                                  Accessoriemodelrequest(
+                                                      name:
+                                                          accessoriesname.text,
+                                                      quantity: int.parse(
+                                                          quantity.text),
+                                                      sellprice: double.parse(
+                                                          sellmoney.text),
+                                                      buyprice: double.parse(
+                                                          buymoney.text)));
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

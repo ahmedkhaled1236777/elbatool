@@ -4,6 +4,22 @@ abstract class OrdersState {}
 
 class OrdersInitial extends OrdersState {}
 
+class getordermovesloading extends OrdersState {}
+
+class getordermovessuccess extends OrdersState {
+  final String successmessage;
+
+  getordermovessuccess({required this.successmessage});
+}
+
+class getordermovesfailure extends OrdersState {
+  final String errormessage;
+
+  getordermovesfailure({required this.errormessage});
+}
+
+class changeorderstste extends OrdersState {}
+
 class AddOrdersLoading extends OrdersState {}
 
 class DeleteOrdersLoading extends OrdersState {}

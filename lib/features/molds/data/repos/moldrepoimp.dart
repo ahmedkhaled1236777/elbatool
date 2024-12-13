@@ -15,14 +15,15 @@ class Moldrepoimp extends moldrepo {
     try {
       Response response = await Getdata.getdata(
         token: cashhelper.getdata(key: "token"),
-        path: urls.stamps,
+        path: urls.modifiers,
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["status"] == true) {
         return right(Moldmodel.fromJson(response.data));
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -40,13 +41,14 @@ class Moldrepoimp extends moldrepo {
     try {
       Response response = await Postdata.postdata(
           token: cashhelper.getdata(key: "token"),
-          path: urls.addstamp,
+          path: urls.modifiers,
           data: mold.tojson());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(response.data["message"]);
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -61,14 +63,15 @@ class Moldrepoimp extends moldrepo {
     try {
       Response response = await Deletedata.deletedata(
         token: cashhelper.getdata(key: "token"),
-        path: "stamps/${moldid}",
+        path: "modifiers/${moldid}",
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right("تم حذف الاسطمبه بنجاح");
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
@@ -84,21 +87,21 @@ class Moldrepoimp extends moldrepo {
   Future<Either<failure, String>> editmold(
       {required Moldmodelrequest mold, required int id}) async {
     try {
-      Response response = await Postdata.postdata(
-          path: "stamps/${id}",
+      Response response = await Putdata.putdata(
+          path: "modifiers/${id}",
           token: cashhelper.getdata(key: "token"),
           data: {
             "name": mold.moldname,
-            "weight": mold.prodweight,
-            "_method": "PUT",
-            "pieces_quantity": mold.numberofpieces,
-            "period_time": mold.cycletime,
+            "weight_piece": mold.prodweight,
+            "numer_of_pieces": mold.numberofpieces.toString(),
+            "time_operation": mold.cycletime,
           });
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(response.data["message"]);
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }

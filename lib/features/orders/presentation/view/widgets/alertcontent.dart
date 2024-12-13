@@ -2,7 +2,6 @@ import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -56,7 +55,7 @@ class Alertinjectioncontent extends StatelessWidget {
                                   "id": ordernumber.text,
                                 };
                                 await BlocProvider.of<OrdersCubit>(context)
-                                    .getorders(page: 1);
+                                    .getorders();
                                 Navigator.pop(context);
                               },
                             )

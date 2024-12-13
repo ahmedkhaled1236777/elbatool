@@ -25,6 +25,21 @@ class Postdata {
   }
 }
 
+class Putdata {
+  static Future<Response> putdata(
+      {required String path,
+      String? token,
+      Object? data,
+      Map<String, dynamic>? queryParameters}) async {
+    var respnse = await Apiservice.dio.put(path,
+        data: data,
+        queryParameters: queryParameters,
+        options: Options(
+            headers: {"Accept": "application/json", "Authorization": token}));
+    return respnse;
+  }
+}
+
 // ignore: camel_case_types
 class Getdata {
   static Future<Response> getdata(
@@ -41,8 +56,11 @@ class Getdata {
 
 class Deletedata {
   static Future<Response> deletedata(
-      {required String path, String? token}) async {
+      {required String path,
+      String? token,
+      Map<String, dynamic>? queryParameters}) async {
     Response response = await Apiservice.dio.delete(path,
+        queryParameters: queryParameters,
         options: Options(
             headers: {"Accept": "application/json", "Authorization": token}));
     return response;

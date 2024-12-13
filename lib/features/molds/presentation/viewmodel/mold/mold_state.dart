@@ -4,6 +4,8 @@ abstract class MoldState {}
 
 class MoldInitial extends MoldState {}
 
+class changemoldstate extends MoldState {}
+
 class AddMoldLoading extends MoldState {}
 
 class AddMoldSuccess extends MoldState {

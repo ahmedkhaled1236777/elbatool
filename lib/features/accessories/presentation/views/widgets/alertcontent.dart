@@ -1,11 +1,13 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Alertaccessoriescontent extends StatelessWidget {
-  TextEditingController accessories = TextEditingController();
+  TextEditingController accessoriename = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class Alertaccessoriescontent extends StatelessWidget {
                               height: 15,
                             ),
                             custommytextform(
-                              controller: accessories,
+                              controller: accessoriename,
                               hintText: "اسم الاكسسوار",
                               keyboardType: TextInputType.number,
                             ),
@@ -46,7 +48,18 @@ class Alertaccessoriescontent extends StatelessWidget {
                               height: 20,
                             ),
                             custommaterialbutton(
-                                button_name: "بحث", onPressed: () async {})
+                                button_name: "بحث",
+                                onPressed: () async {
+                                  BlocProvider.of<plasticaccessoriesCubit>(
+                                          context)
+                                      .queryparms = {
+                                    "search": accessoriename.text,
+                                  };
+                                  await BlocProvider.of<
+                                          plasticaccessoriesCubit>(context)
+                                      .getaccessories();
+                                  Navigator.pop(context);
+                                })
                           ]))))
             ])));
   }

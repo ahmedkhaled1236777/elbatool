@@ -5,6 +5,7 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 import 'package:agman/features/components/presentation/views/addcomponent.dart';
 import 'package:agman/features/components/presentation/views/widgets/alertcontent.dart';
+import 'package:agman/features/components/presentation/views/widgets/componentitem.dart';
 import 'package:agman/features/components/presentation/views/widgets/customtablematerialitem.dart';
 import 'package:agman/features/components/presentation/views/widgets/editdialog.dart';
 import 'package:flutter/material.dart';
@@ -111,7 +112,11 @@ class _plasticcomponentState extends State<plasticcomponent> {
                         onRefresh: () async {},
                         child: ListView.separated(
                             itemBuilder: (context, i) => InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    navigateto(
+                                        context: context,
+                                        page: Componentitem());
+                                  },
                                   child: Customtablecomponentitem(
                                     textStyle: Styles.gettabletextstyle(
                                         context: context),

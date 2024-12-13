@@ -3,6 +3,7 @@ import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/toast/toast.dart';
+import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform%20copy%202.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
@@ -206,9 +207,11 @@ class _UpdateprofileState extends State<Updateprofile> {
                           toaststate: Toaststate.error);
                     }
                     if (state is updateprofilesuccess) {
-                      if (state.success.data!.image != null) {
+                      if (state.success.data!.img != null) {
                         cashhelper.setdata(
-                            key: "image", value: state.success.data!.image);
+                            key: "image",
+                            value:
+                                "${urls.imageurl}${state.success.data!.img}");
                       }
                       cashhelper.setdata(
                           key: "name", value: state.success.data!.name);

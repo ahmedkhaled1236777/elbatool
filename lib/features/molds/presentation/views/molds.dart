@@ -28,6 +28,7 @@ class _moldsState extends State<molds> {
 
   final moldsheader = [
     "اسم الاسطمبه",
+    "عدد القطع",
     "زمن الدوره",
     "وزن المنتج",
     "تعديل",
@@ -122,7 +123,10 @@ class _moldsState extends State<molds> {
                               textStyle:
                                   Styles.getheadertextstyle(context: context),
                               title: e,
-                              flex: e == "تعديل" || e == "حذف" ? 2 : 3,
+                              flex:
+                                  e == "تعديل" || e == "حذف" || e == "عدد القطع"
+                                      ? 2
+                                      : 3,
                             ))
                         .toList()),
               ),
@@ -148,6 +152,10 @@ class _moldsState extends State<molds> {
                           itemBuilder: (context, i) => InkWell(
                                 onTap: () {},
                                 child: Customtablemolditem(
+                                    numberofpieces:
+                                        BlocProvider.of<MoldCubit>(context)
+                                            .molds[i]
+                                            .numerOfPieces!,
                                     textStyle: Styles.gettabletextstyle(
                                         context: context),
                                     edit: IconButton(
@@ -178,6 +186,13 @@ class _moldsState extends State<molds> {
                                                   insetPadding:
                                                       EdgeInsets.all(35),
                                                   content: editmolddialog(
+                                                      numer_of_pieces:
+                                                          TextEditingController(
+                                                              text: BlocProvider
+                                                                      .of<MoldCubit>(
+                                                                          context)
+                                                                  .molds[i]
+                                                                  .numerOfPieces),
                                                       id: BlocProvider.of<
                                                                   MoldCubit>(
                                                               context)
@@ -195,7 +210,7 @@ class _moldsState extends State<molds> {
                                                                     MoldCubit>(
                                                                 context)
                                                             .molds[i]
-                                                            .periodTime
+                                                            .timeOperation
                                                             .toString(),
                                                       ),
                                                       weight:
@@ -204,7 +219,7 @@ class _moldsState extends State<molds> {
                                                                     MoldCubit>(
                                                                 context)
                                                             .molds[i]
-                                                            .weight
+                                                            .weightPiece
                                                             .toString(),
                                                       )),
                                                 );
@@ -216,11 +231,11 @@ class _moldsState extends State<molds> {
                                         .name!,
                                     time: BlocProvider.of<MoldCubit>(context)
                                         .molds[i]
-                                        .periodTime!
+                                        .timeOperation!
                                         .toDouble(),
                                     weight: BlocProvider.of<MoldCubit>(context)
                                         .molds[i]
-                                        .weight
+                                        .weightPiece
                                         .toString(),
                                     delete: IconButton(
                                         onPressed: () {

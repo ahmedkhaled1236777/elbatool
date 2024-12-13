@@ -7,6 +7,8 @@ import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/profile/profile.dart';
 import 'package:agman/features/components/presentation/views/components.dart';
 import 'package:agman/features/customers/presentation/view/customer.dart';
+import 'package:agman/features/factorytools/presentation/views/factorytools.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/users/presentation/views/widgets/employees.dart';
 import 'package:agman/features/injection/presentation/view/production.dart';
 import 'package:agman/features/home/presentation/view/widgets/gridelement.dart';
@@ -33,15 +35,15 @@ class home2 extends StatelessWidget {
     },
     {
       "name": "اوردرات الحقن",
-      "name-en": "injection_orders",
+      "name-en": "injections_order",
       "image": "assets/images/manifest.png",
       "page": Orders()
     },
     {
       "name": "تصنيع الاسطمبات",
-      "name-en": "stampsش",
+      "name-en": "stamp_manufacturing",
       "image": "assets/images/tooling.png",
-      "page": molds()
+      "page": moldmanufacture()
     },
     {
       "name": "الموظفين",
@@ -87,21 +89,21 @@ class home2 extends StatelessWidget {
     },
     {
       "name": "مخزن الاكسسوارات",
-      "name-en": "money_boxش",
+      "name-en": "accessories_store",
       "image": "assets/images/image_0901.png",
       "page": accessories()
     },
     {
       "name": "مخزن المكونات",
-      "name-en": "stores",
+      "name-en": "components_store",
       "image": "assets/images/plastic-houhold.png",
       "page": plasticcomponent()
     },
     {
       "name": "مخزن ادوات المصنع",
-      "name-en": "stores",
+      "name-en": "warehouse",
       "image": "assets/images/wa.png",
-      "page": Login()
+      "page": Factorytools()
     },
     {
       "name": "الاعدادات",

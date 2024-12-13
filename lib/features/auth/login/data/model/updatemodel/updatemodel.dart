@@ -3,14 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'data.dart';
 
 class Updatemodel extends Equatable {
-  final int? status;
+  final bool? status;
   final String? message;
   final Data? data;
 
   const Updatemodel({this.status, this.message, this.data});
 
   factory Updatemodel.fromJson(Map<String, dynamic> json) => Updatemodel(
-        status: json['status'] as int?,
+        status: json['status'] as bool?,
         message: json['message'] as String?,
         data: json['data'] == null
             ? null

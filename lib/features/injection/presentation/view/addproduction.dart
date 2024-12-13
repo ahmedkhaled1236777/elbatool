@@ -1,9 +1,16 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/navigation.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/core/common/widgets/dialogerror.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/injection/data/models/productionmodel.dart';
+import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
+import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
+import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -19,8 +26,6 @@ class _addreportState extends State<addreport> {
   TextEditingController workername = TextEditingController();
 
   TextEditingController machinenumber = TextEditingController();
-
-  TextEditingController cycletime = TextEditingController();
 
   TextEditingController workhours = TextEditingController();
 
@@ -101,38 +106,50 @@ class _addreportState extends State<addreport> {
                             Container(
                               color: Color(0xff535C91),
                               child: Center(
-                                child: DropdownSearch<String>(
-                                  dropdownButtonProps:
-                                      DropdownButtonProps(color: Colors.white),
-                                  popupProps: PopupProps.menu(
-                                      showSelectedItems: true,
-                                      showSearchBox: true,
-                                      searchFieldProps: TextFieldProps()),
-                                  selectedItem: "اختر الاوردر",
-                                  items: [],
-                                  onChanged: (value) {},
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                          baseStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "cairo"),
-                                          textAlign: TextAlign.center,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            enabled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          )),
+                                child: BlocBuilder<OrdersCubit, OrdersState>(
+                                  builder: (context, state) {
+                                    return DropdownSearch<String>(
+                                      dropdownButtonProps: DropdownButtonProps(
+                                          color: Colors.white),
+                                      popupProps: PopupProps.menu(
+                                          showSelectedItems: true,
+                                          showSearchBox: true,
+                                          searchFieldProps: TextFieldProps()),
+                                      selectedItem:
+                                          BlocProvider.of<OrdersCubit>(context)
+                                              .ordername,
+                                      items:
+                                          BlocProvider.of<OrdersCubit>(context)
+                                              .orders,
+                                      onChanged: (value) {
+                                        BlocProvider.of<OrdersCubit>(context)
+                                            .changeorder(value!);
+                                      },
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                              baseStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "cairo"),
+                                              textAlign: TextAlign.center,
+                                              dropdownSearchDecoration:
+                                                  InputDecoration(
+                                                enabled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                    );
+                                  },
                                 ),
                               ),
                             ),
@@ -170,14 +187,6 @@ class _addreportState extends State<addreport> {
                               height: 10,
                             ),
                             custommytextform(
-                                controller: cycletime,
-                                hintText: "زمن الدوره",
-                                val: "برجاء ادخال زمن الدوره",
-                                keyboardType: TextInputType.number),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
                                 controller: workhours,
                                 hintText: "عدد ساعات التشغيل",
                                 val: "برجاء ادخال عدد ساعات التشغيل",
@@ -202,13 +211,134 @@ class _addreportState extends State<addreport> {
                               height: 10,
                             ),
                             custommytextform(
+                                controller: realprodcountity,
+                                hintText: "كمية الانتاج الفعلي",
+                                val: "برجاء ادخال كمية الانتاج الفعلي",
+                                keyboardType: TextInputType.number),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            custommytextform(
                                 controller: notes, hintText: "الملاحظات"),
                             const SizedBox(
                               height: 20,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل التقرير",
-                              onPressed: () async {},
+                            BlocConsumer<InjectionCubit, InjectionState>(
+                              listener: (context, state) {
+                                if (state is addinjectionfailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addinjectionsuccess) {
+                                  workername.clear();
+                                  workhours.clear();
+                                  counterend.clear();
+                                  counterstart.clear();
+                                  shift.clear();
+                                  realprodcountity.clear();
+                                  machinenumber.clear();
+                                  BlocProvider.of<OrdersCubit>(context)
+                                      .resetorder();
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                                // TODO: implement listener
+                              },
+                              builder: (context, state) {
+                                if (state is addinjectionloading)
+                                  return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل التقرير",
+                                  onPressed: () async {
+                                    if (formkey.currentState!.validate()) {
+                                      num expectedprod = ((double.parse(workhours.text) *
+                                                  60 *
+                                                  60 *
+                                                  int.parse(BlocProvider.of<MoldCubit>(context)
+                                                      .moldid[BlocProvider.of<OrdersCubit>(context).ordermold[BlocProvider.of<OrdersCubit>(context).ordername]]![
+                                                          "numberofpieces"]
+                                                      .toString())) /
+                                              num.parse(BlocProvider.of<MoldCubit>(context)
+                                                  .moldid[BlocProvider.of<OrdersCubit>(context).ordermold[
+                                                      BlocProvider.of<OrdersCubit>(context)
+                                                          .ordername]]!["cycletime"]
+                                                  .toString()))
+                                          .round();
+                                      num scrapcountity = (((int.parse(
+                                                      counterend.text) -
+                                                  int.parse(
+                                                      counterstart.text))) *
+                                              int.parse(BlocProvider.of<MoldCubit>(context)
+                                                  .moldid[BlocProvider.of<OrdersCubit>(context)
+                                                          .ordermold[
+                                                      BlocProvider.of<OrdersCubit>(
+                                                              context)
+                                                          .ordername]]!["numberofpieces"]
+                                                  .toString())) -
+                                          int.parse(realprodcountity.text).round();
+
+                                      num proddivision = expectedprod -
+                                          ((double.parse(counterend.text) -
+                                                      double.parse(
+                                                          counterstart.text)) *
+                                                  double.parse(BlocProvider.of<
+                                                          MoldCubit>(context)
+                                                      .moldid[BlocProvider.of<OrdersCubit>(context)
+                                                              .ordermold[
+                                                          BlocProvider.of<OrdersCubit>(
+                                                                  context)
+                                                              .ordername]]!["numberofpieces"]
+                                                      .toString()))
+                                              .round();
+
+                                      num machinestop = (double.parse(
+                                                  proddivision.toString()) *
+                                              double.parse(BlocProvider.of<MoldCubit>(context)
+                                                  .moldid[BlocProvider.of<OrdersCubit>(context)
+                                                      .ordermold[BlocProvider.of<
+                                                          OrdersCubit>(context)
+                                                      .ordername]]!["cycletime"]
+                                                  .toString())) /
+                                          (60 * double.parse(BlocProvider.of<MoldCubit>(context).moldid[BlocProvider.of<OrdersCubit>(context).ordermold[BlocProvider.of<OrdersCubit>(context).ordername]]!["numberofpieces"].toString()))
+                                              .round();
+                                      {
+                                        BlocProvider.of<InjectionCubit>(context).addoroduction(
+                                            production: productionmodel(
+                                                date: BlocProvider.of<DateCubit>(context)
+                                                    .date1,
+                                                ordernuber:
+                                                    BlocProvider.of<OrdersCubit>(context).orderid[
+                                                        BlocProvider.of<OrdersCubit>(context)
+                                                            .ordername]!["id"],
+                                                workername: workername.text,
+                                                color: BlocProvider.of<OrdersCubit>(context)
+                                                        .orderid[
+                                                    BlocProvider.of<OrdersCubit>(context)
+                                                        .ordername]!["color"],
+                                                machinenumber:
+                                                    int.parse(machinenumber.text),
+                                                shift: int.parse(shift.text),
+                                                prodname: BlocProvider.of<OrdersCubit>(context).orderid[BlocProvider.of<OrdersCubit>(context).ordername]!["mold"],
+                                                cycletime: num.parse(BlocProvider.of<MoldCubit>(context).moldid[BlocProvider.of<OrdersCubit>(context).ordermold[BlocProvider.of<OrdersCubit>(context).ordername]]!["cycletime"].toString()),
+                                                numberofpieces: int.parse(BlocProvider.of<MoldCubit>(context).moldid[BlocProvider.of<OrdersCubit>(context).ordermold[BlocProvider.of<OrdersCubit>(context).ordername]]!["numberofpieces"].toString()),
+                                                workhours: num.parse(workhours.text),
+                                                counterstart: int.parse(counterstart.text),
+                                                counterend: int.parse(counterend.text),
+                                                realprodcountity: int.parse(realprodcountity.text),
+                                                expectedprod: expectedprod,
+                                                scrapcountity: scrapcountity,
+                                                proddivision: proddivision,
+                                                machinestop: int.parse(machinestop.ceil().toString()),
+                                                notes: notes.text));
+                                      }
+                                    }
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

@@ -1,26 +1,26 @@
 import 'package:equatable/equatable.dart';
 
-import 'data.dart';
+import 'datum.dart';
 
 class Ordermodel extends Equatable {
-  final int? status;
+  final bool? status;
   final String? message;
-  final Data? data;
+  final List<Datum>? data;
 
   const Ordermodel({this.status, this.message, this.data});
 
   factory Ordermodel.fromJson(Map<String, dynamic> json) => Ordermodel(
-        status: json['status'] as int?,
+        status: json['status'] as bool?,
         message: json['message'] as String?,
-        data: json['data'] == null
-            ? null
-            : Data.fromJson(json['data'] as Map<String, dynamic>),
+        data: (json['data'] as List<dynamic>?)
+            ?.map((e) => Datum.fromJson(e as Map<String, dynamic>))
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
         'status': status,
         'message': message,
-        'data': data?.toJson(),
+        'data': data?.map((e) => e.toJson()).toList(),
       };
 
   @override

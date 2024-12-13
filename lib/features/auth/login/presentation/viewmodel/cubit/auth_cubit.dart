@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
+import 'package:agman/core/common/urls.dart';
 import 'package:agman/features/auth/login/data/model/loginrequest.dart';
 import 'package:agman/features/auth/login/data/model/updatemodel/updatemodel.dart';
 import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
@@ -24,11 +25,15 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold((failure) {
       emit(loginfailure(errormessage: failure.error_message));
     }, (success) {
-      cashhelper.setdata(key: "image", value: success.data!.image ?? "");
-      cashhelper.setdata(key: "token", value: success.data!.token!);
-      cashhelper.setdata(key: "name", value: success.data!.name!);
-      cashhelper.setdata(key: "email", value: success.data!.email!);
-      cashhelper.setdata(key: "phone", value: success.data!.phone!);
+      cashhelper.setdata(key: "token", value: "Bearer ${success.data!.token!}");
+      cashhelper.setdata(key: "name", value: success.data!.name ?? "");
+      cashhelper.setdata(
+          key: "image",
+          value: success.data!.img == null
+              ? "${urls.imageurl}${success.data!.img}"
+              : "");
+      cashhelper.setdata(key: "email", value: success.data!.email ?? "");
+      cashhelper.setdata(key: "phone", value: success.data!.phone ?? "");
       cashhelper.setdata(key: "permessions", value: success.data!.permissions!);
       emit(loginsuccess(successmessage: "تم تسجيل الدخول بنجاح"));
     });

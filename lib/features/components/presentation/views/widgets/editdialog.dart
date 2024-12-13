@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Editcomponentdialog extends StatelessWidget {
   TextEditingController componentquantity = TextEditingController();
+  TextEditingController notes = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -29,9 +30,17 @@ class Editcomponentdialog extends StatelessWidget {
             height: 10,
           ),
           custommytextform(
+            val: "برجاء ادخال الكميه",
             controller: componentquantity,
             hintText: "كمية المكون",
             suffixtext: "قطعه",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          custommytextform(
+            controller: notes,
+            hintText: "الملاحظات",
           ),
           SizedBox(
             height: 15,

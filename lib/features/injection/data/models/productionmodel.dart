@@ -1,33 +1,33 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class productionmodel {
   final String date;
   final String workername;
-  final String machinenumber;
-  final String prodname;
-  final String cycletime;
-  final String numberofpieces;
-  final String workhours;
-  final String counterstart;
-  final String counterend;
-  final String realprodcountity;
-  final String expectedprod;
-  final String scrapcountity;
-  final String proddivision;
-  final String machinestop;
+  final int machinenumber;
+  final num prodname;
+  final num cycletime;
+  final int numberofpieces;
+  final num workhours;
+  final num counterstart;
+  final num counterend;
+  final int realprodcountity;
+  final num expectedprod;
+  final num scrapcountity;
+  final num proddivision;
+  final num machinestop;
   final String notes;
-  final String shift;
-  final String docid;
-  String? storequantity;
-  String? ordernuber;
-  String? color;
+  final num shift;
+  final int ordernuber;
+  final String color;
+  String? stampname;
+  String? ordernumber;
+  int? id;
   productionmodel(
       {required this.date,
-      this.ordernuber,
-      this.color,
-      this.storequantity,
+      this.stampname,
+      this.ordernumber,
+      this.id,
+      required this.ordernuber,
       required this.workername,
-      required this.docid,
+      required this.color,
       required this.machinenumber,
       required this.shift,
       required this.prodname,
@@ -45,48 +45,46 @@ class productionmodel {
 
   tojson() => {
         "date": date,
-        "shift": shift,
-        "workername": workername,
-        "storequantity": storequantity,
-        "machinenumber": machinenumber,
-        "prodname": prodname,
-        "cycletime": cycletime,
-        "numberofpieces": numberofpieces,
-        "workhours": workhours,
-        "counterstart": counterstart,
-        "counterend": counterend,
-        "realprodcountity": realprodcountity,
-        "expectedprod": expectedprod,
-        "scrapcountity": scrapcountity,
-        "proddivision": proddivision,
-        "machinestop": machinestop,
+        "number_of_shift": shift,
+        "worker": workername,
+        "number_of_machine": machinenumber,
+        "stamp_id": prodname,
+        "period_time": cycletime,
+        "number_of_pieces": numberofpieces,
+        "number_of_operating_hours": workhours,
+        "time_start": counterstart,
+        "time_end": counterend,
+        "qty_actual": realprodcountity,
+        "qty_expected": expectedprod,
+        "qty_missing": proddivision,
+        "qty_dilapidated": scrapcountity,
+        "time_stop_machine": machinestop,
         "notes": notes,
-        "docid": docid,
-        "ordernuber": ordernuber,
+        "order_id": ordernuber,
         "color": color,
-        "timestamp": FieldValue.serverTimestamp()
       };
   factory productionmodel.fromjson(var data, {String? dta, String? color}) {
     return productionmodel(
         date: data["date"],
-        docid: data["docid"],
-        shift: data["shift"],
-        storequantity: data["storequantity"],
-        ordernuber: dta,
-        color: color,
-        workername: data["workername"],
-        machinenumber: data["machinenumber"],
-        prodname: data["prodname"],
-        cycletime: data["cycletime"],
-        numberofpieces: data["numberofpieces"],
-        workhours: data["workhours"],
-        counterstart: data["counterstart"],
-        counterend: data["counterend"],
-        realprodcountity: data["realprodcountity"],
-        expectedprod: data["expectedprod"],
-        scrapcountity: data["scrapcountity"],
-        proddivision: data["proddivision"],
-        machinestop: data["machinestop"],
+        workername: data["worker"],
+        shift: data["number_of_shift"],
+        ordernuber: data["order_id"],
+        color: data["color"],
+        ordernumber: data["order_num"],
+        stampname: data["stamp_name"],
+        machinenumber: data["number_of_machine"],
+        prodname: data["stamp_id"],
+        cycletime: data["period_time"],
+        numberofpieces: data["number_of_pieces"],
+        workhours: data["number_of_operating_hours"],
+        counterstart: data["time_start"],
+        counterend: data["time_end"],
+        realprodcountity: data["qty_actual"],
+        expectedprod: data["qty_expected"],
+        scrapcountity: data["qty_dilapidated"],
+        proddivision: data["qty_missing"],
+        id: data["id"],
+        machinestop: data["time_stop_machine"],
         notes: data["notes"]);
   }
 }

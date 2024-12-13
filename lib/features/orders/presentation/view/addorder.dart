@@ -5,6 +5,8 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
+import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
 import 'package:agman/features/orders/data/models/ordermodelrequest.dart';
 import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -102,9 +104,15 @@ class _AddorderState extends State<Addorder> {
                                       showSelectedItems: true,
                                       showSearchBox: true,
                                       searchFieldProps: TextFieldProps()),
-                                  selectedItem: "اختر الاسطمبه",
-                                  items: [],
-                                  onChanged: (value) {},
+                                  selectedItem:
+                                      BlocProvider.of<MoldCubit>(context)
+                                          .moldname,
+                                  items: BlocProvider.of<MoldCubit>(context)
+                                      .mymold,
+                                  onChanged: (value) {
+                                    BlocProvider.of<MoldCubit>(context)
+                                        .changemold(value!);
+                                  },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
                                           baseStyle: TextStyle(
@@ -143,9 +151,18 @@ class _AddorderState extends State<Addorder> {
                                       showSelectedItems: true,
                                       showSearchBox: true,
                                       searchFieldProps: TextFieldProps()),
-                                  selectedItem: "اختر الخامه",
-                                  items: [],
-                                  onChanged: (value) {},
+                                  selectedItem:
+                                      BlocProvider.of<plasticMaterialCubit>(
+                                              context)
+                                          .materialname,
+                                  items: BlocProvider.of<plasticMaterialCubit>(
+                                          context)
+                                      .materialsnames,
+                                  onChanged: (value) {
+                                    BlocProvider.of<plasticMaterialCubit>(
+                                            context)
+                                        .changematerialtype(value: value!);
+                                  },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
                                           baseStyle: TextStyle(
@@ -229,9 +246,18 @@ class _AddorderState extends State<Addorder> {
                                       showSelectedItems: true,
                                       showSearchBox: true,
                                       searchFieldProps: TextFieldProps()),
-                                  selectedItem: "اختر اللون",
-                                  items: [],
-                                  onChanged: (value) {},
+                                  selectedItem:
+                                      BlocProvider.of<plasticMaterialCubit>(
+                                              context)
+                                          .colorname,
+                                  items: BlocProvider.of<plasticMaterialCubit>(
+                                          context)
+                                      .colorsnames,
+                                  onChanged: (value) {
+                                    BlocProvider.of<plasticMaterialCubit>(
+                                            context)
+                                        .changecolorname(value!);
+                                  },
                                   dropdownDecoratorProps:
                                       DropDownDecoratorProps(
                                           baseStyle: TextStyle(
@@ -262,8 +288,8 @@ class _AddorderState extends State<Addorder> {
                             ),
                             custommytextform(
                               controller: colorper,
-                              hintText: "نسبة الماستر باتش",
-                              val: "برجاء ادخال نسبة الماستر باتش ",
+                              hintText: "كمية الماستر باتش",
+                              val: "برجاء ادخال كمية الماستر باتش ",
                             ),
                             SizedBox(
                               height: 10,
@@ -285,12 +311,13 @@ class _AddorderState extends State<Addorder> {
                                   quantity.clear();
                                   colorper.clear();
 
-                                  purematerial =
-                                      TextEditingController(text: "0");
-                                  break_crusher_quantity =
-                                      TextEditingController(text: "0");
-                                  broken_awl_quantity =
-                                      TextEditingController(text: "0");
+                                  purematerial.clear();
+                                  break_crusher_quantity.clear();
+                                  broken_awl_quantity.clear();
+                                  BlocProvider.of<plasticMaterialCubit>(context)
+                                      .resetdata();
+                                  BlocProvider.of<OrdersCubit>(context)
+                                      .getorders();
                                   showtoast(
                                       message: state.successmessage,
                                       toaststate: Toaststate.succes,
@@ -309,25 +336,47 @@ class _AddorderState extends State<Addorder> {
                                   button_name: "تسجيل التقرير",
                                   onPressed: () async {
                                     if (formkey.currentState!.validate()) {
-                                      BlocProvider.of<OrdersCubit>(context)
-                                          .addorder(
-                                              order: Ordermodelrequest(
-                                                  date: BlocProvider.of<
-                                                          DateCubit>(context)
-                                                      .date1,
-                                                  quantituy: quantity.text,
-                                                  color: "اسود",
-                                                  colorquantity: "10",
-                                                  stampid: "1",
-                                                  materialid: "1",
-                                                  purequantity:
-                                                      purematerial.text,
-                                                  break_crusher_quantity:
-                                                      break_crusher_quantity
-                                                          .text,
-                                                  broken_awl_quantity:
-                                                      broken_awl_quantity
-                                                          .text));
+                                      print(
+                                          "pppppppppppppppppppppppppppppppppppppp");
+                                      print(BlocProvider.of<
+                                                  plasticMaterialCubit>(context)
+                                              .colorid[
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .colorname]);
+                                      print(BlocProvider.of<MoldCubit>(context)
+                                              .moldid[
+                                          BlocProvider.of<MoldCubit>(context)
+                                              .moldname]);
+                                      print(
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialid);
+                                      print(BlocProvider.of<
+                                                  plasticMaterialCubit>(context)
+                                              .materialid[
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialname]);
+                                      BlocProvider.of<OrdersCubit>(context).addorder(
+                                          order: Ordermodelrequest(
+                                              date: BlocProvider.of<DateCubit>(context)
+                                                  .date1,
+                                              orderquantity: quantity.text,
+                                              color: BlocProvider.of<plasticMaterialCubit>(context)
+                                                      .colorid[
+                                                  BlocProvider.of<plasticMaterialCubit>(context)
+                                                      .colorname]!,
+                                              colorquantity: colorper.text,
+                                              stampid: BlocProvider.of<MoldCubit>(context).moldid[
+                                                  BlocProvider.of<MoldCubit>(context)
+                                                      .moldname]!["id"],
+                                              materialid:
+                                                  BlocProvider.of<plasticMaterialCubit>(context)
+                                                      .materialid[BlocProvider.of<plasticMaterialCubit>(context).materialname]!,
+                                              quantituy1: purematerial.text,
+                                              quantituy2: break_crusher_quantity.text,
+                                              quantituy3: broken_awl_quantity.text));
                                     }
                                   },
                                 );

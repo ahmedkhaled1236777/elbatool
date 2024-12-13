@@ -47,7 +47,7 @@ class Customtablewalletitem extends StatelessWidget {
             width: 3,
           ),
           Expanded(
-              flex: 2,
+              flex: 3,
               child: Text(
                 salary,
                 style: textStyle,

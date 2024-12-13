@@ -5,18 +5,18 @@ class customtableinjectionshallitem extends StatelessWidget {
   final String date;
   final String name;
   final String quantaity;
+  final String ordernumber;
   final bool status;
 
   Widget delet;
-  Widget edit;
   final TextStyle textStyle;
   customtableinjectionshallitem({
     super.key,
     required this.status,
     required this.date,
     required this.textStyle,
-    required this.edit,
     required this.name,
+    required this.ordernumber,
     required this.quantaity,
     required this.delet,
   });
@@ -47,6 +47,13 @@ class customtableinjectionshallitem extends StatelessWidget {
           Expanded(
               flex: 3,
               child: Text(
+                ordernumber,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
+          Expanded(
+              flex: 3,
+              child: Text(
                 quantaity,
                 style: textStyle,
                 textAlign: TextAlign.center,
@@ -57,10 +64,6 @@ class customtableinjectionshallitem extends StatelessWidget {
                 radius: 5,
                 backgroundColor: status ? Colors.black : Colors.green,
               )),
-          Expanded(
-            flex: 2,
-            child: edit,
-          ),
           Expanded(
             flex: 2,
             child: delet,

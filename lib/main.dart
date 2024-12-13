@@ -2,10 +2,29 @@ import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/localdata.dart';
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/services/apiservice.dart';
+import 'package:agman/features/accessories/data/repos/accessorierepoimp.dart';
+import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
+import 'package:agman/features/accessories/presentation/views/accessories.dart';
 import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
+import 'package:agman/features/components/presentation/viewmodel/cubit/component_cubit.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/features/home/presentation/view/home2.dart';
+import 'package:agman/features/injection/data/repo/injectiomrepoimp.dart';
+import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
+import 'package:agman/features/moldmanufacture/data/repo/moldmanufacturerepoimp.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/accessoriescost/data/repos/accessoriecostrepoimp.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/accessoriescost/presentation/viewmodel/cubit/accessoriecost_cubit.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/firstcost/data/repos/intialcostrepoimp.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/viewmodel/cubit/intialcost_cubit.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/industerialcost/data/repos/industerialcostrepoimp.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/industerialcost/presentation/viewmodel/cubit/industerialcostcuibt.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/machinecost/data/repos/machinerepoimp.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/machinecost/presentation/viewmodel/cubit/induxterialcost_cubit.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
+import 'package:agman/features/moldmanufacture/presentation/viewmodel/costcuibt/costcuibt.dart';
+import 'package:agman/features/oldproj/view/home.dart';
 import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
 import 'package:agman/features/users/presentation/viewmodel/addemployee/addemployee_cubit.dart';
 import 'package:agman/features/users/presentation/viewmodel/showemployeecuibt/employeecuibt.dart';
@@ -71,16 +90,44 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) =>
+                IntialcostCubit(intialcostrepoimp: Intialcostrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => InjectionCubit(Injectiomrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => IndusterialcostCubit(
+                industerialcostrepoimp: Industerialcostrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => accessoriecostCubit(
+                accessoriecostrepo: Accessoriecostrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) =>
                 AddemployeeCubit(addemployeerepo: emplyeerepoimplementaion()),
           ),
           BlocProvider(
             create: (context) => AuthCubit(Authrepoimp()),
           ),
           BlocProvider(
+            create: (context) => InduxterialcostCubit(Machinerepoimp()),
+          ),
+          BlocProvider(
             create: (context) => OrdersCubit(orderrepoimp()),
           ),
           BlocProvider(
+            create: (context) => plasticcomponentCubit(),
+          ),
+          BlocProvider(
+            create: (context) =>
+                plasticaccessoriesCubit(accessorierepoimp: Accessorierepoimp()),
+          ),
+          BlocProvider(
             create: (context) => MoldCubit(Moldrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => Costcuibt(Moldmanufacturerepoimp()),
           ),
           BlocProvider(
             create: (context) => plasticMaterialCubit(Materialrepoimp()),
@@ -117,6 +164,7 @@ class MyApp extends StatelessWidget {
                 home: child,
               );
             },
-            child: Login()));
+            child:
+                cashhelper.getdata(key: "token") == null ? Login() : home2()));
   }
 }

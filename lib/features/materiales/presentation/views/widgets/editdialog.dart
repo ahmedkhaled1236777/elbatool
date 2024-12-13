@@ -11,13 +11,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Editmaterialdialog extends StatelessWidget {
   final TextEditingController materialquantity;
-  final TextEditingController materialname;
   final int id;
-
+  final String type;
   const Editmaterialdialog(
       {super.key,
+      required this.type,
       required this.materialquantity,
-      required this.materialname,
       required this.id});
   @override
   Widget build(BuildContext context) {
@@ -26,22 +25,6 @@ class Editmaterialdialog extends StatelessWidget {
         children: [
           SizedBox(
             height: 20,
-          ),
-          BlocBuilder<plasticMaterialCubit, plasticMaterialState>(
-            builder: (context, state) {
-              return radios(
-                  firstradio: "PUT",
-                  secondradio: "DELETE",
-                  firstradiotitle: "اضافه",
-                  secondradiotitle: "سحب");
-            },
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          custommytextform(controller: materialname, hintText: "اسم الخامه"),
-          SizedBox(
-            height: 10,
           ),
           custommytextform(
               controller: materialquantity, hintText: "كمية الخامه"),
@@ -68,11 +51,8 @@ class Editmaterialdialog extends StatelessWidget {
                 button_name: "تسجيل",
                 onPressed: () {
                   BlocProvider.of<plasticMaterialCubit>(context).updatematerial(
-                      material: Materialmodelrequest(
-                          name: materialname.text,
-                          quantity: double.parse(materialquantity.text),
-                          type: BlocProvider.of<plasticMaterialCubit>(context)
-                              .type),
+                      type: type,
+                      quantity: double.parse(materialquantity.text),
                       id: id);
                 },
               );

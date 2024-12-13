@@ -3,8 +3,12 @@ import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/view/customgridimages.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/view/pickedimage.dart';
+import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/viewmodel/cubit/intialcost_cubit.dart';
 import 'package:agman/features/molds/data/models/moldmodelrequest.dart';
 import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -91,6 +95,34 @@ class Addmold extends StatelessWidget {
                           hintText: "(جرام) وزن القطعه ",
                         ),
                         SizedBox(
+                          height: 10,
+                        ),
+                        BlocBuilder<IntialcostCubit, IntialcostState>(
+                          builder: (context, state) {
+                            return Column(
+                              children: [
+                                pickedimage(),
+                                const SizedBox(
+                                  height: 10,
+                                ),
+                                if (BlocProvider.of<IntialcostCubit>(context)
+                                        .image !=
+                                    null)
+                                  customgridimages(),
+                                if (BlocProvider.of<IntialcostCubit>(context)
+                                        .image !=
+                                    null)
+                                  const SizedBox(
+                                    height: 10,
+                                  ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                        SizedBox(
                           height: 20,
                         ),
                         BlocConsumer<MoldCubit, MoldState>(
@@ -106,6 +138,8 @@ class Addmold extends StatelessWidget {
                               weight.clear();
                               numberofpieces.clear();
                               secondsperpiece.clear();
+                              BlocProvider.of<IntialcostCubit>(context)
+                                  .resetimage();
                               BlocProvider.of<MoldCubit>(context).getmolds();
                               showtoast(
                                   message: state.successmessage,
@@ -118,14 +152,29 @@ class Addmold extends StatelessWidget {
                             return custommaterialbutton(
                               button_name: "تسجيل",
                               onPressed: () async {
-                                await BlocProvider.of<MoldCubit>(context)
-                                    .addmold(
-                                        mold: Moldmodelrequest(
-                                            numberofpieces:
-                                                int.parse(numberofpieces.text),
-                                            prodweight: weight.text,
-                                            cycletime: secondsperpiece.text,
-                                            moldname: moldname.text));
+                                await BlocProvider.of<MoldCubit>(context).addmold(
+                                    mold: Moldmodelrequest(
+                                        image: BlocProvider.of<IntialcostCubit>(context)
+                                                    .image !=
+                                                null
+                                            ? await MultipartFile.fromFile(
+                                                BlocProvider.of<IntialcostCubit>(
+                                                        context)
+                                                    .image!
+                                                    .path,
+                                                filename:
+                                                    BlocProvider.of<IntialcostCubit>(
+                                                            context)
+                                                        .image!
+                                                        .path
+                                                        .split("/")
+                                                        .last)
+                                            : null,
+                                        numberofpieces:
+                                            int.parse(numberofpieces.text),
+                                        prodweight: weight.text,
+                                        cycletime: secondsperpiece.text,
+                                        moldname: moldname.text));
                               },
                             );
                           },

@@ -12,6 +12,7 @@ class editmolddialog extends StatelessWidget {
   final TextEditingController moldname;
   final TextEditingController weight;
   final TextEditingController cycletime;
+  final TextEditingController numer_of_pieces;
   final int id;
 
   const editmolddialog(
@@ -19,6 +20,7 @@ class editmolddialog extends StatelessWidget {
       required this.moldname,
       required this.weight,
       required this.cycletime,
+      required this.numer_of_pieces,
       required this.id});
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,14 @@ class editmolddialog extends StatelessWidget {
             controller: moldname,
             hintText: "اسم الاسطمبه",
             val: "لابد من ادخال اسم الاسطمبه",
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          custommytextform(
+            controller: numer_of_pieces,
+            hintText: "عدد القطع",
+            val: "لابد من ادخال عدد القطع",
           ),
           SizedBox(
             height: 10,
@@ -73,7 +83,7 @@ class editmolddialog extends StatelessWidget {
                   BlocProvider.of<MoldCubit>(context).updatemold(
                       mold: Moldmodelrequest(
                           moldname: moldname.text,
-                          numberofpieces: 5,
+                          numberofpieces: int.parse(numer_of_pieces.text),
                           cycletime: cycletime.text,
                           prodweight: weight.text),
                       id: id);

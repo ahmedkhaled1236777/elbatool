@@ -110,9 +110,9 @@ class Login extends StatelessWidget {
                             onPressed: () {
                               BlocProvider.of<AuthCubit>(context).login(
                                   login: loginrequest(
-                                      password: password.text,
-                                      email: email.text,
-                                      token: "token"));
+                                password: password.text,
+                                email: email.text,
+                              ));
                             },
                             button_name: "تسجيل الدخول");
                       },

@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class radios extends StatelessWidget {
-  final String firstradio;
-  final String secondradio;
+  final int firstradio;
+  final int secondradio;
   final String firstradiotitle;
   final String secondradiotitle;
   radios(

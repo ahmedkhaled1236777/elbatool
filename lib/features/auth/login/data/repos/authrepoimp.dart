@@ -23,7 +23,6 @@ class Authrepoimp extends Authrepo {
 
       if (response.statusCode == 200) {
         loginModel = Loginmodel.fromJson(response.data);
-        print("dddddddddddddddddddddddddddddddddddddddddd");
 
         return right(loginModel);
       } else if (response.statusCode == 200 && response.data["code"] == 422) {
@@ -45,7 +44,7 @@ class Authrepoimp extends Authrepo {
     try {
       Response response = await Postdata.postdata(
           path: urls.logout, token: cashhelper.getdata(key: "token"));
-      if (response.statusCode == 200 && response.data["status"] == 200) {
+      if (response.statusCode == 200 && response.data["status"] == true) {
         return right("تم تسجيل الخروج");
       } else {
         if (response.data["data"] != null) {
@@ -78,14 +77,14 @@ class Authrepoimp extends Authrepo {
         "password": newpass,
         "password_confirmation": newpass,
         if (photo != null)
-          "image": await MultipartFile.fromFile(photo.path,
+          "img": await MultipartFile.fromFile(photo.path,
               filename: photo.path.split("/").last)
       });
-      Response response = await Postdata.postdata(
+      Response response = await Putdata.putdata(
           path: urls.updateprofile,
           token: cashhelper.getdata(key: "token"),
           data: data);
-      if (response.statusCode == 200 && response.data["status"] == 200) {
+      if (response.statusCode == 200 && response.data["status"] == true) {
         return right(Updatemodel.fromJson(response.data));
       } else {
         if (response.data["data"] != null) {

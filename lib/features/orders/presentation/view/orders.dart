@@ -4,7 +4,6 @@ import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/toast/toast.dart';
-import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
@@ -13,6 +12,7 @@ import 'package:agman/core/common/widgets/showdialogerror.dart';
 import 'package:agman/features/orders/presentation/view/addorder.dart';
 import 'package:agman/features/orders/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/orders/presentation/view/widgets/customtableproductionitem.dart';
+import 'package:agman/features/orders/presentation/view/widgets/ordermoves.dart';
 import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,22 +26,16 @@ class _OrdersState extends State<Orders> {
   final injectionheader = [
     "التاريخ",
     "اسم\nالمنتج",
+    "رقم\nالاوردر",
     "الكميه",
     "حالة\nالاوردر",
-    "تعديل",
     "حذف",
   ];
   ScrollController scrollController = ScrollController();
 
   getdata() async {
     BlocProvider.of<OrdersCubit>(context).queryparms = null;
-    BlocProvider.of<OrdersCubit>(context).getorders(page: 1);
-    scrollController.addListener(() async {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        await BlocProvider.of<OrdersCubit>(context).getamoreorders();
-      }
-    });
+    BlocProvider.of<OrdersCubit>(context).getorders();
   }
 
   @override
@@ -64,8 +58,7 @@ class _OrdersState extends State<Orders> {
                       BlocProvider.of<OrdersCubit>(context).firstloading =
                           false;
                       BlocProvider.of<OrdersCubit>(context).queryparms = null;
-                      await BlocProvider.of<OrdersCubit>(context)
-                          .getorders(page: 1);
+                      await BlocProvider.of<OrdersCubit>(context).getorders();
                     },
                     icon: Icon(
                       Icons.refresh,
@@ -152,132 +145,148 @@ class _OrdersState extends State<Orders> {
                   else {
                     return ListView.separated(
                         controller: scrollController,
-                        itemBuilder: (context, i) => i >=
-                                BlocProvider.of<OrdersCubit>(context)
-                                    .data
-                                    .length
-                            ? loading()
-                            : InkWell(
-                                onTap: () {},
-                                child: customtableinjectionshallitem(
-                                    textStyle: Styles.gettabletextstyle(
-                                        context: context),
-                                    edit: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(editeicon)),
-                                    status:
-                                        BlocProvider.of<OrdersCubit>(context)
-                                                    .data[i]
-                                                    .isConfirmed ==
-                                                0
-                                            ? false
-                                            : true,
-                                    date: BlocProvider.of<OrdersCubit>(context)
-                                        .data[i]
-                                        .orderDate!,
-                                    name: BlocProvider.of<OrdersCubit>(context)
-                                        .data[i]
-                                        .stamp!,
-                                    quantaity:
-                                        BlocProvider.of<OrdersCubit>(context)
+                        itemBuilder: (context, i) => InkWell(
+                              onTap: () {
+                                navigateto(
+                                    context: context,
+                                    page: ordermoves(
+                                        orderquantity:
+                                            BlocProvider.of<OrdersCubit>(
+                                                    context)
+                                                .data[i]
+                                                .qtyOrder!,
+                                        actualquantity:
+                                            BlocProvider.of<OrdersCubit>(
+                                                    context)
+                                                .data[i]
+                                                .qtyImplemented!
+                                                .toString(),
+                                        stampname: BlocProvider.of<OrdersCubit>(
+                                                context)
                                             .data[i]
-                                            .quantity
-                                            .toString(),
-                                    delet: IconButton(
-                                        onPressed: () {
-                                          awsomdialogerror(
-                                              context: context,
-                                              mywidget: BlocConsumer<
-                                                  OrdersCubit, OrdersState>(
-                                                listener: (context, state) {
-                                                  if (state
-                                                      is DeleteOrderSuccess) {
-                                                    Navigator.pop(context);
+                                            .stampName!,
+                                        orderid: BlocProvider.of<OrdersCubit>(
+                                                context)
+                                            .data[i]
+                                            .id!,
+                                        ordernumber:
+                                            BlocProvider.of<OrdersCubit>(
+                                                    context)
+                                                .data[i]
+                                                .orderNum!));
+                              },
+                              child: customtableinjectionshallitem(
+                                  ordernumber:
+                                      BlocProvider.of<OrdersCubit>(context)
+                                              .data[i]
+                                              .orderNum ??
+                                          "",
+                                  textStyle: Styles.gettabletextstyle(
+                                      context: context),
+                                  status: int.parse(
+                                              BlocProvider.of<OrdersCubit>(context)
+                                                  .data[i]
+                                                  .qtyOrder!) >
+                                          BlocProvider.of<OrdersCubit>(context)
+                                              .data[i]
+                                              .qtyImplemented!
+                                      ? false
+                                      : true,
+                                  date: BlocProvider.of<OrdersCubit>(context)
+                                          .data[i]
+                                          .date ??
+                                      "",
+                                  name:
+                                      "${BlocProvider.of<OrdersCubit>(context).data[i].stampName}-${BlocProvider.of<OrdersCubit>(context).data[i].colorName}",
+                                  quantaity:
+                                      BlocProvider.of<OrdersCubit>(context)
+                                          .data[i]
+                                          .qtyOrder
+                                          .toString(),
+                                  delet: IconButton(
+                                      onPressed: () {
+                                        awsomdialogerror(
+                                            context: context,
+                                            mywidget: BlocConsumer<OrdersCubit,
+                                                OrdersState>(
+                                              listener: (context, state) {
+                                                if (state
+                                                    is DeleteOrderSuccess) {
+                                                  Navigator.pop(context);
 
-                                                    showtoast(
-                                                        message: state
-                                                            .successmessage,
-                                                        toaststate:
-                                                            Toaststate.succes,
-                                                        context: context);
-                                                  }
-                                                  if (state
-                                                      is DeleteOrdersFailure) {
-                                                    Navigator.pop(context);
+                                                  showtoast(
+                                                      message:
+                                                          state.successmessage,
+                                                      toaststate:
+                                                          Toaststate.succes,
+                                                      context: context);
+                                                }
+                                                if (state
+                                                    is DeleteOrdersFailure) {
+                                                  Navigator.pop(context);
 
-                                                    showtoast(
-                                                        message:
-                                                            state.errormessage,
-                                                        toaststate:
-                                                            Toaststate.error,
-                                                        context: context);
-                                                  }
-                                                },
-                                                builder: (context, state) {
-                                                  if (state
-                                                      is DeleteOrdersLoading)
-                                                    return deleteloading();
-                                                  return SizedBox(
-                                                    height: 50,
-                                                    width: 100,
-                                                    child: ElevatedButton(
-                                                        style:
-                                                            const ButtonStyle(
-                                                          backgroundColor:
-                                                              MaterialStatePropertyAll(
-                                                                  Color
-                                                                      .fromARGB(
-                                                                          255,
-                                                                          37,
-                                                                          163,
-                                                                          42)),
-                                                        ),
-                                                        onPressed: () async {
-                                                          await BlocProvider.of<
-                                                                      OrdersCubit>(
-                                                                  context)
-                                                              .deleteorder(
-                                                                  orderid: BlocProvider.of<
-                                                                              OrdersCubit>(
-                                                                          context)
-                                                                      .data[i]
-                                                                      .id!);
-                                                        },
-                                                        child: const Text(
-                                                          "تاكيد",
-                                                          style: TextStyle(
-                                                              fontSize: 12,
-                                                              fontFamily:
-                                                                  "cairo",
-                                                              color:
-                                                                  Colors.white),
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                        )),
-                                                  );
-                                                },
-                                              ),
-                                              tittle:
-                                                  "هل تريد حذف الاوردر رقم ${BlocProvider.of<OrdersCubit>(context).data[i].orderNumber}");
-                                        },
-                                        icon: Icon(
-                                          deleteicon,
-                                          color: Colors.red,
-                                        ))),
-                              ),
+                                                  showtoast(
+                                                      message:
+                                                          state.errormessage,
+                                                      toaststate:
+                                                          Toaststate.error,
+                                                      context: context);
+                                                }
+                                              },
+                                              builder: (context, state) {
+                                                if (state
+                                                    is DeleteOrdersLoading)
+                                                  return deleteloading();
+                                                return SizedBox(
+                                                  height: 50,
+                                                  width: 100,
+                                                  child: ElevatedButton(
+                                                      style: const ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStatePropertyAll(
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    37,
+                                                                    163,
+                                                                    42)),
+                                                      ),
+                                                      onPressed: () async {
+                                                        await BlocProvider.of<
+                                                                    OrdersCubit>(
+                                                                context)
+                                                            .deleteorder(
+                                                                orderid: BlocProvider.of<
+                                                                            OrdersCubit>(
+                                                                        context)
+                                                                    .data[i]
+                                                                    .id!);
+                                                      },
+                                                      child: const Text(
+                                                        "تاكيد",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily: "cairo",
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      )),
+                                                );
+                                              },
+                                            ),
+                                            tittle:
+                                                "هل تريد حذف الاوردر رقم ${BlocProvider.of<OrdersCubit>(context).data[i].orderNum}");
+                                      },
+                                      icon: Icon(
+                                        deleteicon,
+                                        color: Colors.red,
+                                      ))),
+                            ),
                         separatorBuilder: (context, i) => Divider(
                               color: Colors.grey,
                             ),
                         itemCount:
-                            BlocProvider.of<OrdersCubit>(context).loading ==
-                                    true
-                                ? BlocProvider.of<OrdersCubit>(context)
-                                        .data
-                                        .length +
-                                    1
-                                : BlocProvider.of<OrdersCubit>(context)
-                                    .data
-                                    .length);
+                            BlocProvider.of<OrdersCubit>(context).data.length);
                   }
                 }
               })),

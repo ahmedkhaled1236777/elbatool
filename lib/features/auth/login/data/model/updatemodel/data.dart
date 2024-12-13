@@ -2,63 +2,67 @@ import 'package:equatable/equatable.dart';
 
 class Data extends Equatable {
   final int? id;
-  final String? image;
   final String? name;
-  final String? factory;
+  final dynamic img;
   final String? email;
-  final String? phone;
-  final int? isAdmin;
-  final List<String>? permissions;
-  final String? token;
+  final dynamic phone;
+  final dynamic jobTitle;
+  final dynamic emailVerifiedAt;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
 
   const Data({
     this.id,
-    this.image,
     this.name,
-    this.factory,
+    this.img,
     this.email,
     this.phone,
-    this.isAdmin,
-    this.permissions,
-    this.token,
+    this.jobTitle,
+    this.emailVerifiedAt,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
         id: json['id'] as int?,
-        image: json['image'] as String?,
         name: json['name'] as String?,
-        factory: json['factory'] as String?,
+        img: json['img'] as dynamic,
         email: json['email'] as String?,
-        phone: json['phone'] as String?,
-        isAdmin: json['is_admin'] as int?,
-        permissions: List<String>.from(json['permissions'] ?? []),
-        token: json['token'] as String?,
+        phone: json['phone'] as dynamic,
+        jobTitle: json['job_title'] as dynamic,
+        emailVerifiedAt: json['email_verified_at'] as dynamic,
+        createdAt: json['created_at'] == null
+            ? null
+            : DateTime.parse(json['created_at'] as String),
+        updatedAt: json['updated_at'] == null
+            ? null
+            : DateTime.parse(json['updated_at'] as String),
       );
 
   Map<String, dynamic> toJson() => {
         'id': id,
-        'image': image,
         'name': name,
-        'factory': factory,
+        'img': img,
         'email': email,
         'phone': phone,
-        'is_admin': isAdmin,
-        'permissions': permissions,
-        'token': token,
+        'job_title': jobTitle,
+        'email_verified_at': emailVerifiedAt,
+        'created_at': createdAt?.toIso8601String(),
+        'updated_at': updatedAt?.toIso8601String(),
       };
 
   @override
   List<Object?> get props {
     return [
       id,
-      image,
       name,
-      factory,
+      img,
       email,
       phone,
-      isAdmin,
-      permissions,
-      token,
+      jobTitle,
+      emailVerifiedAt,
+      createdAt,
+      updatedAt,
     ];
   }
 }

@@ -42,7 +42,10 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.ordernuber ?? "لا يوجد",
+                Text(
+                    productions.ordernuber == null
+                        ? "لا يوجد"
+                        : productions.ordernuber.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -102,7 +105,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.shift,
+                Text(productions.shift.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -164,7 +167,10 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.prodname,
+                Text(
+                    productions.stampname == null
+                        ? ""
+                        : productions.stampname.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -194,7 +200,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.cycletime,
+                Text(productions.cycletime.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -224,7 +230,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.numberofpieces,
+                Text(productions.numberofpieces.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -254,7 +260,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.expectedprod,
+                Text(productions.expectedprod.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -284,7 +290,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.realprodcountity,
+                Text(productions.realprodcountity.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -314,7 +320,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.counterstart,
+                Text(productions.counterstart.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -344,7 +350,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.counterend,
+                Text(productions.counterend.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -374,7 +380,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.scrapcountity,
+                Text(productions.scrapcountity.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -404,7 +410,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.workhours,
+                Text(productions.workhours.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -434,7 +440,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.proddivision,
+                Text(productions.proddivision.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,
@@ -464,7 +470,7 @@ class Productionitem extends StatelessWidget {
                         fontFamily: "cairo",
                         fontSize: 12.5,
                         color: appcolors.maincolor)),
-                Text(productions.machinestop,
+                Text(productions.machinestop.toString(),
                     style: TextStyle(
                         fontFamily: "cairo",
                         fontSize: 12.5,

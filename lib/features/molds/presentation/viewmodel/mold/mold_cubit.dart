@@ -2,15 +2,22 @@ import 'package:agman/features/molds/data/models/moldmodel/datum.dart';
 import 'package:agman/features/molds/data/models/moldmodelrequest.dart';
 import 'package:agman/features/molds/data/repos/moldrepoimp.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-
 part 'mold_state.dart';
 
 class MoldCubit extends Cubit<MoldState> {
   List<Datum> molds = [];
   List<Datum> filterdata = [];
+  List<String> mymold = [];
   final Moldrepoimp moldrepo;
   bool firstloading = true;
+  String moldname = "اختر الاسطمبه";
+  Map<String, Map> moldid = {};
+  Map<int, String> moldfromid = {};
+  changemold(String value) {
+    moldname = value;
+    emit(changemoldstate());
+  }
+
   MoldCubit(this.moldrepo) : super(MoldInitial());
   getmolds() async {
     if (firstloading) emit(GetMoldLoading());
@@ -18,7 +25,20 @@ class MoldCubit extends Cubit<MoldState> {
     result.fold((failure) {
       emit(GetMoldFailure(errormessage: failure.error_message));
     }, (success) {
-      molds = success.data!;
+      mymold.clear();
+      molds.clear();
+      success.data!.forEach((e) {
+        molds.add(e);
+        mymold.add(e.name!);
+        moldfromid.addAll({e.id!: e.name!});
+        moldid.addAll({
+          e.name!: {
+            "id": e.id,
+            "numberofpieces": e.numerOfPieces,
+            "cycletime": e.timeOperation
+          }
+        });
+      });
       filterdata = success.data!;
       firstloading = false;
       emit(GetMoldSuccess(successmessage: success.message!));
