@@ -61,11 +61,12 @@ class Injectiomrepoimp extends injectionrepo {
 
   @override
   Future<Either<failure, List<productionmodel>>> getinjections(
-      {Map<String, dynamic>? queryparms}) async {
+      {required String date}) async {
     List<productionmodel> productions = [];
     try {
       Response response = await Getdata.getdata(
         token: cashhelper.getdata(key: "token"),
+        queryParameters: {"date": date},
         path: urls.reports,
       );
 

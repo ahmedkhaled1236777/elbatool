@@ -22,8 +22,7 @@ class InjectionCubit extends Cubit<InjectionState> {
 
   getinjections({required String date}) async {
     emit(getinjectionsloading());
-    var result =
-        await injectiomrepoimp.getinjections(queryparms: {"date": date});
+    var result = await injectiomrepoimp.getinjections(date: date);
     result.fold((failure) {
       emit(getinjectiongfailure(errormessage: failure.error_message));
     }, (success) {

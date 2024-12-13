@@ -3,6 +3,7 @@ import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,7 +74,14 @@ class Alertcontent extends StatelessWidget {
                               height: 20,
                             ),
                             custommaterialbutton(
-                                button_name: "بحث", onPressed: () async {})
+                                button_name: "بحث",
+                                onPressed: () async {
+                                  BlocProvider.of<InjectionCubit>(context)
+                                      .getinjections(
+                                          date: BlocProvider.of<DateCubit>(
+                                                  context)
+                                              .date2);
+                                })
                           ]))))
             ])));
   }

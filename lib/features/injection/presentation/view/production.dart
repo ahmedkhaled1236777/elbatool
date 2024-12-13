@@ -38,7 +38,9 @@ class _productionState extends State<production> {
   ];
 
   getdata() async {
-    BlocProvider.of<InjectionCubit>(context).getinjections(date: "");
+    BlocProvider.of<InjectionCubit>(context).getinjections(
+        date:
+            '${DateTime.now().year}-${DateTime.now().month < 10 ? "0${DateTime.now().month}" : DateTime.now().month}-${DateTime.now().day < 10 ? "0${DateTime.now().day}" : DateTime.now().day}');
   }
 
   @override

@@ -6,6 +6,6 @@ abstract class injectionrepo {
   Future<Either<failure, String>> addinjection(
       {required productionmodel injectionrequest});
   Future<Either<failure, List<productionmodel>>> getinjections(
-      {Map<String, dynamic>? queryparms});
+      {required String date});
   Future<Either<failure, String>> deleteinjection({required int injectionid});
 }
