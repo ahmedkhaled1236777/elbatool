@@ -2,17 +2,22 @@ import 'package:agman/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class Customtablefactorytoolitem extends StatelessWidget {
-  final String accessoriesname;
+  final String factorytoolname;
   final String quantity;
-
+  final String totalbuy;
+  final String totalconsume;
+  final String totalsell;
   Widget delet;
   Widget edit;
   final TextStyle textStyle;
 
   Customtablefactorytoolitem({
     super.key,
-    required this.accessoriesname,
+    required this.factorytoolname,
     required this.textStyle,
+    required this.totalsell,
+    required this.totalconsume,
+    required this.totalbuy,
     required this.quantity,
     required this.edit,
     required this.delet,
@@ -29,7 +34,40 @@ class Customtablefactorytoolitem extends StatelessWidget {
           Expanded(
             flex: 3,
             child: Text(
-              accessoriesname,
+              factorytoolname,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              totalbuy,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              totalconsume,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+            flex: 3,
+            child: Text(
+              totalsell,
               style: textStyle,
               textAlign: TextAlign.center,
             ),

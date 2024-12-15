@@ -13,7 +13,7 @@ class Accessoriemotionmodel extends Equatable {
   final int? lastPage;
   final String? lastPageUrl;
   final List<Link>? links;
-  final dynamic nextPageUrl;
+  final String? nextPageUrl;
   final String? path;
   final int? perPage;
   final dynamic prevPageUrl;
@@ -53,7 +53,7 @@ class Accessoriemotionmodel extends Equatable {
       links: (json['links'] as List<dynamic>?)
           ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
           .toList(),
-      nextPageUrl: json['next_page_url'] as dynamic,
+      nextPageUrl: json['next_page_url'] as String?,
       path: json['path'] as String?,
       perPage: json['per_page'] as int?,
       prevPageUrl: json['prev_page_url'] as dynamic,

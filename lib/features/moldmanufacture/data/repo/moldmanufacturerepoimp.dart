@@ -1,6 +1,7 @@
 import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/errors/failure.dart';
 import 'package:agman/core/common/errors/handlingerror.dart';
+import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/moldmanufacture/data/model/moldmanufacturemodel/moldmanufacturemodel.dart';
@@ -17,7 +18,7 @@ class Moldmanufacturerepoimp extends Moldmanfacturerepo {
       Response response = await Postdata.postdata(
           path: urls.stamps,
           queryParameters: moldrequest.tojson(),
-          token: token);
+          token: cashhelper.getdata(key: "token"));
       if (response.statusCode == 200 && response.data["success"] == true) {
         return right("تم اضافة الاسطمبه بنجاح");
       } else if (response.data["errors"] != null)
@@ -36,11 +37,10 @@ class Moldmanufacturerepoimp extends Moldmanfacturerepo {
       {required int page, Map<String, dynamic>? queryparms}) async {
     try {
       Response response = await Getdata.getdata(
-          token: token,
+          token: cashhelper.getdata(key: "token"),
           path: "stamps?page=${page}",
           queryParameters: queryparms);
-      print("lllllllllllllllllllllllllllllllllll");
-      print(response.data);
+
       if (response.data["success"] == true && response.statusCode == 200) {
         return right(Moldmanufacturemodel.fromJson(response.data));
       } else {
@@ -63,7 +63,7 @@ class Moldmanufacturerepoimp extends Moldmanfacturerepo {
       {required int stampid}) async {
     try {
       Response response = await Deletedata.deletedata(
-        token: token,
+        token: cashhelper.getdata(key: "token"),
         path: "${urls.stamps}/${stampid}",
       );
 
@@ -90,7 +90,7 @@ class Moldmanufacturerepoimp extends Moldmanfacturerepo {
     try {
       Response response = await Putdata.putdata(
         queryParameters: stamp.tojson(),
-        token: token,
+        token: cashhelper.getdata(key: "token"),
         path: "stamps/${stampid}",
       );
 

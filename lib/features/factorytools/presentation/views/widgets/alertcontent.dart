@@ -1,9 +1,14 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/date/date_cubit.dart';
+import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/toast/toast.dart';
+import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/dialogerror.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
+import 'package:agman/features/factorytools/presentation/views/widgets/toolgard.dart';
 import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -42,6 +47,33 @@ class alertfactorytoolcontent extends StatelessWidget {
                             const SizedBox(
                               height: 15,
                             ),
+                            BlocBuilder<DateCubit, DateState>(
+                              builder: (context, state) {
+                                return choosedate(
+                                  date:
+                                      BlocProvider.of<DateCubit>(context).date3,
+                                  onPressed: () {
+                                    BlocProvider.of<DateCubit>(context)
+                                        .changedate3(context);
+                                  },
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            BlocBuilder<DateCubit, DateState>(
+                              builder: (context, state) {
+                                return choosedate(
+                                  date:
+                                      BlocProvider.of<DateCubit>(context).date4,
+                                  onPressed: () {
+                                    BlocProvider.of<DateCubit>(context)
+                                        .changedate4(context);
+                                  },
+                                );
+                              },
+                            ),
                             custommytextform(
                               controller: material,
                               hintText: "اسم الاداه",
@@ -50,33 +82,50 @@ class alertfactorytoolcontent extends StatelessWidget {
                             const SizedBox(
                               height: 20,
                             ),
-                            BlocConsumer<plasticMaterialCubit,
-                                plasticMaterialState>(
-                              listener: (context, state) {
-                                if (state is GetMaterialsFailure) {
-                                  showdialogerror(
-                                      error: state.errormessage,
-                                      context: context);
-                                }
-                              },
-                              builder: (context, state) {
-                                if (state is GetMaterialsLoading)
-                                  return loading();
-                                return custommaterialbutton(
-                                    button_name: "بحث",
-                                    onPressed: () async {
-                                      BlocProvider.of<plasticMaterialCubit>(
-                                              context)
-                                          .queryparms = {"name": material.text};
-                                      await BlocProvider.of<
-                                              plasticMaterialCubit>(context)
-                                          .getMaterials(
-                                        page: 1,
-                                      );
-                                      Navigator.pop(context);
+                            custommaterialbutton(
+                                button_name: "بحث",
+                                onPressed: () async {
+                                  if ((BlocProvider.of<DateCubit>(context)
+                                                  .date3 ==
+                                              "التاريخ من" &&
+                                          BlocProvider.of<DateCubit>(context)
+                                                  .date4 !=
+                                              "التاريخ الي") ||
+                                      (BlocProvider.of<DateCubit>(context)
+                                                  .date3 !=
+                                              "التاريخ من" &&
+                                          BlocProvider.of<DateCubit>(context)
+                                                  .date4 ==
+                                              "التاريخ الي")) {
+                                    showdialogerror(
+                                        error:
+                                            "برجاء تحديد التاريخ من والتاريخ الي",
+                                        context: context);
+                                  } else {
+                                    BlocProvider.of<FactorytoolsCubit>(context)
+                                        .getfactorytools(queryparms: {
+                                      if ((BlocProvider.of<DateCubit>(context)
+                                                  .date3 !=
+                                              "التاريخ من" &&
+                                          BlocProvider.of<DateCubit>(context)
+                                                  .date4 !=
+                                              "التاريخ الي"))
+                                        "date_from":
+                                            BlocProvider.of<DateCubit>(context)
+                                                .date3,
+                                      if ((BlocProvider.of<DateCubit>(context)
+                                                  .date3 !=
+                                              "التاريخ من" &&
+                                          BlocProvider.of<DateCubit>(context)
+                                                  .date4 !=
+                                              "التاريخ الي"))
+                                        "date_to":
+                                            BlocProvider.of<DateCubit>(context)
+                                                .date4,
                                     });
-                              },
-                            )
+                                  }
+                                  Navigator.pop(context);
+                                })
                           ]))))
             ])));
   }

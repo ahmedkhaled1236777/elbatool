@@ -3,7 +3,9 @@ import 'package:equatable/equatable.dart';
 class DatumMOTION extends Equatable {
   final int? id;
   final int? type;
+  final dynamic stampName;
   final String? date;
+  final dynamic notes;
   final int? userId;
   final int? accessoryId;
   final int? qty;
@@ -12,17 +14,15 @@ class DatumMOTION extends Equatable {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final String? userName;
-  final String? notes;
-  final String? stamp_name;
 
   const DatumMOTION({
     this.id,
     this.type,
+    this.stampName,
     this.date,
+    this.notes,
     this.userId,
     this.accessoryId,
-    this.notes,
-    this.stamp_name,
     this.qty,
     this.buyPrice,
     this.totalPrice,
@@ -34,13 +34,13 @@ class DatumMOTION extends Equatable {
   factory DatumMOTION.fromJson(Map<String, dynamic> json) => DatumMOTION(
         id: json['id'] as int?,
         type: json['type'] as int?,
+        stampName: json['stamp_name'] as dynamic,
         date: json['date'] as String?,
+        notes: json['notes'] as dynamic,
         userId: json['user_id'] as int?,
         accessoryId: json['accessory_id'] as int?,
         qty: json['qty'] as int?,
         buyPrice: json['buy_price'] as String?,
-        notes: json['notes'] as String?,
-        stamp_name: json['stamp_name'] as String?,
         totalPrice: json['total_price'] as String?,
         createdAt: json['created_at'] == null
             ? null
@@ -54,7 +54,9 @@ class DatumMOTION extends Equatable {
   Map<String, dynamic> toJson() => {
         'id': id,
         'type': type,
+        'stamp_name': stampName,
         'date': date,
+        'notes': notes,
         'user_id': userId,
         'accessory_id': accessoryId,
         'qty': qty,
@@ -70,7 +72,9 @@ class DatumMOTION extends Equatable {
     return [
       id,
       type,
+      stampName,
       date,
+      notes,
       userId,
       accessoryId,
       qty,

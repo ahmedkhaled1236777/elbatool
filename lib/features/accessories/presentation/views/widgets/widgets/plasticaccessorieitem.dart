@@ -159,14 +159,14 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                                       BlocProvider.of<plasticaccessoriesCubit>(
                                                       context)
                                                   .alldata[i]
-                                                  .stamp_name ==
+                                                  .stampName ==
                                               null
                                           ? "لا يوجد"
                                           : BlocProvider.of<
                                                       plasticaccessoriesCubit>(
                                                   context)
                                               .alldata[i]
-                                              .stamp_name!,
+                                              .stampName!,
                                   date:
                                       BlocProvider.of<plasticaccessoriesCubit>(
                                               context)
@@ -178,14 +178,20 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                                           .alldata[i]
                                           .qty!
                                           .toString(),
-                                  status:
-                                      BlocProvider.of<plasticaccessoriesCubit>(
+                                  status: BlocProvider.of<
+                                                      plasticaccessoriesCubit>(
+                                                  context)
+                                              .alldata[i]
+                                              .type ==
+                                          0
+                                      ? "سحب"
+                                      : BlocProvider.of<plasticaccessoriesCubit>(
                                                       context)
                                                   .alldata[i]
                                                   .type ==
-                                              0
+                                              1
                                           ? "اضافه"
-                                          : "سحب",
+                                          : "بيع",
                                   notes:
                                       BlocProvider.of<plasticaccessoriesCubit>(
                                                       context)

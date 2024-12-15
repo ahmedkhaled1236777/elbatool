@@ -4,6 +4,20 @@ abstract class InjectionState {}
 
 class InjectionInitial extends InjectionState {}
 
+class getmoldandordersloading extends InjectionState {}
+
+class getmoldandorderssuccess extends InjectionState {
+  final String successmessage;
+
+  getmoldandorderssuccess({required this.successmessage});
+}
+
+class getmoldandordersfailure extends InjectionState {
+  final String errormessage;
+
+  getmoldandordersfailure({required this.errormessage});
+}
+
 class deleteinjectionloading extends InjectionState {}
 
 class deleteinjectionfailure extends InjectionState {

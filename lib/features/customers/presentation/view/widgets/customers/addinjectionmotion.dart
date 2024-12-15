@@ -10,20 +10,20 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Addmoldmotion extends StatefulWidget {
+class Addinjectionmotion extends StatefulWidget {
   @override
-  State<Addmoldmotion> createState() => _AddmoldmotionState();
+  State<Addinjectionmotion> createState() => _AddinjectionmotionState();
 }
 
-class _AddmoldmotionState extends State<Addmoldmotion> {
+class _AddinjectionmotionState extends State<Addinjectionmotion> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController type = TextEditingController();
 
   TextEditingController desc = TextEditingController();
-  TextEditingController putcost = TextEditingController();
 
   TextEditingController quantity = TextEditingController();
+  TextEditingController putcost = TextEditingController();
   TextEditingController pieceprice = TextEditingController();
   TextEditingController totalvalue = TextEditingController();
   TextEditingController payedvalue = TextEditingController();
@@ -78,17 +78,19 @@ class _AddmoldmotionState extends State<Addmoldmotion> {
                                   height: 7,
                                 ),
                                 radiostypes(
-                                  firstradio: "MANUFACTURE",
+                                  firstradio: "INJECTION",
                                   secondradio: "PAYMENT",
-                                  firstradiotitle: "تصنيع",
+                                  thirdradio: "mold",
+                                  firstradiotitle: "حقن",
                                   secondradiotitle: "دفعه",
+                                  thirdradiotittle: "اسطمبه",
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<CustomersCubit>(context)
                                         .type !=
-                                    "MANUFACTURE")
+                                    "INJECTION")
                                   customerradios(
                                     firstradio: "cash",
                                     secondradio: "transported",
@@ -177,8 +179,11 @@ class _AddmoldmotionState extends State<Addmoldmotion> {
                                 ),
                                 SizedBox(height: 10),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .type ==
-                                    "MANUFACTURE")
+                                            .type ==
+                                        "INJECTION" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "mold")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: quantity,
@@ -186,14 +191,20 @@ class _AddmoldmotionState extends State<Addmoldmotion> {
                                     val: "برجاء ادخال الكميه",
                                   ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .type ==
-                                    "MANUFACTURE")
+                                            .type ==
+                                        "INJECTION" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "mold")
                                   const SizedBox(
                                     height: 10,
                                   ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .type ==
-                                    "MANUFACTURE")
+                                            .type ==
+                                        "INJECTION" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "mold")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: pieceprice,
@@ -201,8 +212,11 @@ class _AddmoldmotionState extends State<Addmoldmotion> {
                                     val: "برجاء ادخال سعر الوحده",
                                   ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .type ==
-                                    "MANUFACTURE")
+                                            .type ==
+                                        "INJECTION" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "mold")
                                   const SizedBox(
                                     height: 10,
                                   ),

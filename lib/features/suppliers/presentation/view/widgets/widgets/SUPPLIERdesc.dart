@@ -3,11 +3,8 @@ import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
-import 'package:agman/features/customers/presentation/view/widgets/mold/addmoldmotion.dart';
-import 'package:agman/features/customers/presentation/view/widgets/customeritemdesc.dart';
-import 'package:agman/features/customers/presentation/view/widgets/customerusageitem.dart';
-import 'package:agman/features/customers/presentation/view/widgets/monthsearch.dart';
-import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+
+import 'package:agman/features/customers/presentation/view/widgets/customers/monthsearch.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/supplieritemdesc.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/supplierusageitem.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';

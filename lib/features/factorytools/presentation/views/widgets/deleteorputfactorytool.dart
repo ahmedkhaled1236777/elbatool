@@ -5,26 +5,25 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
-import 'package:agman/features/accessories/data/model/deleteputmodelrequest.dart';
-import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
-import 'package:agman/features/accessories/presentation/views/widgets/widgets/radios.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolmotionrequest.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
+import 'package:agman/features/factorytools/presentation/views/widgets/factorytoolsradio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Deleteorput extends StatefulWidget {
-  final int accessoreeid;
+class Deleteorputfactorytool extends StatefulWidget {
+  final int factorytoolid;
 
-  const Deleteorput({super.key, required this.accessoreeid});
+  const Deleteorputfactorytool({super.key, required this.factorytoolid});
   @override
-  State<Deleteorput> createState() => _DeleteorputState();
+  State<Deleteorputfactorytool> createState() => _DeleteorputfactorytoolState();
 }
 
-class _DeleteorputState extends State<Deleteorput> {
+class _DeleteorputfactorytoolState extends State<Deleteorputfactorytool> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController quantity = TextEditingController();
   TextEditingController notes = TextEditingController(text: "لا يوجد");
-  TextEditingController stampname = TextEditingController(text: "لا يوجد");
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +37,7 @@ class _DeleteorputState extends State<Deleteorput> {
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
               title: const Text(
-                "سحب او اضافة اكسسوار",
+                "حركة ادوات المصنع",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "cairo",
@@ -73,16 +72,15 @@ class _DeleteorputState extends State<Deleteorput> {
                             const SizedBox(
                               height: 50,
                             ),
-                            BlocBuilder<plasticaccessoriesCubit,
-                                plasticaccessoriesState>(
+                            BlocBuilder<FactorytoolsCubit, FactorytoolsState>(
                               builder: (context, state) {
-                                return radios(
-                                    sell: 2,
-                                    firstradio: 0,
-                                    secondradio: 1,
-                                    firstradiotitle: "سحب",
-                                    selltittle: "بيع",
-                                    secondradiotitle: "اضافه");
+                                return Factorytoolsradio(
+                                    thirdradio: "2",
+                                    firstradio: "1",
+                                    secondradio: "0",
+                                    firstradiotitle: "شراء",
+                                    thirdradiotittle: "بيع",
+                                    secondradiotitle: "استهلاك");
                               },
                             ),
                             SizedBox(
@@ -104,16 +102,8 @@ class _DeleteorputState extends State<Deleteorput> {
                               height: 10,
                             ),
                             custommytextform(
-                              controller: stampname,
-                              hintText: "اسم الاسطمبه اذا وجد",
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            custommytextform(
                               controller: quantity,
                               hintText: "الكميه",
-                              val: "برجاء ادخال الكميه",
                             ),
                             const SizedBox(
                               height: 10,
@@ -126,62 +116,55 @@ class _DeleteorputState extends State<Deleteorput> {
                             const SizedBox(
                               height: 10,
                             ),
-                            BlocConsumer<plasticaccessoriesCubit,
-                                plasticaccessoriesState>(
+                            BlocConsumer<FactorytoolsCubit, FactorytoolsState>(
                               listener: (context, state) {
-                                if (state is addordeletefailure) {
+                                if (state is addtoolmotionfailure) {
                                   showtoast(
                                       message: state.errormessage,
                                       toaststate: Toaststate.error,
                                       context: context);
                                 }
-                                if (state is addordeletesuccess) {
-                                  BlocProvider.of<plasticaccessoriesCubit>(
-                                          context)
-                                      .getaccessoriesmotion(
-                                          accessorieid: widget.accessoreeid);
-                                  BlocProvider.of<plasticaccessoriesCubit>(
-                                          context)
-                                      .getaccessories();
+                                if (state is addtoolmotionsuccess) {
+                                  BlocProvider.of<FactorytoolsCubit>(context)
+                                      .getfactorytoolsmotion(
+                                          id: widget.factorytoolid);
+                                  BlocProvider.of<FactorytoolsCubit>(context)
+                                      .getfactorytools();
                                   BlocProvider.of<DateCubit>(context)
                                       .cleardates();
-                                  BlocProvider.of<plasticaccessoriesCubit>(
-                                          context)
-                                      .changetype(value: 1);
+                                  BlocProvider.of<FactorytoolsCubit>(context)
+                                      .changetype(value: "1");
                                   notes.clear();
                                   quantity.clear();
-                                  stampname.clear();
                                   showtoast(
-                                      message: state.successmessage,
+                                      message: "تمت الاضافه بنجاح",
                                       toaststate: Toaststate.succes,
                                       context: context);
                                 }
                                 // TODO: implement listener
                               },
                               builder: (context, state) {
-                                if (state is addordeleteloading)
+                                if (state is addtoolmotionloading)
                                   return loading();
                                 return custommaterialbutton(
-                                  button_name: "سحب او اضافه",
+                                  button_name: "تسجيل",
                                   onPressed: () async {
-                                    BlocProvider.of<plasticaccessoriesCubit>(
-                                            context)
-                                        .putordeleteaccessorie(
-                                            accessorie: Deleteputmodelrequest(
-                                                id: widget.accessoreeid,
-                                                stampname: stampname.text,
+                                    BlocProvider.of<FactorytoolsCubit>(context)
+                                        .addtoolmotion(
+                                            factorytool: Factorytoolmotionrequest(
+                                                date: BlocProvider.of<
+                                                        DateCubit>(context)
+                                                    .date1,
                                                 quantity:
                                                     int.parse(quantity.text),
-                                                notes: notes.text,
-                                                date:
-                                                    BlocProvider.of<DateCubit>(
-                                                            context)
-                                                        .date1,
-                                                type: BlocProvider.of<
-                                                            plasticaccessoriesCubit>(
+                                                id: widget.factorytoolid,
+                                                status: BlocProvider.of<
+                                                            FactorytoolsCubit>(
                                                         context)
-                                                    .type
-                                                    .toString()));
+                                                    .type,
+                                                notes: notes.text.isEmpty
+                                                    ? "لا يوجد"
+                                                    : notes.text));
                                   },
                                 );
                               },

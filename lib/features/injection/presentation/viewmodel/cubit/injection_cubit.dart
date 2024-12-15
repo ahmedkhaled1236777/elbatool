@@ -1,6 +1,10 @@
 import 'package:agman/features/injection/data/models/productionmodel.dart';
 import 'package:agman/features/injection/data/repo/injectiomrepoimp.dart';
+import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
+import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'injection_state.dart';
 
@@ -45,5 +49,16 @@ class InjectionCubit extends Cubit<InjectionState> {
       });
       emit(deleteinjectionsuccess(successmesssage: success));
     });
+  }
+
+  gertmoldsandorders({required BuildContext context}) async {
+    try {
+      emit(getmoldandordersloading());
+      await BlocProvider.of<OrdersCubit>(context).getorders();
+      await BlocProvider.of<MoldCubit>(context).getmolds();
+      emit(getmoldandorderssuccess(successmessage: "successmessage"));
+    } catch (e) {
+      emit(getmoldandordersfailure(errormessage: e.toString()));
+    }
   }
 }

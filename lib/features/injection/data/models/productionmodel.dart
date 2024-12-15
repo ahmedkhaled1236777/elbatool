@@ -16,7 +16,7 @@ class productionmodel {
   final String notes;
   final num shift;
   final int ordernuber;
-  final String color;
+  final String? color;
   String? stampname;
   String? ordernumber;
   int? id;

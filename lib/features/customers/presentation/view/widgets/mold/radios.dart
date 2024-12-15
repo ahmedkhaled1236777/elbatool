@@ -61,12 +61,16 @@ class radios extends StatelessWidget {
 class radiostypes extends StatelessWidget {
   final String firstradio;
   final String secondradio;
+  final String thirdradio;
   final String firstradiotitle;
   final String secondradiotitle;
+  final String thirdradiotittle;
   radiostypes(
       {super.key,
       required this.firstradio,
       required this.secondradio,
+      required this.thirdradio,
+      required this.thirdradiotittle,
       required this.firstradiotitle,
       required this.secondradiotitle});
   @override
@@ -100,6 +104,20 @@ class radiostypes extends StatelessWidget {
               }),
           Text(
             secondradiotitle,
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: thirdradio,
+              groupValue: customerbloc.type,
+              onChanged: (val) {
+                customerbloc.changetype(value: val!);
+              }),
+          Text(
+            thirdradiotittle,
             style: Styles.textStyle12,
           ),
         ],

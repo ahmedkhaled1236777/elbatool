@@ -7,19 +7,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class radios extends StatelessWidget {
   final int firstradio;
   final int secondradio;
+  final int sell;
   final String firstradiotitle;
   final String secondradiotitle;
+  final String selltittle;
   radios(
       {super.key,
       required this.firstradio,
       required this.secondradio,
       required this.firstradiotitle,
+      required this.sell,
+      required this.selltittle,
       required this.secondradiotitle});
   @override
   Widget build(BuildContext context) {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
-    var materialbloc = BlocProvider.of<plasticaccessoriesCubit>(context);
+    var accessoriesbloc = BlocProvider.of<plasticaccessoriesCubit>(context);
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
@@ -28,9 +32,9 @@ class radios extends StatelessWidget {
           Radio(
               activeColor: appcolors.seconderycolor,
               value: firstradio,
-              groupValue: materialbloc.type,
+              groupValue: accessoriesbloc.type,
               onChanged: (val) {
-                materialbloc.changetype(value: val!);
+                accessoriesbloc.changetype(value: val!);
               }),
           Text(firstradiotitle),
           SizedBox(
@@ -42,11 +46,22 @@ class radios extends StatelessWidget {
           Radio(
               activeColor: appcolors.seconderycolor,
               value: secondradio,
-              groupValue: materialbloc.type,
+              groupValue: accessoriesbloc.type,
               onChanged: (val) {
-                materialbloc.changetype(value: val!);
+                accessoriesbloc.changetype(value: val!);
               }),
           Text(secondradiotitle),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: sell,
+              groupValue: accessoriesbloc.type,
+              onChanged: (val) {
+                accessoriesbloc.changetype(value: val!);
+              }),
+          Text(selltittle),
         ],
       ),
     );

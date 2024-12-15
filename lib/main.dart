@@ -10,6 +10,8 @@ import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
 import 'package:agman/features/components/presentation/viewmodel/cubit/component_cubit.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
 import 'package:agman/features/home/presentation/view/home2.dart';
 import 'package:agman/features/injection/data/repo/injectiomrepoimp.dart';
 import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
@@ -91,6 +93,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 IntialcostCubit(intialcostrepoimp: Intialcostrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => FactorytoolsCubit(Factorytoolsrepoimp()),
           ),
           BlocProvider(
             create: (context) => InjectionCubit(Injectiomrepoimp()),

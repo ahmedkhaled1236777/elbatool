@@ -4,7 +4,6 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/customers/presentation/view/widgets/mold/radios.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -66,18 +65,6 @@ class _addcustomerState extends State<addcustomer> {
                               child: Column(children: [
                             const SizedBox(
                               height: 50,
-                            ),
-                            BlocBuilder<CustomersCubit, CustomersState>(
-                              builder: (context, state) {
-                                return radios(
-                                    firstradio: "INJECTION",
-                                    secondradio: "MOLDS",
-                                    firstradiotitle: "عميل حقن",
-                                    secondradiotitle: "عميل اسطمبات");
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
                             ),
                             BlocBuilder<DateCubit, DateState>(
                               builder: (context, state) {

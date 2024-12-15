@@ -1,7 +1,13 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolmodelrequest.dart';
+import 'package:agman/features/factorytools/data/repos/factorytoolsrep.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Addfactorytools extends StatefulWidget {
   @override
@@ -11,7 +17,8 @@ class Addfactorytools extends StatefulWidget {
 class _AddfactorytoolsState extends State<Addfactorytools> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  TextEditingController accessoriesname = TextEditingController();
+  TextEditingController toolname = TextEditingController();
+  TextEditingController quantity = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -61,16 +68,60 @@ class _AddfactorytoolsState extends State<Addfactorytools> {
                               height: 50,
                             ),
                             custommytextform(
-                                controller: accessoriesname,
+                                controller: toolname,
                                 hintText: "اسم الاداه",
                                 val: "برجاء ادخال اسم الاداه",
                                 keyboardType: TextInputType.number),
                             const SizedBox(
                               height: 10,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل الاداه",
-                              onPressed: () async {},
+                            custommytextform(
+                                controller: quantity,
+                                hintText: "الكميه",
+                                val: "برجاء ادخال الكميه",
+                                keyboardType: TextInputType.number),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            BlocConsumer<FactorytoolsCubit, FactorytoolsState>(
+                              listener: (context, state) {
+                                if (state is addtoolfailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addtoolsuccess) {
+                                  BlocProvider.of<FactorytoolsCubit>(context)
+                                      .getfactorytools();
+
+                                  quantity.text;
+                                  toolname.text;
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                                // TODO: implement listener
+                              },
+                              builder: (context, state) {
+                                if (state is addtoolloading) return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل الاداه",
+                                  onPressed: () async {
+                                    if (formkey.currentState!.validate()) {
+                                      BlocProvider.of<FactorytoolsCubit>(
+                                              context)
+                                          .addtool(
+                                              factorytool:
+                                                  Factorytoolmodelrequest(
+                                        toolname: toolname.text,
+                                        quantity: quantity.text,
+                                      ));
+                                    }
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

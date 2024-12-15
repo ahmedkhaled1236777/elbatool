@@ -4,7 +4,6 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/customers/presentation/view/widgets/mold/radios.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/save/presentation/view/widgets/radiossave.dart';
 import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart';

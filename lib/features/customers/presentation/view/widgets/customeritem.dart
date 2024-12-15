@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 class customtablcustomeritem extends StatelessWidget {
   final String name;
   final String phone;
-  final String place;
+  final String totalinjection;
+  final String totalmold;
 
   Widget edit;
   Widget delet;
@@ -13,7 +14,8 @@ class customtablcustomeritem extends StatelessWidget {
     super.key,
     required this.phone,
     required this.textStyle,
-    required this.place,
+    required this.totalinjection,
+    required this.totalmold,
     required this.name,
     required this.delet,
     required this.edit,
@@ -42,9 +44,16 @@ class customtablcustomeritem extends StatelessWidget {
                 textAlign: TextAlign.center,
               )),
           Expanded(
-              flex: 2,
+              flex: 3,
               child: Text(
-                place,
+                totalinjection,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
+          Expanded(
+              flex: 3,
+              child: Text(
+                totalmold,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),

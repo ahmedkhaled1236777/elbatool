@@ -6,7 +6,7 @@ import 'package:agman/features/accessories/presentation/views/accessories.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/profile/profile.dart';
 import 'package:agman/features/components/presentation/views/components.dart';
-import 'package:agman/features/customers/presentation/view/customer.dart';
+import 'package:agman/features/customers/presentation/view/widgets/customers/injectioncustomers.dart';
 import 'package:agman/features/factorytools/presentation/views/factorytools.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/users/presentation/views/widgets/employees.dart';
@@ -61,7 +61,7 @@ class home2 extends StatelessWidget {
       "name": "العملاء",
       "name-en": "customers",
       "image": "assets/images/public-service.png",
-      "page": customers()
+      "page": injectioncustomers()
     },
     {
       "name": "الموردين",

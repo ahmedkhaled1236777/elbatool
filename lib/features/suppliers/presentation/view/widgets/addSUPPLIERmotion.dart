@@ -4,7 +4,6 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/customers/presentation/view/widgets/mold/radios.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
@@ -78,7 +77,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                 const SizedBox(
                                   height: 7,
                                 ),
-                                RadiosSUPPLIERtypes(
+                                /* RadiosSUPPLIERtypes(
                                   firstradio: "SUPPLY",
                                   secondradio: "PAYMENT",
                                   firstradiotitle: "توريد",
@@ -95,7 +94,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     secondradio: "transported",
                                     firstradiotitle: "نقدي",
                                     secondradiotitle: "تحويل",
-                                  ),
+                                  ),*/
                                 SizedBox(
                                   height: 10,
                                 ),

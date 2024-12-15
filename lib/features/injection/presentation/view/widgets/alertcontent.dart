@@ -81,6 +81,7 @@ class Alertcontent extends StatelessWidget {
                                           date: BlocProvider.of<DateCubit>(
                                                   context)
                                               .date2);
+                                  Navigator.pop(context);
                                 })
                           ]))))
             ])));

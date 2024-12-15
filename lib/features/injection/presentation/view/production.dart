@@ -169,15 +169,15 @@ class _productionState extends State<production> {
                                                                 .productions[i]
                                                                 .ordernumber!),
                                                         color: BlocProvider.of<InjectionCubit>(context)
-                                                            .productions[i]
-                                                            .color,
+                                                                .productions[i]
+                                                                .color ??
+                                                            "",
                                                         date: BlocProvider.of<InjectionCubit>(context)
                                                             .productions[i]
                                                             .date,
-                                                        workername:
-                                                            BlocProvider.of<InjectionCubit>(context)
-                                                                .productions[i]
-                                                                .workername,
+                                                        workername: BlocProvider.of<InjectionCubit>(context)
+                                                            .productions[i]
+                                                            .workername,
                                                         machinenumber:
                                                             BlocProvider.of<InjectionCubit>(context)
                                                                 .productions[i]
@@ -191,9 +191,7 @@ class _productionState extends State<production> {
                                                         stampname: BlocProvider.of<InjectionCubit>(context)
                                                             .productions[i]
                                                             .stampname!,
-                                                        cycletime: BlocProvider.of<InjectionCubit>(context)
-                                                            .productions[i]
-                                                            .cycletime,
+                                                        cycletime: BlocProvider.of<InjectionCubit>(context).productions[i].cycletime,
                                                         numberofpieces: BlocProvider.of<InjectionCubit>(context).productions[i].numberofpieces,
                                                         workhours: BlocProvider.of<InjectionCubit>(context).productions[i].workhours,
                                                         counterstart: BlocProvider.of<InjectionCubit>(context).productions[i].counterstart,

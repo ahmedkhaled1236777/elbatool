@@ -2,14 +2,20 @@ import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
-import 'package:agman/features/accessories/presentation/views/widgets/alertcontent.dart';
-import 'package:agman/features/accessories/presentation/views/widgets/editdialog.dart';
+import 'package:agman/core/common/widgets/loading.dart';
+import 'package:agman/core/common/widgets/nodata.dart';
+import 'package:agman/core/common/widgets/shimmerloading.dart';
+import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
 import 'package:agman/features/factorytools/presentation/views/addfactorytools.dart';
 import 'package:agman/features/factorytools/presentation/views/widgets/alertcontent.dart';
 import 'package:agman/features/factorytools/presentation/views/widgets/customtablefactorytoolitem.dart';
+import 'package:agman/features/factorytools/presentation/views/widgets/editdialog.dart';
 import 'package:agman/features/factorytools/presentation/views/widgets/factorytoolitem.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Factorytools extends StatefulWidget {
   @override
@@ -19,12 +25,17 @@ class Factorytools extends StatefulWidget {
 class _FactorytoolsState extends State<Factorytools> {
   final accessoriesheader = [
     "اسم الاداه",
+    "اجمالي الشراء",
+    "اجمالي الاستهلاك",
+    "اجمالي البيع",
     "الكميه",
     "تعديل",
     "حذف",
   ];
 
-  getdata() async {}
+  getdata() async {
+    BlocProvider.of<FactorytoolsCubit>(context).getfactorytools();
+  }
 
   @override
   void initState() {
@@ -111,65 +122,215 @@ class _FactorytoolsState extends State<Factorytools> {
                 Expanded(
                     child: RefreshIndicator(
                         onRefresh: () async {},
-                        child: ListView.separated(
-                            itemBuilder: (context, i) => InkWell(
-                                  onTap: () {
-                                    navigateto(
-                                        context: context,
-                                        page: Factorytoolitem());
-                                  },
-                                  child: Customtablefactorytoolitem(
-                                    textStyle: Styles.gettabletextstyle(
-                                        context: context),
-                                    accessoriesname: 'بنز 5 مملي',
-                                    quantity: "225",
-                                    delet: IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          color: Colors.red,
-                                          deleteicon,
-                                        )),
-                                    edit: IconButton(
-                                        onPressed: () {
-                                          /*  showDialog(
-                                              barrierDismissible: false,
-                                              context: context,
-                                              builder: (context) {
-                                                return AlertDialog(
-                                                  title: Container(
-                                                    height: 20,
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    child: IconButton(
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
+                        child:
+                            BlocBuilder<FactorytoolsCubit, FactorytoolsState>(
+                          builder: (context, state) {
+                            if (state is gettoolloading)
+                              return loadingshimmer();
+                            if (state is gettoolfailure) return SizedBox();
+                            return BlocProvider.of<FactorytoolsCubit>(context)
+                                    .data
+                                    .isEmpty
+                                ? nodata()
+                                : ListView.separated(
+                                    itemBuilder: (context, i) => InkWell(
+                                          onTap: () {
+                                            navigateto(
+                                                context: context,
+                                                page: Factorytoolitem(
+                                                  id: BlocProvider.of<
+                                                              FactorytoolsCubit>(
+                                                          context)
+                                                      .data[i]
+                                                      .id!,
+                                                ));
+                                          },
+                                          child: Customtablefactorytoolitem(
+                                            totalbuy: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .data[i]
+                                                .buyQty
+                                                .toString(),
+                                            totalconsume: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .data[i]
+                                                .dilapidatedQty
+                                                .toString(),
+                                            totalsell: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .data[i]
+                                                .salesQty
+                                                .toString(),
+                                            textStyle: Styles.gettabletextstyle(
+                                                context: context),
+                                            factorytoolname: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .data[i]
+                                                .name!,
+                                            quantity: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .data[i]
+                                                .qty!,
+                                            delet: IconButton(
+                                                onPressed: () {
+                                                  awsomdialogerror(
+                                                      context: context,
+                                                      mywidget: BlocConsumer<
+                                                          FactorytoolsCubit,
+                                                          FactorytoolsState>(
+                                                        listener:
+                                                            (context, state) {
+                                                          if (state
+                                                              is deletetoolsuccess) {
+                                                            Navigator.pop(
+                                                                context);
+
+                                                            showtoast(
+                                                                message: state
+                                                                    .successmessage,
+                                                                toaststate:
+                                                                    Toaststate
+                                                                        .succes,
+                                                                context:
+                                                                    context);
+                                                          }
+                                                          if (state
+                                                              is deletetoolfailure) {
+                                                            Navigator.pop(
+                                                                context);
+
+                                                            showtoast(
+                                                                message: state
+                                                                    .errormessage,
+                                                                toaststate:
+                                                                    Toaststate
+                                                                        .error,
+                                                                context:
+                                                                    context);
+                                                          }
                                                         },
-                                                        icon: Icon(
-                                                          Icons.close,
-                                                          color: appcolors
-                                                              .maincolor,
-                                                        )),
-                                                  ),
-                                                  contentPadding:
-                                                      EdgeInsets.all(10),
-                                                  backgroundColor: Colors.white,
-                                                  insetPadding:
-                                                      EdgeInsets.all(35),
-                                                  content:
-                                                      Editaccessoriesdialog(),
-                                                );
-                                              });*/
-                                        },
-                                        icon: Icon(
-                                          editeicon,
-                                        )),
-                                  ),
-                                ),
-                            separatorBuilder: (context, i) => Divider(
-                                  color: Colors.grey,
-                                ),
-                            itemCount: 5))),
+                                                        builder:
+                                                            (context, state) {
+                                                          if (state
+                                                              is deletetoolloading)
+                                                            return deleteloading();
+                                                          return SizedBox(
+                                                            height: 50,
+                                                            width: 100,
+                                                            child:
+                                                                ElevatedButton(
+                                                                    style:
+                                                                        const ButtonStyle(
+                                                                      backgroundColor: MaterialStatePropertyAll(Color.fromARGB(
+                                                                          255,
+                                                                          37,
+                                                                          163,
+                                                                          42)),
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await BlocProvider.of<FactorytoolsCubit>(
+                                                                              context)
+                                                                          .deletetool(
+                                                                        factorytoolid: BlocProvider.of<FactorytoolsCubit>(context)
+                                                                            .data[i]
+                                                                            .id!,
+                                                                      );
+                                                                    },
+                                                                    child:
+                                                                        const Text(
+                                                                      "تاكيد",
+                                                                      style: TextStyle(
+                                                                          fontSize:
+                                                                              12,
+                                                                          fontFamily:
+                                                                              "cairo",
+                                                                          color:
+                                                                              Colors.white),
+                                                                      textAlign:
+                                                                          TextAlign
+                                                                              .center,
+                                                                    )),
+                                                          );
+                                                        },
+                                                      ),
+                                                      tittle:
+                                                          "هل تريد الحذف ؟");
+                                                },
+                                                icon: Icon(
+                                                  deleteicon,
+                                                  color: Colors.red,
+                                                )),
+                                            edit: IconButton(
+                                                onPressed: () {
+                                                  showDialog(
+                                                      barrierDismissible: false,
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return AlertDialog(
+                                                          title: Container(
+                                                            height: 20,
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: IconButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                icon: Icon(
+                                                                  Icons.close,
+                                                                  color: appcolors
+                                                                      .maincolor,
+                                                                )),
+                                                          ),
+                                                          contentPadding:
+                                                              EdgeInsets.all(
+                                                                  10),
+                                                          backgroundColor:
+                                                              Colors.white,
+                                                          insetPadding:
+                                                              EdgeInsets.all(
+                                                                  35),
+                                                          content:
+                                                              Editfactorytooldialog(
+                                                                  id: BlocProvider.of<
+                                                                              FactorytoolsCubit>(
+                                                                          context)
+                                                                      .data[i]
+                                                                      .id!,
+                                                                  factorytoolname: TextEditingController(
+                                                                      text: BlocProvider.of<FactorytoolsCubit>(
+                                                                              context)
+                                                                          .data[
+                                                                              i]
+                                                                          .name!),
+                                                                  factorytoolquantity:
+                                                                      TextEditingController(
+                                                                    text: BlocProvider.of<FactorytoolsCubit>(
+                                                                            context)
+                                                                        .data[i]
+                                                                        .qty
+                                                                        .toString(),
+                                                                  )),
+                                                        );
+                                                      });
+                                                },
+                                                icon: Icon(
+                                                  editeicon,
+                                                )),
+                                          ),
+                                        ),
+                                    separatorBuilder: (context, i) => Divider(
+                                          color: Colors.grey,
+                                        ),
+                                    itemCount:
+                                        BlocProvider.of<FactorytoolsCubit>(
+                                                context)
+                                            .data
+                                            .length);
+                          },
+                        ))),
                 SizedBox(
                   height: 10,
                 ),

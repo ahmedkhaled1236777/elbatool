@@ -1,31 +1,30 @@
-import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/errors/failure.dart';
 import 'package:agman/core/common/errors/handlingerror.dart';
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
-import 'package:agman/features/accessories/data/model/accessoriemodel/accessoriemodel.dart';
-import 'package:agman/features/accessories/data/model/accessoriemodelrequest.dart';
-import 'package:agman/features/accessories/data/model/accessoriemotionmodel/accessoriemotionmodel.dart';
-import 'package:agman/features/accessories/data/model/deleteputmodelrequest.dart';
-import 'package:agman/features/accessories/data/repos/accessoriesrepo.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolmodelrequest.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolmotionrequest.dart';
+import 'package:agman/features/factorytools/data/models/factorytools/factorytools.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolsmoves/factorytoolsmoves.dart';
+import 'package:agman/features/factorytools/data/repos/factorytoolsrep.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
-class Accessorierepoimp extends Accessoriesrepo {
+class Factorytoolsrepoimp extends factorytoolsrepo {
   @override
-  Future<Either<failure, String>> addaccessorie(
-      {required Accessoriemodelrequest accessorie}) async {
+  Future<Either<failure, String>> addfactorytool(
+      {required Factorytoolmodelrequest factorytool}) async {
     try {
       Response response = await Postdata.postdata(
-          path: urls.addaccessorie,
-          queryParameters: accessorie.tojson(),
+          path: urls.factorytools,
+          queryParameters: factorytool.tojson(),
           token: cashhelper.getdata(key: "token"));
 
       if (response.data["success"] == true && response.statusCode == 200) {
-        return right("تم الاضافه بنجاح");
+        return right("تم الاضافه بنجاح بنجاح");
       } else {
-        if (response.data["data"] != null) {
+        if (response.data["errors"] != null) {
           return left(
               requestfailure(error_message: response.data["errors"][0]));
         } else
@@ -39,16 +38,66 @@ class Accessorierepoimp extends Accessoriesrepo {
   }
 
   @override
-  Future<Either<failure, Accessoriemodel>> getaccessories(
+  Future<Either<failure, String>> editfactorytool(
+      {required Factorytoolmodelrequest factorytool,
+      required int factorytoolid}) async {
+    try {
+      Response response = await Putdata.putdata(
+          path: "stocks/${factorytoolid}",
+          queryParameters: factorytool.tojson(),
+          token: cashhelper.getdata(key: "token"));
+
+      if (response.data["success"] == true && response.statusCode == 200) {
+        return right("تم الاضافه بنجاح بنجاح");
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      print(e.toString());
+      if (e is DioException) return left(requestfailure.fromdioexception(e));
+      return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, String>> deletefactorytool(
+      {required int factorytoolid}) async {
+    try {
+      Response response = await Deletedata.deletedata(
+          path: "stocks/${factorytoolid}",
+          token: cashhelper.getdata(key: "token"));
+
+      if (response.data["success"] == true && response.statusCode == 200) {
+        return right("تم الحذف بنجاح بنجاح");
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      print(e.toString());
+      if (e is DioException) return left(requestfailure.fromdioexception(e));
+      return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, Factorytools>> getfactorytools(
       {Map<String, dynamic>? queryparms}) async {
     try {
       Response response = await Getdata.getdata(
           token: cashhelper.getdata(key: "token"),
-          path: "accessories",
+          path: urls.factorytools,
           queryParameters: queryparms);
 
-      if (response.data["status"] == true && response.statusCode == 200) {
-        return right(Accessoriemodel.fromJson(response.data));
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return right(Factorytools.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {
           return left(
@@ -65,70 +114,16 @@ class Accessorierepoimp extends Accessoriesrepo {
   }
 
   @override
-  Future<Either<failure, String>> deleteaccessorie(
-      {required int accessorie_id}) async {
-    try {
-      Response response = await Deletedata.deletedata(
-        token: cashhelper.getdata(key: "token"),
-        path: "${urls.addaccessorie}/$accessorie_id{}",
-      );
-
-      if (response.data["success"] == true && response.statusCode == 200) {
-        return right("تم الحذف بنجاح");
-      } else {
-        if (response.data["data"] != null) {
-          return left(
-              requestfailure(error_message: response.data["errors"][0]));
-        } else
-          return left(requestfailure(error_message: response.data["message"]));
-      }
-    } catch (e) {
-      if (e is DioException)
-        return left(requestfailure.fromdioexception(e));
-      else
-        return left(requestfailure(error_message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<failure, String>> editaccessorie(
-      {required Accessoriemodelrequest accessorie,
-      required int accessorieid}) async {
-    try {
-      Response response = await Putdata.putdata(
-        queryParameters: accessorie.tojson(),
-        token: cashhelper.getdata(key: "token"),
-        path: "accessories/${accessorieid}",
-      );
-
-      if (response.data["success"] == true && response.statusCode == 200) {
-        return right("تم التعديل بنجاح");
-      } else {
-        if (response.data["data"] != null) {
-          return left(
-              requestfailure(error_message: response.data["errors"][0]));
-        } else
-          return left(requestfailure(error_message: response.data["message"]));
-      }
-    } catch (e) {
-      if (e is DioException)
-        return left(requestfailure.fromdioexception(e));
-      else
-        return left(requestfailure(error_message: e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<failure, Accessoriemotionmodel>> getaccessoriesmotion(
-      {required int page, required int accessorieid}) async {
+  Future<Either<failure, Factorytoolsmoves>> getfactorytoolsmotion(
+      {required int factorytoolid}) async {
     try {
       Response response = await Getdata.getdata(
           token: cashhelper.getdata(key: "token"),
-          path: "accessories?page=${page}",
-          queryParameters: {"accessory_id": accessorieid});
+          path: urls.factorytoolsmoves,
+          queryParameters: {"stock_id": factorytoolid});
 
-      if (response.data["success"] == true && response.statusCode == 200) {
-        return right(Accessoriemotionmodel.fromJson(response.data));
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return right(Factorytoolsmoves.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {
           return left(
@@ -145,18 +140,18 @@ class Accessorierepoimp extends Accessoriesrepo {
   }
 
   @override
-  Future<Either<failure, String>> putordeleteaccessorie(
-      {required Deleteputmodelrequest accessorie}) async {
+  Future<Either<failure, String>> addfactorytoolmotion(
+      {required Factorytoolmotionrequest factorytool}) async {
     try {
       Response response = await Postdata.postdata(
-          path: urls.addmove,
-          queryParameters: accessorie.tojson(),
+          path: urls.factorytoolsmoves,
+          queryParameters: factorytool.tojson(),
           token: cashhelper.getdata(key: "token"));
 
       if (response.data["success"] == true && response.statusCode == 200) {
-        return right("تم التسجيل بنجاح");
+        return right("تم الاضافه بنجاح بنجاح");
       } else {
-        if (response.data["data"] != null) {
+        if (response.data["errors"] != null) {
           return left(
               requestfailure(error_message: response.data["errors"][0]));
         } else
@@ -170,28 +165,26 @@ class Accessorierepoimp extends Accessoriesrepo {
   }
 
   @override
-  Future<Either<failure, String>> deletemove({required int move_id}) async {
+  Future<Either<failure, String>> deletefactorytoolmove(
+      {required int move_id}) async {
     try {
-      Response response = await Postdata.postdata(
-        token: cashhelper.getdata(key: "token"),
-        queryParameters: {"move_id": move_id},
-        path: "${urls.deletemov}",
-      );
+      Response response = await Deletedata.deletedata(
+          path: "stockmoves/${move_id}",
+          token: cashhelper.getdata(key: "token"));
 
       if (response.data["success"] == true && response.statusCode == 200) {
-        return right("تم الحذف بنجاح");
+        return right("تم الحذف بنجاح بنجاح");
       } else {
-        if (response.data["data"] != null) {
+        if (response.data["errors"] != null) {
           return left(
               requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
-      if (e is DioException)
-        return left(requestfailure.fromdioexception(e));
-      else
-        return left(requestfailure(error_message: e.toString()));
+      print(e.toString());
+      if (e is DioException) return left(requestfailure.fromdioexception(e));
+      return left(requestfailure(error_message: e.toString()));
     }
   }
 }
