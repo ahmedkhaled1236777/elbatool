@@ -78,24 +78,44 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 7,
                                 ),
                                 radiostypes(
+                                  fourthradio: "maintenance",
                                   firstradio: "INJECTION",
                                   secondradio: "PAYMENT",
                                   thirdradio: "mold",
                                   firstradiotitle: "حقن",
                                   secondradiotitle: "دفعه",
                                   thirdradiotittle: "اسطمبه",
+                                  fourthradiotittle: "صيانه",
                                 ),
                                 SizedBox(
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .type !=
-                                    "INJECTION")
-                                  customerradios(
-                                    firstradio: "cash",
-                                    secondradio: "transported",
-                                    firstradiotitle: "نقدي",
-                                    secondradiotitle: "تحويل",
+                                            .type !=
+                                        "INJECTION" &&
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type !=
+                                        "maintenance" &&
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type !=
+                                        "mold")
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      customerradios(
+                                        firstradio: "cash",
+                                        secondradio: "transported",
+                                        firstradiotitle: "نقدي",
+                                        secondradiotitle: "تحويل",
+                                      ),
+                                      customerradiospay(
+                                        firstradio: "inj",
+                                        secondradio: "moldandmain",
+                                        firstradiotitle: "حقن",
+                                        secondradiotitle: "اسطمبات وصيانه",
+                                      ),
+                                    ],
                                   ),
                                 SizedBox(
                                   height: 10,
@@ -116,8 +136,11 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                        .paymenttype ==
-                                    "transported")
+                                            .paymenttype ==
+                                        "transported" &&
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "PAYMENT")
                                   Column(
                                     children: [
                                       Container(
@@ -183,7 +206,10 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                         "INJECTION" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "mold")
+                                        "mold" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "maintenance")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: quantity,
@@ -195,7 +221,10 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                         "INJECTION" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "mold")
+                                        "mold" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "maintenance")
                                   const SizedBox(
                                     height: 10,
                                   ),
@@ -204,7 +233,10 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                         "INJECTION" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "mold")
+                                        "mold" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "maintenance")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: pieceprice,

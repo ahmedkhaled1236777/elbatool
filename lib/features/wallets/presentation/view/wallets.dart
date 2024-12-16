@@ -1,20 +1,23 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
+import 'package:agman/core/common/widgets/loading.dart';
+import 'package:agman/core/common/widgets/nodata.dart';
+import 'package:agman/core/common/widgets/shimmerloading.dart';
+import 'package:agman/core/common/widgets/showdialogerror.dart';
 import 'package:agman/features/wallets/presentation/view/addwallet.dart';
 import 'package:agman/features/wallets/presentation/view/walletsmotion.dart';
-import 'package:agman/features/wallets/presentation/view/widgets/addwalletmotion.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/customtabletimeritem.dart';
+import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/common/widgets/error.dart';
 
 class wallets extends StatefulWidget {
-  List<String> mywallets = [
-    "محفظه عماد البنك الاهلي",
-    "محفظه اسامه البنك الاهلي",
-    "محفظه عماد بنك مصر",
-    "محفظه اسامه بنك مصر",
-  ];
   @override
   State<wallets> createState() => _walletsState();
 }
@@ -25,12 +28,15 @@ class _walletsState extends State<wallets> {
   TextEditingController notes = TextEditingController(text: "لا يوجد");
 
   final walletsheader = [
-    "التاريخ",
+    "تاريخ انشاء المحفظه",
     "اسم المحفظه",
     "المبلغ",
+    "حذف",
   ];
 
-  getdata() async {}
+  getdata() async {
+    BlocProvider.of<WalletCubit>(context).getwallets();
+  }
 
   @override
   void initState() {
@@ -108,23 +114,124 @@ class _walletsState extends State<wallets> {
                               textStyle:
                                   Styles.getheadertextstyle(context: context),
                               title: e,
-                              flex: 3,
+                              flex: e == "حذف" ? 2 : 3,
                             ))
                         .toList()),
               ),
-              Expanded(
-                  child: RefreshIndicator(
-                      onRefresh: () async {},
-                      child: ListView.separated(
+              Expanded(child: BlocBuilder<WalletCubit, walletState>(
+                builder: (context, state) {
+                  if (state is getwalletloading) return loadingshimmer();
+                  if (state is getwalletfailure)
+                    return errorfailure(
+                      errormessage: state.errormessage,
+                    );
+
+                  return BlocProvider.of<WalletCubit>(context).data.isEmpty
+                      ? nodata()
+                      : ListView.separated(
                           itemBuilder: (context, i) => InkWell(
                                 onTap: () {
                                   navigateto(
-                                      context: context, page: walletsmotions());
+                                      context: context,
+                                      page: walletsmotions(
+                                        walletid: BlocProvider.of<WalletCubit>(
+                                                context)
+                                            .data[i]
+                                            .id!,
+                                      ));
                                 },
                                 child: Customtablewalletitem(
-                                  salary: "500",
-                                  date: "22/7/2024",
-                                  walletname: widget.mywallets[i],
+                                  delete: IconButton(
+                                      onPressed: () {
+                                        awsomdialogerror(
+                                            context: context,
+                                            mywidget: BlocConsumer<WalletCubit,
+                                                walletState>(
+                                              listener: (context, state) {
+                                                if (state
+                                                    is deletewalletsuccess) {
+                                                  Navigator.pop(context);
+
+                                                  showtoast(
+                                                      message:
+                                                          state.successmessage,
+                                                      toaststate:
+                                                          Toaststate.succes,
+                                                      context: context);
+                                                }
+                                                if (state
+                                                    is deletewalletfailure) {
+                                                  Navigator.pop(context);
+
+                                                  showtoast(
+                                                      message:
+                                                          state.errormessage,
+                                                      toaststate:
+                                                          Toaststate.error,
+                                                      context: context);
+                                                }
+                                              },
+                                              builder: (context, state) {
+                                                if (state
+                                                    is deletewalletloading)
+                                                  return deleteloading();
+                                                return SizedBox(
+                                                  height: 50,
+                                                  width: 100,
+                                                  child: ElevatedButton(
+                                                      style: const ButtonStyle(
+                                                        backgroundColor:
+                                                            MaterialStatePropertyAll(
+                                                                Color.fromARGB(
+                                                                    255,
+                                                                    37,
+                                                                    163,
+                                                                    42)),
+                                                      ),
+                                                      onPressed: () async {
+                                                        await BlocProvider.of<
+                                                                    WalletCubit>(
+                                                                context)
+                                                            .deletewallet(
+                                                          walletid: BlocProvider
+                                                                  .of<WalletCubit>(
+                                                                      context)
+                                                              .data[i]
+                                                              .id!,
+                                                        );
+                                                      },
+                                                      child: const Text(
+                                                        "تاكيد",
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontFamily: "cairo",
+                                                            color:
+                                                                Colors.white),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                      )),
+                                                );
+                                              },
+                                            ),
+                                            tittle: "هل تريد الحذف ؟");
+                                      },
+                                      icon: Icon(
+                                        deleteicon,
+                                        color: Colors.red,
+                                      )),
+                                  salary: BlocProvider.of<WalletCubit>(context)
+                                          .data[i]
+                                          .money ??
+                                      "",
+                                  date: BlocProvider.of<WalletCubit>(context)
+                                          .data[i]
+                                          .date ??
+                                      "",
+                                  walletname:
+                                      BlocProvider.of<WalletCubit>(context)
+                                              .data[i]
+                                              .name ??
+                                          "",
                                   textStyle: Styles.gettabletextstyle(
                                       context: context),
                                 ),
@@ -132,7 +239,11 @@ class _walletsState extends State<wallets> {
                           separatorBuilder: (context, i) => Divider(
                                 color: Colors.grey,
                               ),
-                          itemCount: widget.mywallets.length))),
+                          itemCount: BlocProvider.of<WalletCubit>(context)
+                              .data
+                              .length);
+                },
+              )),
             ])));
   }
 }

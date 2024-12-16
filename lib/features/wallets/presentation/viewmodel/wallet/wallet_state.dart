@@ -1,7 +1,63 @@
 part of 'wallet_cubit.dart';
 
-abstract class WalletState {}
+abstract class walletState {}
 
-class WalletInitial extends WalletState {}
+class WalletInitial extends walletState {}
 
-class changesavestate extends WalletState {}
+class changewalletstate extends walletState {}
+
+class addwalletloading extends walletState {}
+
+class addwalletsuccess extends walletState {
+  final String successmessage;
+
+  addwalletsuccess({required this.successmessage});
+}
+
+class addwalletfailure extends walletState {
+  final String errormessage;
+
+  addwalletfailure({required this.errormessage});
+}
+
+class addwalletmotionloading extends walletState {}
+
+class addwalletmotionsuccess extends walletState {
+  final String successmessage;
+
+  addwalletmotionsuccess({required this.successmessage});
+}
+
+class addwalletmotionfailure extends walletState {
+  final String errormessage;
+
+  addwalletmotionfailure({required this.errormessage});
+}
+
+class getwalletloading extends walletState {}
+
+class getwalletsuccess extends walletState {
+  final String successmessage;
+
+  getwalletsuccess({required this.successmessage});
+}
+
+class getwalletfailure extends walletState {
+  final String errormessage;
+
+  getwalletfailure({required this.errormessage});
+}
+
+class deletewalletloading extends walletState {}
+
+class deletewalletsuccess extends walletState {
+  final String successmessage;
+
+  deletewalletsuccess({required this.successmessage});
+}
+
+class deletewalletfailure extends walletState {
+  final String errormessage;
+
+  deletewalletfailure({required this.errormessage});
+}

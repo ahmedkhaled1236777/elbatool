@@ -39,14 +39,15 @@ class emplyeerepoimplementaion extends employeerepo {
     Employeemodel employeesmodel;
     try {
       Response response = await Getdata.getdata(path: urls.users, token: token);
-      print(response.data);
-      if (response.statusCode == 200 && response.data["status"] == 200) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         employeesmodel = Employeemodel.fromJson(response.data);
         return right(employeesmodel);
-      } else if (response.statusCode == 200 && response.data["code"] == 422) {
-        return left(requestfailure(error_message: response.data["data"][0]));
       } else {
-        return left(requestfailure(error_message: response.data["message"]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
       if (e is DioException)

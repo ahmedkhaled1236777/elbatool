@@ -27,8 +27,11 @@ abstract class Styles {
       TextStyle(color: Colors.white, fontWeight: FontWeight.w300, fontSize: 14);
   static TextStyle textStyle14wt = TextStyle(
       color: Colors.white, fontWeight: FontWeight.w300, fontSize: 10.sp);
-  static const TextStyle textStyle12 =
-      TextStyle(fontSize: 13, color: Colors.black, fontFamily: "cairo");
+  static const TextStyle textStyle12 = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.bold,
+      color: Colors.black,
+      fontFamily: "cairo");
   static const TextStyle textStyle12b = const TextStyle(
       fontSize: 12.5,
       color: appcolors.maincolor,

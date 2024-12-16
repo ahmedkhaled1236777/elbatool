@@ -8,6 +8,9 @@ import 'package:agman/features/wallets/presentation/view/widgets/widgets/customt
 import 'package:flutter/material.dart';
 
 class walletsmotions extends StatefulWidget {
+  final int walletid;
+
+  const walletsmotions({super.key, required this.walletid});
   @override
   State<walletsmotions> createState() => _walletsmotionsState();
 }
@@ -45,7 +48,11 @@ class _walletsmotionsState extends State<walletsmotions> {
                   color: Colors.white,
                 ),
                 onPressed: () {
-                  navigateto(context: context, page: Addwalletmotion());
+                  navigateto(
+                      context: context,
+                      page: Addwalletmotion(
+                        walletid: widget.walletid,
+                      ));
                 }),
             appBar: AppBar(
               leading: BackButton(

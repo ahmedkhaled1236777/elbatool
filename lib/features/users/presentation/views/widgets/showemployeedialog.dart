@@ -48,7 +48,7 @@ class showtemployeedialog extends StatelessWidget {
                     SizedBox(
                       height: 20,
                     ),
-                    if (BlocProvider.of<showemployeescuibt>(context)
+                    /*    if (BlocProvider.of<showemployeescuibt>(context)
                             .employeesdata[index]
                             .image !=
                         null)
@@ -64,7 +64,7 @@ class showtemployeedialog extends StatelessWidget {
                           ),
                           radius: 50,
                         ),
-                      ),
+                      ),*/
                     SizedBox(
                       height: 20,
                     ),

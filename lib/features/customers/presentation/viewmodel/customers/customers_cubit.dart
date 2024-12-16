@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 
 part 'customers_state.dart';
 
@@ -8,6 +7,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   String customeertype = "INJECTION";
   String type = "MANUFACTURE";
   String paymenttype = "cash";
+  String paymenttypesec = "inj";
   List<bool> injchecks = [
     true,
     true,
@@ -34,6 +34,11 @@ class CustomersCubit extends Cubit<CustomersState> {
 
   changetcustomerype({required String value}) {
     customeertype = value;
+    emit(CustomersChangeType());
+  }
+
+  changepaymenttypepay({required String value}) {
+    paymenttypesec = value;
     emit(CustomersChangeType());
   }
 

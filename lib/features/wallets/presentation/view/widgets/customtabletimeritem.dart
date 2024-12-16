@@ -5,13 +5,14 @@ class Customtablewalletitem extends StatelessWidget {
   final String walletname;
   final String salary;
   final String date;
-
+  final Widget delete;
   final TextStyle textStyle;
 
   Customtablewalletitem(
       {super.key,
       required this.walletname,
       required this.date,
+      required this.delete,
       required this.salary,
       required this.textStyle});
 
@@ -53,6 +54,7 @@ class Customtablewalletitem extends StatelessWidget {
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),
+          Expanded(flex: 2, child: delete),
         ],
       ),
     );

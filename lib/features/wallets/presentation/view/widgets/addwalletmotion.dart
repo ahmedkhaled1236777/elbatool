@@ -1,10 +1,12 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/wallets/presentation/view/wallets.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/wallets/data/model/walletmotionmodel.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/widgets/radioswallet.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 
@@ -12,6 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Addwalletmotion extends StatefulWidget {
+  final int walletid;
+
+  const Addwalletmotion({super.key, required this.walletid});
   @override
   State<Addwalletmotion> createState() => _AddwalletmotionState();
 }
@@ -21,7 +26,7 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
 
   TextEditingController amountofmoney = TextEditingController();
 
-  TextEditingController notes = TextEditingController();
+  TextEditingController notes = TextEditingController(text: "لا يوجد");
 
   @override
   Widget build(BuildContext context) {
@@ -82,11 +87,11 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                             SizedBox(
                               height: 10,
                             ),
-                            BlocBuilder<WalletCubit, WalletState>(
+                            BlocBuilder<WalletCubit, walletState>(
                               builder: (context, state) {
                                 return radioswalletsmotions(
-                                  firstradio: "DELETE",
-                                  secondradio: "PUT",
+                                  firstradio: 0,
+                                  secondradio: 1,
                                   firstradiotitle: "سحب",
                                   secondradiotitle: "ايداع",
                                 );
@@ -110,9 +115,47 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                             const SizedBox(
                               height: 20,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل",
-                              onPressed: () async {},
+                            BlocConsumer<WalletCubit, walletState>(
+                              listener: (context, state) {
+                                if (state is addwalletmotionfailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addwalletmotionsuccess) {
+                                  amountofmoney.clear();
+                                  notes.clear();
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                                // TODO: implement listener
+                              },
+                              builder: (context, state) {
+                                if (state is addwalletmotionloading)
+                                  return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل",
+                                  onPressed: () async {
+                                    if (formkey.currentState!.validate()) {
+                                      BlocProvider.of<WalletCubit>(context)
+                                          .addwalletmotion(
+                                              wallet: Walletmotionmodelrequest(
+                                                  date: BlocProvider.of<
+                                                          DateCubit>(context)
+                                                      .date1,
+                                                  status: BlocProvider.of<
+                                                          WalletCubit>(context)
+                                                      .wallettype,
+                                                  notes: notes.text,
+                                                  money: amountofmoney.text,
+                                                  walletid: widget.walletid));
+                                    }
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,
