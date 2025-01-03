@@ -15,13 +15,15 @@ abstract class urls {
   static const String factorytoolsmoves = "stockmoves";
   static const String deletemov = "delete-move";
   static const String electronicwallets = "stores";
+  static const String electronicwalletsmoves = "storemoves";
   static const String orders = "orders";
   static const String logout = "logout";
   static const String raw_material_stores = "raw_material_stores";
   static const String stamps = "stamps";
   static const String addstamp = "stamps";
-  static const String adduser = "users ";
+  static const String adduser = "register";
   static const String users = "users";
+  static const String clients = "clients";
   static const String updateprofile = "profile";
   static const String machines = "machines";
   static const String imageurl =

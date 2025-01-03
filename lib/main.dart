@@ -9,6 +9,7 @@ import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
 import 'package:agman/features/components/presentation/viewmodel/cubit/component_cubit.dart';
+import 'package:agman/features/customers/data/repos/clientsrepoimp.dart';
 import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
 import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
@@ -27,6 +28,8 @@ import 'package:agman/features/moldmanufacture/presentation/view/machinecost/pre
 import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/moldmanufacture/presentation/viewmodel/costcuibt/costcuibt.dart';
 import 'package:agman/features/oldproj/view/home.dart';
+import 'package:agman/features/save/presentation/view/saves.dart';
+import 'package:agman/features/suppliers/presentation/view/suppliers.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
 import 'package:agman/features/users/presentation/viewmodel/addemployee/addemployee_cubit.dart';
@@ -139,7 +142,8 @@ class MyApp extends StatelessWidget {
             create: (context) => plasticMaterialCubit(Materialrepoimp()),
           ),
           BlocProvider(
-            create: (context) => CustomersCubit(),
+            create: (context) =>
+                CustomersCubit(clientsrepoimp: Clientsrepoimp()),
           ),
           BlocProvider(
             create: (context) => SupplierssCubit(),

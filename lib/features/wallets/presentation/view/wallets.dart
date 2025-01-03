@@ -134,6 +134,11 @@ class _walletsState extends State<wallets> {
                                   navigateto(
                                       context: context,
                                       page: walletsmotions(
+                                        walletname:
+                                            BlocProvider.of<WalletCubit>(
+                                                    context)
+                                                .data[i]
+                                                .name!,
                                         walletid: BlocProvider.of<WalletCubit>(
                                                 context)
                                             .data[i]

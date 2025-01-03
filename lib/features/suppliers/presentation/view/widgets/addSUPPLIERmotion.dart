@@ -4,7 +4,10 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
+import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
+import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
+import 'package:agman/features/suppliers/presentation/view/widgets/radios.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +26,8 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
   TextEditingController desc = TextEditingController();
 
   TextEditingController quantity = TextEditingController();
+  TextEditingController accessoriesell = TextEditingController();
+  TextEditingController accessoriebuy = TextEditingController();
   TextEditingController putcost = TextEditingController();
   TextEditingController pieceprice = TextEditingController();
   TextEditingController totalvalue = TextEditingController();
@@ -40,7 +45,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
               title: const Text(
-                "اضافة حركة عميل",
+                "اضافة حركة مورد",
                 style: Styles.appbarstyle,
               ),
             ),
@@ -75,9 +80,9 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                               child: SingleChildScrollView(
                                   child: Column(children: [
                                 const SizedBox(
-                                  height: 7,
+                                  height: 20,
                                 ),
-                                /* RadiosSUPPLIERtypes(
+                                RadiosSUPPLIERtypes(
                                   firstradio: "SUPPLY",
                                   secondradio: "PAYMENT",
                                   firstradiotitle: "توريد",
@@ -94,7 +99,232 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     secondradio: "transported",
                                     firstradiotitle: "نقدي",
                                     secondradiotitle: "تحويل",
-                                  ),*/
+                                  ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                        .type ==
+                                    "SUPPLY")
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                        .type ==
+                                    "SUPPLY")
+                                  supplierradioadd(
+                                      firstradio: "material",
+                                      secondradio: "accessories",
+                                      thirdradio: "factorytools",
+                                      fourthradio: "other",
+                                      thirdradiotittle: "ادوات المصنع",
+                                      fourthradiotittle: "اخري",
+                                      firstradiotitle: "الخامات",
+                                      secondradiotitle: "الاكسسورات"),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart ==
+                                        "accessories")
+                                  Container(
+                                    color: Color(0xff535C91),
+                                    child: Center(
+                                      child: BlocBuilder<
+                                          plasticaccessoriesCubit,
+                                          plasticaccessoriesState>(
+                                        builder: (context, state) {
+                                          return DropdownSearch<String>(
+                                            dropdownButtonProps:
+                                                DropdownButtonProps(
+                                                    color: Colors.white),
+                                            popupProps: PopupProps.menu(
+                                                showSelectedItems: true,
+                                                showSearchBox: true,
+                                                searchFieldProps:
+                                                    TextFieldProps()),
+                                            selectedItem: BlocProvider.of<
+                                                        plasticaccessoriesCubit>(
+                                                    context)
+                                                .accessoriename,
+                                            items: BlocProvider.of<
+                                                        plasticaccessoriesCubit>(
+                                                    context)
+                                                .accessoriesnames,
+                                            onChanged: (value) {
+                                              BlocProvider.of<
+                                                          plasticaccessoriesCubit>(
+                                                      context)
+                                                  .changeaccessorie(value!);
+                                            },
+                                            dropdownDecoratorProps:
+                                                DropDownDecoratorProps(
+                                                    baseStyle: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: "cairo"),
+                                                    textAlign: TextAlign.center,
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      enabled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                    )),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart ==
+                                        "material")
+                                  Container(
+                                    color: Color(0xff535C91),
+                                    child: Center(
+                                      child: BlocBuilder<plasticMaterialCubit,
+                                          plasticMaterialState>(
+                                        builder: (context, state) {
+                                          return DropdownSearch<String>(
+                                            dropdownButtonProps:
+                                                DropdownButtonProps(
+                                                    color: Colors.white),
+                                            popupProps: PopupProps.menu(
+                                                showSelectedItems: true,
+                                                showSearchBox: true,
+                                                searchFieldProps:
+                                                    TextFieldProps()),
+                                            selectedItem: BlocProvider.of<
+                                                        plasticMaterialCubit>(
+                                                    context)
+                                                .materialname,
+                                            items: BlocProvider.of<
+                                                        plasticMaterialCubit>(
+                                                    context)
+                                                .materialsnames,
+                                            onChanged: (value) {
+                                              BlocProvider.of<
+                                                          plasticMaterialCubit>(
+                                                      context)
+                                                  .changematerialname(value!);
+                                            },
+                                            dropdownDecoratorProps:
+                                                DropDownDecoratorProps(
+                                                    baseStyle: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: "cairo"),
+                                                    textAlign: TextAlign.center,
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      enabled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                    )),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart ==
+                                        "factorytools")
+                                  Container(
+                                    color: Color(0xff535C91),
+                                    child: Center(
+                                      child: BlocBuilder<FactorytoolsCubit,
+                                          FactorytoolsState>(
+                                        builder: (context, state) {
+                                          return DropdownSearch<String>(
+                                            dropdownButtonProps:
+                                                DropdownButtonProps(
+                                                    color: Colors.white),
+                                            popupProps: PopupProps.menu(
+                                                showSelectedItems: true,
+                                                showSearchBox: true,
+                                                searchFieldProps:
+                                                    TextFieldProps()),
+                                            selectedItem: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .toolname,
+                                            items: BlocProvider.of<
+                                                    FactorytoolsCubit>(context)
+                                                .tools,
+                                            onChanged: (value) {
+                                              BlocProvider.of<
+                                                          FactorytoolsCubit>(
+                                                      context)
+                                                  .changettoolname(
+                                                      value: value!);
+                                            },
+                                            dropdownDecoratorProps:
+                                                DropDownDecoratorProps(
+                                                    baseStyle: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: "cairo"),
+                                                    textAlign: TextAlign.center,
+                                                    dropdownSearchDecoration:
+                                                        InputDecoration(
+                                                      enabled: true,
+                                                      enabledBorder:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      border:
+                                                          OutlineInputBorder(
+                                                        borderSide: BorderSide(
+                                                            color: Color(
+                                                                0xff535C91)),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                    )),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                 SizedBox(
                                   height: 10,
                                 ),
@@ -110,12 +340,15 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     );
                                   },
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<SupplierssCubit>(context)
-                                        .paymenttype ==
-                                    "transported")
+                                            .paymenttype ==
+                                        "transported" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .type !=
+                                        "SUPPLY")
                                   Column(
                                     children: [
                                       Container(
@@ -167,9 +400,6 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     ],
                                   ),
                                 SizedBox(height: 10),
-                                const SizedBox(
-                                  height: 10,
-                                ),
                                 custommytextform(
                                   controller: desc,
                                   hintText: "التوضيح",
@@ -192,13 +422,43 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     height: 10,
                                   ),
                                 if (BlocProvider.of<SupplierssCubit>(context)
-                                        .type ==
-                                    "SUPPLY")
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart !=
+                                        "accessories")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: pieceprice,
                                     hintText: "سعر الوحده",
                                     val: "برجاء ادخال سعر الوحده",
+                                  ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart ==
+                                        "accessories")
+                                  custommytextform(
+                                    keyboardType: TextInputType.number,
+                                    controller: accessoriesell,
+                                    hintText: "سعر الشراء",
+                                    val: "برجاء ادخال سعر الشراء",
+                                  ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                if (BlocProvider.of<SupplierssCubit>(context)
+                                            .type ==
+                                        "SUPPLY" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .supplypart ==
+                                        "accessories")
+                                  custommytextform(
+                                    keyboardType: TextInputType.number,
+                                    controller: accessoriebuy,
+                                    hintText: "سعر البيع",
+                                    val: "برجاء ادخال سعر البيع",
                                   ),
                                 if (BlocProvider.of<SupplierssCubit>(context)
                                         .type ==
@@ -222,8 +482,11 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     height: 10,
                                   ),
                                 if (BlocProvider.of<SupplierssCubit>(context)
-                                        .paymenttype ==
-                                    "transported")
+                                            .paymenttype ==
+                                        "transported" &&
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                            .type !=
+                                        "SUPPLY")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: putcost,
@@ -234,7 +497,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                   height: 20,
                                 ),
                                 custommaterialbutton(
-                                  button_name: "تسجيل عميل",
+                                  button_name: "تسجيل",
                                   onPressed: () async {},
                                 ),
                                 SizedBox(

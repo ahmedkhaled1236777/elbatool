@@ -29,7 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
       cashhelper.setdata(key: "name", value: success.data!.name ?? "");
       cashhelper.setdata(
           key: "image",
-          value: success.data!.img == null
+          value: success.data!.img != null
               ? "${urls.imageurl}${success.data!.img}"
               : "");
       cashhelper.setdata(key: "email", value: success.data!.email ?? "");

@@ -144,56 +144,6 @@ class radiostypes extends StatelessWidget {
   }
 }
 
-class RadiosSUPPLIERtypes extends StatelessWidget {
-  final String firstradio;
-  final String secondradio;
-  final String firstradiotitle;
-  final String secondradiotitle;
-  RadiosSUPPLIERtypes(
-      {super.key,
-      required this.firstradio,
-      required this.secondradio,
-      required this.firstradiotitle,
-      required this.secondradiotitle});
-  @override
-  Widget build(BuildContext context) {
-    var customerbloc = BlocProvider.of<SupplierssCubit>(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Radio(
-              activeColor: appcolors.seconderycolor,
-              value: firstradio,
-              groupValue: customerbloc.type,
-              onChanged: (val) {
-                customerbloc.changetype(value: val!);
-              }),
-          Text(
-            firstradiotitle,
-            style: Styles.textStyle12,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Radio(
-              activeColor: appcolors.seconderycolor,
-              value: secondradio,
-              groupValue: customerbloc.type,
-              onChanged: (val) {
-                customerbloc.changetype(value: val!);
-              }),
-          Text(
-            secondradiotitle,
-            style: Styles.textStyle12,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class customerradios extends StatelessWidget {
   final String firstradio;
   final String secondradio;
@@ -286,59 +236,6 @@ class customerradiospay extends StatelessWidget {
               groupValue: customerbloc.paymenttypesec,
               onChanged: (val) {
                 customerbloc.changepaymenttypepay(value: val!);
-              }),
-          Text(
-            secondradiotitle,
-            style: Styles.textStyle12,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class supplierradios extends StatelessWidget {
-  final String firstradio;
-  final String secondradio;
-  final String firstradiotitle;
-  final String secondradiotitle;
-  supplierradios(
-      {super.key,
-      required this.firstradio,
-      required this.secondradio,
-      required this.firstradiotitle,
-      required this.secondradiotitle});
-  @override
-  Widget build(BuildContext context) {
-    var customerbloc = BlocProvider.of<SupplierssCubit>(context);
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Radio(
-              activeColor: appcolors.seconderycolor,
-              value: firstradio,
-              groupValue: customerbloc.paymenttype,
-              onChanged: (val) {
-                customerbloc.changepaymenttype(value: val!);
-              }),
-          Text(
-            firstradiotitle,
-            style: Styles.textStyle12,
-          ),
-          SizedBox(
-            width: 10,
-          ),
-          Radio(
-              activeColor: appcolors.seconderycolor,
-              value: secondradio,
-              groupValue: customerbloc.paymenttype,
-              onChanged: (val) {
-                customerbloc.changepaymenttype(value: val!);
               }),
           Text(
             secondradiotitle,

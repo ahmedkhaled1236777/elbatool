@@ -15,11 +15,18 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
   FactorytoolsCubit(this.factorytoolsrepoimp) : super(FactorytoolsInitial());
   final Factorytoolsrepoimp factorytoolsrepoimp;
   String type = "1";
+  String toolname = "اختر الاداه";
   bool firstloading = false;
   List<Datum> data = [];
+  List<String> tools = [];
   List<datummoves> datamoves = [];
   changetype({required String value}) {
     type = value;
+    emit(changetypestate());
+  }
+
+  changettoolname({required String value}) {
+    toolname = value;
     emit(changetypestate());
   }
 
@@ -97,7 +104,12 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
     result.fold((failue) {
       emit(gettoolfailure(errormessage: failue.error_message));
     }, (success) {
-      data = success.data!;
+      data.clear();
+      tools.clear();
+      success.data!.forEach((e) {
+        data.add(e);
+        tools.add(e.name!);
+      });
       firstloading = true;
 
       emit(gettoolsuccess(successmessage: ""));

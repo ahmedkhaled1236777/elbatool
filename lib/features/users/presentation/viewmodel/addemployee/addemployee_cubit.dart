@@ -13,6 +13,7 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
       : super(AddemployeeInitial());
   File? image;
   String? is_active;
+  String? manager;
   uploadimage() async {
     XFile? pickedimage =
         await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -28,10 +29,10 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
   }
 
   bool loading = false;
-  List headertable = ["اسم الموظف", "الوظيفه", "رقم الهاتف", "تعديل", "حذف"];
+  List headertable = ["اسم الموظف", "الوظيفه", "رقم الهاتف", "تعديل", "الحاله"];
   Map permessions = {
     'الحقن': "injections",
-    'اوردرات الحقن': "injection_orders",
+    'اوردرات الحقن': "injections_order",
     'تصنيع الاسطمبات': "stamp_manufacturing",
     'الموظفين': "employees",
     'المستخدمين': "users",
@@ -40,13 +41,14 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
     'مخزن الخامات': "material_store",
     'مخزن الاكسسوارات': "accessories_store",
     "مخزن المكونات": "components_store",
-    'مخزن ادوات المصنع': "factory_tools_store",
+    "المحافظ الالكترونيه": "wallets",
+    "الخزينه": "save",
+    'مخزن ادوات المصنع': "warehouse",
     'الاعدادات': "settings",
-    'الاشعارات': "notifications",
   };
   Map showpermessions = {
     "injections": 'الحقن',
-    "injection_orders": 'اوردرات الحقن',
+    "injections_order": 'اوردرات الحقن',
     "stamp_manufacturing": 'تصنيع الاسطمبات',
     "employees": 'الموظفين',
     "users": "المستخدمين",
@@ -55,13 +57,15 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
     "material_store": 'مخزن الخامات',
     "accessories_store": 'مخزن الاكسسوارات',
     "components_store": "مخزن المكونات",
-    "factory_tools_store": 'مخزن ادوات المصنع',
+    "wallets": "المحافظ الالكترونيه",
+    "save": "الخزينه",
+    "warehouse": 'مخزن ادوات المصنع',
     "settings": 'الاعدادات',
-    "notifications": 'الاشعارات',
   };
   List<String> selecteditems = [];
   getselecteditems() {
     List<String> employeepermession = [];
+    employeepermession.add("settings");
     for (int i = 0; i < selecteditems.length; i++) {
       if (selecteditems[i] == "الاشعارات" || selecteditems[i] == "الاعدادات") {
         continue;
@@ -93,12 +97,10 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
   }
 
   updateemployee(
-      {required String token,
-      required int id,
-      required addemployeemodel employee}) async {
+      {required String token, required editemployeemodel employee}) async {
     emit(updateemployeeloading());
-    var result = await addemployeerepo.editemployee(
-        token: token, id: id, employee: employee);
+    var result =
+        await addemployeerepo.editemployee(token: token, employee: employee);
     result.fold(
         (l) => {emit(updateemployeefailure(errormessage: l.error_message))},
         (r) => {emit(updateemployeesuccess(succes_message: r))});
@@ -112,6 +114,11 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
 
   changestatus(String val) {
     this.is_active = val;
+    emit(changestatusstate());
+  }
+
+  changemanager(String val) {
+    this.manager = val;
     emit(changestatusstate());
   }
 }

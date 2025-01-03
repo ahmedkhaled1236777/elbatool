@@ -6,21 +6,19 @@ import 'package:agman/features/accessories/presentation/views/accessories.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/profile/profile.dart';
 import 'package:agman/features/components/presentation/views/components.dart';
-import 'package:agman/features/customers/presentation/view/widgets/customers/injectioncustomers.dart';
+import 'package:agman/features/customers/presentation/view/widgets/customers/customers.dart';
 import 'package:agman/features/factorytools/presentation/views/factorytools.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/users/presentation/views/widgets/employees.dart';
 import 'package:agman/features/injection/presentation/view/production.dart';
 import 'package:agman/features/home/presentation/view/widgets/gridelement.dart';
 import 'package:agman/features/materiales/presentation/views/material.dart';
-import 'package:agman/features/molds/presentation/views/molds.dart';
 import 'package:agman/features/orders/presentation/view/orders.dart';
 import 'package:agman/features/save/presentation/view/saves.dart';
 import 'package:agman/features/suppliers/presentation/view/suppliers.dart';
 import 'package:agman/features/wallets/presentation/view/wallets.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:avatar_glow/avatar_glow.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -71,13 +69,13 @@ class home2 extends StatelessWidget {
     },
     {
       "name": "الخزينه",
-      "name-en": "warehouse",
+      "name-en": "save",
       "image": "assets/images/safe-deposit.png",
       "page": save()
     },
     {
       "name": "المحافظ الالكترونيه",
-      "name-en": "warehouse",
+      "name-en": "wallets",
       "image": "assets/images/wallet.png",
       "page": wallets()
     },

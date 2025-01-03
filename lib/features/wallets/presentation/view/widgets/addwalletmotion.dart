@@ -116,7 +116,7 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                               height: 20,
                             ),
                             BlocConsumer<WalletCubit, walletState>(
-                              listener: (context, state) {
+                              listener: (context, state) async {
                                 if (state is addwalletmotionfailure) {
                                   showtoast(
                                       message: state.errormessage,
@@ -126,6 +126,11 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                                 if (state is addwalletmotionsuccess) {
                                   amountofmoney.clear();
                                   notes.clear();
+                                  await BlocProvider.of<WalletCubit>(context)
+                                      .getwalletsmotion(
+                                          walletid: widget.walletid);
+                                  await BlocProvider.of<WalletCubit>(context)
+                                      .getwallets();
                                   showtoast(
                                       message: state.successmessage,
                                       toaststate: Toaststate.succes,

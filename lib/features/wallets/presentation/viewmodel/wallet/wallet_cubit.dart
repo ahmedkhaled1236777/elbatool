@@ -1,6 +1,7 @@
 import 'package:agman/features/wallets/data/model/walletmodel/datum.dart';
 import 'package:agman/features/wallets/data/model/walletmodelrequest.dart';
 import 'package:agman/features/wallets/data/model/walletmotionmodel.dart';
+import 'package:agman/features/wallets/data/model/walletmotionmodel/datum.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +12,11 @@ class WalletCubit extends Cubit<walletState> {
   WalletCubit(this.walletrepoimp) : super(WalletInitial());
 
   int wallettype = 0;
+  int motionpage = 1;
+  Map<String, dynamic>? queryparms;
+  bool motionloading = false;
+
+  bool firstloadingmotion = false;
   changewallettype(int val) {
     wallettype = val;
     emit(changewalletstate());
@@ -18,6 +24,7 @@ class WalletCubit extends Cubit<walletState> {
 
   final Walletrepoimp walletrepoimp;
   List<Datum> data = [];
+  List<Datumwalletmotion> datamotions = [];
 
   addwallet({required Walletmodelrequest wallet}) async {
     emit(addwalletloading());
@@ -54,6 +61,22 @@ class WalletCubit extends Cubit<walletState> {
     });
   }
 
+  deletewalletmotion({
+    required int walletmotionid,
+  }) async {
+    emit(deletewalletmotionloading());
+    var result =
+        await walletrepoimp.deletewalletmotion(walletmotionid: walletmotionid);
+    result.fold((failure) {
+      emit(deletewalletmotionfailure(errormessage: failure.error_message));
+    }, (success) {
+      datamotions.removeWhere((e) {
+        return e.id == walletmotionid;
+      });
+      emit(deletewalletmotionsuccess(successmessage: success));
+    });
+  }
+
   getwallets({Map<String, dynamic>? queryparms}) async {
     emit(getwalletloading());
     var result = await walletrepoimp.getwallet();
@@ -63,6 +86,48 @@ class WalletCubit extends Cubit<walletState> {
       data = success.data!;
 
       emit(getwalletsuccess(successmessage: ""));
+    });
+  }
+
+  getwalletsmotion({required int walletid}) async {
+    if (firstloadingmotion == false) emit(getwalletmotionloading());
+    this.motionpage = 1;
+    var result = await walletrepoimp.getwalletmotion(
+        page: motionpage, walletid: walletid);
+    motionloading = true;
+    result.fold((failue) {
+      emit(getwalletmotionfailure(errormessage: failue.error_message));
+    }, (success) {
+      if (success.nextPageUrl == null) {
+        motionloading = false;
+      }
+      datamotions.clear();
+
+      success.data!.forEach((e) {
+        datamotions.add(e);
+      });
+
+      emit(getwalletmotionsuccess(successmessage: ""));
+    });
+  }
+
+  getmorewalletmotion({required int walletid}) async {
+    motionpage++;
+    var result = await walletrepoimp.getwalletmotion(
+        page: motionpage, walletid: walletid);
+    motionloading = true;
+    result.fold((failue) {
+      motionloading = false;
+
+      emit(getwalletmotionfailure(errormessage: failue.error_message));
+    }, (success) {
+      if (success.nextPageUrl == null) {
+        motionloading = false;
+      }
+      success.data!.forEach((e) {
+        datamotions.add(e);
+      });
+      emit(getwalletmotionsuccess(successmessage: ""));
     });
   }
 }

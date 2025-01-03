@@ -1,9 +1,13 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/wallets/data/model/walletmodelrequest.dart';
+import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,9 +97,47 @@ class _AddwalletState extends State<Addwallet> {
                             const SizedBox(
                               height: 20,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل محفظه",
-                              onPressed: () async {},
+                            BlocConsumer<WalletCubit, walletState>(
+                              listener: (context, state) {
+                                if (state is addwalletfailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addwalletsuccess) {
+                                  wallwtname.clear();
+                                  moneyinwallet.clear();
+                                  BlocProvider.of<DateCubit>(context)
+                                      .cleardates();
+
+                                  BlocProvider.of<WalletCubit>(context)
+                                      .getwallets();
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is addwalletloading) return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل محفظه",
+                                  onPressed: () async {
+                                    if (formkey.currentState!.validate()) {
+                                      await BlocProvider.of<
+                                              WalletCubit>(context)
+                                          .addwallet(
+                                              wallet: Walletmodelrequest(
+                                                  name: wallwtname.text,
+                                                  date: BlocProvider.of<
+                                                          DateCubit>(context)
+                                                      .date1,
+                                                  money: moneyinwallet.text));
+                                    }
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

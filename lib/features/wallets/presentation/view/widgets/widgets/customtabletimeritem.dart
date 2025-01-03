@@ -8,6 +8,7 @@ class Customtablewalletmotionitem extends StatelessWidget {
   final String amountofmoney;
   final String notes;
   final String employer;
+  final Widget delete;
 
   final TextStyle textStyle;
 
@@ -16,6 +17,7 @@ class Customtablewalletmotionitem extends StatelessWidget {
       required this.clientorcustomer,
       required this.date,
       required this.type,
+      required this.delete,
       required this.textStyle,
       required this.amountofmoney,
       required this.employer,
@@ -27,7 +29,7 @@ class Customtablewalletmotionitem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       constraints:
-          BoxConstraints(minHeight: MediaQuery.of(context).size.height / 19),
+          BoxConstraints(minHeight: MediaQuery.of(context).size.height / 15),
       child: Row(
         children: [
           Expanded(
@@ -88,6 +90,7 @@ class Customtablewalletmotionitem extends StatelessWidget {
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),
+          Expanded(flex: 2, child: delete),
         ],
       ),
     );

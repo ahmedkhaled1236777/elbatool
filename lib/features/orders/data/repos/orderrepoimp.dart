@@ -22,8 +22,9 @@ class orderrepoimp extends orderrepo {
       if (response.statusCode == 200) {
         return right(response.data["message"]);
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }

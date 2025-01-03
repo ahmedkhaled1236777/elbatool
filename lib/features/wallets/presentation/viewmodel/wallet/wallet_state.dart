@@ -61,3 +61,31 @@ class deletewalletfailure extends walletState {
 
   deletewalletfailure({required this.errormessage});
 }
+
+class getwalletmotionloading extends walletState {}
+
+class getwalletmotionsuccess extends walletState {
+  final String successmessage;
+
+  getwalletmotionsuccess({required this.successmessage});
+}
+
+class getwalletmotionfailure extends walletState {
+  final String errormessage;
+
+  getwalletmotionfailure({required this.errormessage});
+}
+
+class deletewalletmotionloading extends walletState {}
+
+class deletewalletmotionsuccess extends walletState {
+  final String successmessage;
+
+  deletewalletmotionsuccess({required this.successmessage});
+}
+
+class deletewalletmotionfailure extends walletState {
+  final String errormessage;
+
+  deletewalletmotionfailure({required this.errormessage});
+}

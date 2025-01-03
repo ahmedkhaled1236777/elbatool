@@ -5,8 +5,8 @@ class customtableemployeeitem extends StatelessWidget {
   final String employeename;
   final String job;
   final String phone;
+  final String status;
 
-  Widget delet;
   Widget edit;
   TextStyle textStyle;
   double iconsize;
@@ -15,8 +15,8 @@ class customtableemployeeitem extends StatelessWidget {
       {super.key,
       required this.employeename,
       required this.phone,
+      required this.status,
       required this.job,
-      required this.delet,
       required this.edit,
       this.iconsize = 22,
       this.textStyle = Styles.textStyle12b});
@@ -51,11 +51,14 @@ class customtableemployeeitem extends StatelessWidget {
                 textAlign: TextAlign.center,
               )),
           Expanded(
-            child: edit,
-            flex: 2,
-          ),
+              flex: 2,
+              child: Text(
+                status,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
           Expanded(
-            child: delet,
+            child: edit,
             flex: 2,
           ),
         ],

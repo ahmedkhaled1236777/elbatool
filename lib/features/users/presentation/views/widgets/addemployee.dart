@@ -67,42 +67,6 @@ class _addemplyeeState extends State<addemplyee> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        SizedBox(
-                          height: 10,
-                        ),
-                        BlocBuilder<AddemployeeCubit, AddemployeeState>(
-                          builder: (context, state) {
-                            return Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: [
-                                BlocProvider.of<AddemployeeCubit>(context)
-                                            .image ==
-                                        null
-                                    ? CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: AssetImage(
-                                            "assets/images/division.png"),
-                                      )
-                                    : CircleAvatar(
-                                        radius: 50,
-                                        backgroundImage: FileImage(
-                                            BlocProvider.of<AddemployeeCubit>(
-                                                    context)
-                                                .image!),
-                                      ),
-                                IconButton(
-                                    onPressed: () {
-                                      BlocProvider.of<AddemployeeCubit>(context)
-                                          .uploadimage();
-                                    },
-                                    icon: const Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.grey,
-                                    ))
-                              ],
-                            );
-                          },
-                        ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -220,38 +184,18 @@ class _addemplyeeState extends State<addemplyee> {
                                         error: "يجب تحديد الصلاحيات",
                                         context: context);
                                   } else {
-                                    var image;
-                                    if (BlocProvider.of<AddemployeeCubit>(
-                                                context)
-                                            .image !=
-                                        null) {
-                                      image = await MultipartFile.fromFile(
-                                          BlocProvider.of<AddemployeeCubit>(
-                                                  context)
-                                              .image!
-                                              .path,
-                                          filename:
-                                              BlocProvider.of<AddemployeeCubit>(
-                                                      context)
-                                                  .image!
-                                                  .path
-                                                  .split("/")
-                                                  .last);
-                                    }
                                     await BlocProvider.of<AddemployeeCubit>(
                                             context)
                                         .addemployee(
                                             token: cashhelper.getdata(
                                                 key: "token"),
                                             employee: addemployeemodel(
-                                                isactive: "1",
                                                 email: email.text,
                                                 password_confirmation:
                                                     passwordconfirm.text,
                                                 password: password.text,
                                                 name: employeename.text,
                                                 phone: phone.text,
-                                                image: image,
                                                 jobtittle: jobdescription.text,
                                                 permessions: BlocProvider.of<
                                                             AddemployeeCubit>(
