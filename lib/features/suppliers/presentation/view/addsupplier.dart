@@ -1,9 +1,11 @@
 import 'package:agman/core/colors/colors.dart';
-import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
-import 'package:agman/core/common/widgets/choosedate.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
+import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -65,21 +67,6 @@ class _addsupplierState extends State<addsupplier> {
                             const SizedBox(
                               height: 50,
                             ),
-                            BlocBuilder<DateCubit, DateState>(
-                              builder: (context, state) {
-                                return choosedate(
-                                  date:
-                                      BlocProvider.of<DateCubit>(context).date1,
-                                  onPressed: () {
-                                    BlocProvider.of<DateCubit>(context)
-                                        .changedate(context);
-                                  },
-                                );
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
                             custommytextform(
                               controller: suppliername,
                               hintText: "اسم المورد",
@@ -106,9 +93,41 @@ class _addsupplierState extends State<addsupplier> {
                             const SizedBox(
                               height: 20,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل مورد",
-                              onPressed: () async {},
+                            BlocConsumer<SupplierssCubit, SupplierssState>(
+                              listener: (context, state) {
+                                if (state is addSupplierfailure)
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                if (state is addSuppliersuccess) {
+                                  suppliername.clear();
+                                  phone.clear();
+                                  place.clear();
+                                  BlocProvider.of<SupplierssCubit>(context)
+                                      .getSuppliers();
+
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                              },
+                              builder: (context, state) {
+                                if (state is addSupplierloading)
+                                  return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل مورد",
+                                  onPressed: () async {
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                        .addsupplier(
+                                            supplier: Supplierrequest(
+                                                name: suppliername.text,
+                                                phone: phone.text,
+                                                place: place.text));
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

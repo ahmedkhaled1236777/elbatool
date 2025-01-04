@@ -66,6 +66,7 @@ class Authrepoimp extends Authrepo {
       required String name,
       required String oldpass,
       required String newpass,
+      required String newpassconfirm,
       File? photo}) async {
     try {
       FormData data = FormData.fromMap({
@@ -73,7 +74,8 @@ class Authrepoimp extends Authrepo {
         "email": email,
         "phone": phone,
         "password": newpass,
-        "password_confirmation": newpass,
+        "password_confirmation": newpassconfirm,
+        "old_password": oldpass,
         if (photo != null)
           "img": await MultipartFile.fromFile(photo.path,
               filename: photo.path.split("/").last)
@@ -82,6 +84,7 @@ class Authrepoimp extends Authrepo {
           path: urls.updateprofile,
           token: cashhelper.getdata(key: "token"),
           data: data);
+
       if (response.statusCode == 200 && response.data["status"] == true) {
         return right(Updatemodel.fromJson(response.data));
       } else {

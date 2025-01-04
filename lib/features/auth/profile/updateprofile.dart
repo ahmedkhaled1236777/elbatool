@@ -23,6 +23,7 @@ class Updateprofile extends StatefulWidget {
   final TextEditingController email;
   final TextEditingController oldpass = TextEditingController();
   final TextEditingController newpass = TextEditingController();
+  final TextEditingController newpassconfirm = TextEditingController();
 
   Updateprofile(
       {super.key,
@@ -191,6 +192,27 @@ class _UpdateprofileState extends State<Updateprofile> {
                           prefixicon: Icon(Icons.lock),
                           hintText: "كلمة المرور الجديده",
                         ),
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        customtextform(
+                          suffixIcon: IconButton(
+                              onPressed: () {
+                                BlocProvider.of<AuthCubit>(context)
+                                    .changeobsecure();
+                              },
+                              icon: Icon(
+                                BlocProvider.of<AuthCubit>(context).obsecure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: appcolors.lighttext,
+                              )),
+                          obscureText:
+                              BlocProvider.of<AuthCubit>(context).obsecure,
+                          controller: widget.newpassconfirm,
+                          prefixicon: Icon(Icons.lock),
+                          hintText: "تأكيد كلمة المرور الجديده",
+                        ),
                       ],
                     );
                   },
@@ -237,6 +259,7 @@ class _UpdateprofileState extends State<Updateprofile> {
                             phone: widget.phone.text,
                             name: widget.name.text,
                             oldpass: widget.oldpass.text,
+                            newpassconfirm: widget.newpassconfirm.text,
                             newpass: widget.newpass.text,
                             photo: photo);
                       },

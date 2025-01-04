@@ -10,6 +10,7 @@ abstract class urls {
   static const String stamp_initial_costs = "stamp_initial_costs";
   static const String industrials = "industrials";
   static const String stamp_accessories = "stamp_accessories";
+  static const String suppliers = "suppliers";
   static const String addmove = "add-move";
   static const String factorytools = "stocks";
   static const String factorytoolsmoves = "stockmoves";

@@ -15,5 +15,6 @@ abstract class Authrepo {
       required String name,
       required String oldpass,
       required String newpass,
+      required String newpassconfirm,
       File? photo});
 }

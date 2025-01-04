@@ -29,6 +29,7 @@ import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.
 import 'package:agman/features/moldmanufacture/presentation/viewmodel/costcuibt/costcuibt.dart';
 import 'package:agman/features/oldproj/view/home.dart';
 import 'package:agman/features/save/presentation/view/saves.dart';
+import 'package:agman/features/suppliers/data/repos/supplierrepoimp.dart';
 import 'package:agman/features/suppliers/presentation/view/suppliers.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
@@ -146,7 +147,8 @@ class MyApp extends StatelessWidget {
                 CustomersCubit(clientsrepoimp: Clientsrepoimp()),
           ),
           BlocProvider(
-            create: (context) => SupplierssCubit(),
+            create: (context) =>
+                SupplierssCubit(supplierepo: suppliersrepoimp()),
           ),
           BlocProvider(
             create: (context) => SaveCubit(),

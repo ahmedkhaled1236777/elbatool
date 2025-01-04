@@ -2,17 +2,29 @@ import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
+import 'package:agman/core/common/widgets/error.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
+import 'package:agman/core/common/widgets/loading.dart';
+import 'package:agman/core/common/widgets/nodata.dart';
+import 'package:agman/core/common/widgets/shimmerloading.dart';
+import 'package:agman/core/common/widgets/showdialogerror.dart';
 import 'package:agman/features/suppliers/presentation/view/addsupplier.dart';
 import 'package:agman/features/suppliers/presentation/view/supplieritem.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/addSUPPLIERmotion.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/alertcontent.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/SUPPLIERdesc.dart';
+import 'package:agman/features/suppliers/presentation/view/widgets/widgets/editsupplierdialog.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Suppliers extends StatelessWidget {
+class Suppliers extends StatefulWidget {
+  @override
+  State<Suppliers> createState() => _SuppliersState();
+}
+
+class _SuppliersState extends State<Suppliers> {
   final supplierheader = [
     "اسم المورد",
     "رقم الهاتف",
@@ -20,6 +32,15 @@ class Suppliers extends StatelessWidget {
     "تعديل",
     "حذف",
   ];
+  getdata() async {
+    await BlocProvider.of<SupplierssCubit>(context).getSuppliers();
+  }
+
+  @override
+  void initState() {
+    getdata();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,50 +111,199 @@ class Suppliers extends StatelessWidget {
             Expanded(
                 child: RefreshIndicator(
                     onRefresh: () async {},
-                    child: ListView.separated(
-                        itemBuilder: (context, i) => InkWell(
-                              onTap: () {
-                                BlocProvider.of<SupplierssCubit>(context)
-                                    .changetype(value: "INJECTION");
-                                BlocProvider.of<SupplierssCubit>(context)
-                                    .changepaymenttype(value: "cash");
-                                navigateto(
-                                    context: context,
-                                    page: supplierdesc(
-                                      textStyle: Styles.gettabletextstyle(
-                                          context: context),
-                                      name: "SUPPLY",
-                                      page: AddSuppliersmotion(),
-                                      date: "22/7/2024",
-                                      desc: "خامه",
-                                      quantity: "20",
-                                      pieceprice: "200",
-                                      total: "4000",
-                                      type: "توريد",
-                                    ));
-                              },
-                              child: customtablsupplieritem(
-                                  textStyle: Styles.gettabletextstyle(
-                                      context: context),
-                                  name: 'احمد',
-                                  phone: "011503987412",
-                                  place: "مصنع السلام",
-                                  edit: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        editeicon,
-                                      )),
-                                  delet: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(
-                                        deleteicon,
-                                        color: Colors.red,
-                                      ))),
-                            ),
-                        separatorBuilder: (context, i) => Divider(
-                              color: Colors.grey,
-                            ),
-                        itemCount: 5))),
+                    child: BlocBuilder<SupplierssCubit, SupplierssState>(
+                      builder: (context, state) {
+                        if (state is getSuppliergfailure)
+                          return errorfailure(errormessage: state.errormessage);
+                        if (state is getSuppliersloading)
+                          return loadingshimmer();
+                        return BlocProvider.of<SupplierssCubit>(context)
+                                .suppliers
+                                .isEmpty
+                            ? nodata()
+                            : ListView.separated(
+                                itemBuilder: (context, i) => InkWell(
+                                      onTap: () {},
+                                      child: customtablsupplieritem(
+                                          textStyle: Styles.gettabletextstyle(
+                                              context: context),
+                                          name:
+                                              BlocProvider.of<SupplierssCubit>(
+                                                          context)
+                                                      .suppliers[i]
+                                                      .name ??
+                                                  "",
+                                          phone:
+                                              BlocProvider.of<SupplierssCubit>(
+                                                          context)
+                                                      .suppliers[i]
+                                                      .phone ??
+                                                  "",
+                                          place:
+                                              BlocProvider.of<SupplierssCubit>(
+                                                          context)
+                                                      .suppliers[i]
+                                                      .industry ??
+                                                  "",
+                                          edit: IconButton(
+                                              onPressed: () {
+                                                showDialog(
+                                                    barrierDismissible: false,
+                                                    // user must tap button!
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return AlertDialog(
+                                                          title: Container(
+                                                            alignment: Alignment
+                                                                .topLeft,
+                                                            child: IconButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                icon: const Icon(
+                                                                    Icons
+                                                                        .close)),
+                                                          ),
+                                                          surfaceTintColor:
+                                                              Colors.white,
+                                                          shape: RoundedRectangleBorder(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          0)),
+                                                          content:
+                                                              editsupplierdialog(
+                                                            id: BlocProvider.of<
+                                                                        SupplierssCubit>(
+                                                                    context)
+                                                                .suppliers[i]
+                                                                .id!,
+                                                            place: TextEditingController(
+                                                                text: BlocProvider.of<
+                                                                            SupplierssCubit>(
+                                                                        context)
+                                                                    .suppliers[
+                                                                        i]
+                                                                    .industry),
+                                                            Suppliername: TextEditingController(
+                                                                text: BlocProvider.of<
+                                                                            SupplierssCubit>(
+                                                                        context)
+                                                                    .suppliers[
+                                                                        i]
+                                                                    .name),
+                                                            phone: TextEditingController(
+                                                                text: BlocProvider.of<
+                                                                            SupplierssCubit>(
+                                                                        context)
+                                                                    .suppliers[
+                                                                        i]
+                                                                    .phone),
+                                                          ));
+                                                    });
+                                              },
+                                              icon: Icon(
+                                                editeicon,
+                                              )),
+                                          delet: IconButton(
+                                              onPressed: () {
+                                                awsomdialogerror(
+                                                    context: context,
+                                                    mywidget: BlocConsumer<
+                                                        SupplierssCubit,
+                                                        SupplierssState>(
+                                                      listener:
+                                                          (context, state) {
+                                                        if (state
+                                                            is deleteSuppliersuccess) {
+                                                          Navigator.pop(
+                                                              context);
+
+                                                          showtoast(
+                                                              message: state
+                                                                  .successmesssage,
+                                                              toaststate:
+                                                                  Toaststate
+                                                                      .succes,
+                                                              context: context);
+                                                        }
+                                                        if (state
+                                                            is deleteSupplierfailure) {
+                                                          Navigator.pop(
+                                                              context);
+
+                                                          showtoast(
+                                                              message: state
+                                                                  .errormessage,
+                                                              toaststate:
+                                                                  Toaststate
+                                                                      .error,
+                                                              context: context);
+                                                        }
+                                                      },
+                                                      builder:
+                                                          (context, state) {
+                                                        if (state
+                                                            is deleteSupplierloading)
+                                                          return deleteloading();
+                                                        return SizedBox(
+                                                          height: 50,
+                                                          width: 100,
+                                                          child: ElevatedButton(
+                                                              style:
+                                                                  const ButtonStyle(
+                                                                backgroundColor:
+                                                                    MaterialStatePropertyAll(
+                                                                        Color.fromARGB(
+                                                                            255,
+                                                                            37,
+                                                                            163,
+                                                                            42)),
+                                                              ),
+                                                              onPressed:
+                                                                  () async {
+                                                                await BlocProvider.of<
+                                                                            SupplierssCubit>(
+                                                                        context)
+                                                                    .deletesupplier(
+                                                                        supplierid: BlocProvider.of<SupplierssCubit>(context)
+                                                                            .suppliers[i]
+                                                                            .id!);
+                                                              },
+                                                              child: const Text(
+                                                                "تاكيد",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    fontFamily:
+                                                                        "cairo",
+                                                                    color: Colors
+                                                                        .white),
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                              )),
+                                                        );
+                                                      },
+                                                    ),
+                                                    tittle: "هل تريد الحذف ؟");
+                                              },
+                                              icon: Icon(
+                                                deleteicon,
+                                                color: Colors.red,
+                                              ))),
+                                    ),
+                                separatorBuilder: (context, i) => Divider(
+                                      color: Colors.grey,
+                                    ),
+                                itemCount:
+                                    BlocProvider.of<SupplierssCubit>(context)
+                                        .suppliers
+                                        .length);
+                      },
+                    ))),
             SizedBox(
               height: 10,
             ),

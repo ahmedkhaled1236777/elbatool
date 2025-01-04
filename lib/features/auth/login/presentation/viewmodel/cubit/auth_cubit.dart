@@ -45,6 +45,7 @@ class AuthCubit extends Cubit<AuthState> {
       required String name,
       required String oldpass,
       required String newpass,
+      required String newpassconfirm,
       File? photo}) async {
     emit(updateprofileloading());
     var result = await authrepoimp.updateprofile(
@@ -53,6 +54,7 @@ class AuthCubit extends Cubit<AuthState> {
         name: name,
         photo: photo,
         oldpass: oldpass,
+        newpassconfirm: newpassconfirm,
         newpass: newpass);
     result.fold((failure) {
       emit(updateprofilefailure(errormessage: failure.error_message));
