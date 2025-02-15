@@ -24,6 +24,20 @@ class changetypematerialstate extends plasticMaterialState {}
 
 class AddMaterialLoading extends plasticMaterialState {}
 
+class AddMaterialmoveLoading extends plasticMaterialState {}
+
+class AddMaterialmovesuccess extends plasticMaterialState {
+  final String successmessage;
+
+  AddMaterialmovesuccess({required this.successmessage});
+}
+
+class AddMaterialmovefailure extends plasticMaterialState {
+  final String errormessage;
+
+  AddMaterialmovefailure({required this.errormessage});
+}
+
 class AddMaterialSuccess extends plasticMaterialState {
   final String successmessage;
 

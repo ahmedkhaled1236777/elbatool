@@ -8,6 +8,8 @@ class Datum extends Equatable {
   final String? sellPrice;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final dynamic? dateFrom;
+  final dynamic? dateTo;
 
   const Datum({
     this.id,
@@ -17,6 +19,8 @@ class Datum extends Equatable {
     this.sellPrice,
     this.createdAt,
     this.updatedAt,
+    this.dateFrom,
+    this.dateTo,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -31,6 +35,8 @@ class Datum extends Equatable {
         updatedAt: json['updated_at'] == null
             ? null
             : DateTime.parse(json['updated_at'] as String),
+        dateFrom: json['date_from'],
+        dateTo: json['date_to'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,6 +47,8 @@ class Datum extends Equatable {
         'sell_price': sellPrice,
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
+        'date_from': dateFrom,
+        'date_to': dateTo,
       };
 
   @override
@@ -53,6 +61,8 @@ class Datum extends Equatable {
       sellPrice,
       createdAt,
       updatedAt,
+      dateFrom,
+      dateTo,
     ];
   }
 }

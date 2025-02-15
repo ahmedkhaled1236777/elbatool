@@ -1,11 +1,8 @@
-import 'dart:collection';
-
 import 'package:agman/features/accessories/data/model/accessoriemodel/datum.dart';
 import 'package:agman/features/accessories/data/model/accessoriemodelrequest.dart';
 import 'package:agman/features/accessories/data/model/deleteputmodelrequest.dart';
 import 'package:agman/features/accessories/data/repos/accessorierepoimp.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 
 import '../../../data/model/accessoriemotionmodel/datum.dart';
 
@@ -18,9 +15,13 @@ class plasticaccessoriesCubit extends Cubit<plasticaccessoriesState> {
       : super(accessoriesInitial());
   int page = 1;
   Map<String, dynamic>? queryparms;
+  int totalsell = 0;
+  int totalbuy = 0;
+  int totalconsume = 0;
 
   bool loading = false;
   List<Datum> data = [];
+  List<Datum> datasearch = [];
   bool firstloading = false;
   int motionpage = 1;
   String accessoriename = "اختر الاكسسوار";
@@ -61,6 +62,23 @@ class plasticaccessoriesCubit extends Cubit<plasticaccessoriesState> {
     });
   }
 
+  getaccessorieswithsearch(
+      {required String datefrom, required String dateto}) async {
+    emit(getaccessoriesloading());
+    var result = await accessorierepoimp
+        .getaccessories(queryparms: {"date_from": datefrom, "date_to": dateto});
+    result.fold((failue) {
+      emit(getaccessoriesfailure(errormessage: failue.error_message));
+    }, (success) {
+      datasearch.clear();
+      success.data!.forEach((e) {
+        datasearch.add(e);
+      });
+
+      emit(getaccessoriessuccess(successmessage: ""));
+    });
+  }
+
   getaccessories() async {
     if (firstloading == false) emit(getaccessoriesloading());
     var result = await accessorierepoimp.getaccessories(queryparms: queryparms);
@@ -81,22 +99,28 @@ class plasticaccessoriesCubit extends Cubit<plasticaccessoriesState> {
     });
   }
 
-  getaccessoriesmotion({required int accessorieid}) async {
+  getaccessoriesmotion(
+      {required int accessorieid, String? datefrom, String? dateto}) async {
     if (firstloadingmotion == false) emit(getaccessoriesmotionloading());
     this.motionpage = 1;
     var result = await accessorierepoimp.getaccessoriesmotion(
-        page: motionpage, accessorieid: accessorieid);
+        datefrom: datefrom,
+        dateto: dateto,
+        page: motionpage,
+        accessorieid: accessorieid);
     motionloading = true;
     result.fold((failue) {
       emit(getaccessoriesmotionfailure(errormessage: failue.error_message));
     }, (success) {
-      if (success.nextPageUrl == null) {
+      if (success.data!.nextPageUrl == null) {
         motionloading = false;
       }
       alldata.clear();
-
+      totalbuy = success.summary!.addedQuantity!;
+      totalsell = success.summary!.saleQuantity!;
+      totalconsume = success.summary!.consumedQuantity!;
       firstloadingmotion = true;
-      success.data!.forEach((e) {
+      success.data!.data!.forEach((e) {
         alldata.add(e);
       });
 
@@ -112,10 +136,11 @@ class plasticaccessoriesCubit extends Cubit<plasticaccessoriesState> {
     result.fold((failue) {
       emit(getaccessoriesmotionfailure(errormessage: failue.error_message));
     }, (success) {
-      if (success.nextPageUrl == null) {
+      if (success.data!.nextPageUrl == null) {
         motionloading = false;
       }
-      success.data!.forEach((e) {
+
+      success.data!.data!.forEach((e) {
         alldata.add(e);
       });
       emit(getaccessoriesmotionsuccess(successmessage: ""));

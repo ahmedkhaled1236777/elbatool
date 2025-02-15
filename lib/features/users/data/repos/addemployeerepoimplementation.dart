@@ -1,5 +1,6 @@
 import 'package:agman/core/common/errors/failure.dart';
 import 'package:agman/core/common/errors/handlingerror.dart';
+import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/users/data/models/addemployeerequest.dart';
@@ -65,16 +66,20 @@ class emplyeerepoimplementaion extends employeerepo {
 
   @override
   Future<Either<failure, String>> deleteemployee(
-      {required String token, required int employeenumber}) async {
+      {required int employeenumber}) async {
     try {
-      Response response = await Deletedata.deletedata(
-          path: "users/${employeenumber}", token: token);
-      if (response.statusCode == 200 && response.data["status"] == 200)
+      Response response = await Postdata.postdata(
+          path: "delete-user",
+          queryParameters: {"user_id": employeenumber},
+          token: cashhelper.getdata(key: "token"));
+      if (response.statusCode == 200 && response.data["success"] == true)
         return right("تم حذف البيانات بنجاح");
-      else if (response.statusCode == 200 && response.data["code"] == 422) {
-        return left(requestfailure(error_message: response.data["data"][0]));
-      } else {
-        return left(requestfailure(error_message: response.data["message"]));
+      else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
       if (e is DioException) {

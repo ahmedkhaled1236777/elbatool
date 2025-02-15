@@ -29,7 +29,14 @@ class AddemployeeCubit extends Cubit<AddemployeeState> {
   }
 
   bool loading = false;
-  List headertable = ["اسم الموظف", "الوظيفه", "رقم الهاتف", "تعديل", "الحاله"];
+  List headertable = [
+    "اسم الموظف",
+    "الوظيفه",
+    "رقم الهاتف",
+    "الحاله",
+    "تعديل",
+    "حذف"
+  ];
   Map permessions = {
     'الحقن': "injections",
     'اوردرات الحقن': "injections_order",

@@ -32,7 +32,7 @@ class _walletsmotionsState extends State<walletsmotions> {
     "العمليه",
     "عميل - مورد",
     "المبلغ",
-    "الموظف",
+    "المستخدم",
     "الملاحظات",
     "حذف",
   ];

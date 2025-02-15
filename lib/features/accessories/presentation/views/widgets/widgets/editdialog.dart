@@ -3,7 +3,6 @@ import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/dialogerror.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
-import 'package:agman/features/materiales/data/models/materialmodelrequest.dart';
 import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
 import 'package:agman/features/materiales/presentation/views/widgets/radios.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class Editmaterialdialog extends StatelessWidget {
           ),
           BlocBuilder<plasticMaterialCubit, plasticMaterialState>(
             builder: (context, state) {
-              return radios(
+              return radiosmaterialtype(
                   firstradio: "PUT",
                   secondradio: "DELETE",
                   firstradiotitle: "اضافه",

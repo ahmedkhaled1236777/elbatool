@@ -2,14 +2,16 @@ import 'package:equatable/equatable.dart';
 
 class DatumMOTION extends Equatable {
   final int? id;
+  final String? currentQty;
   final int? type;
-  final dynamic stampName;
+  final String? stampName;
   final String? date;
-  final dynamic notes;
+  final String? notes;
   final int? userId;
   final int? accessoryId;
   final int? qty;
   final String? buyPrice;
+  final String? sellPrice;
   final String? totalPrice;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -17,6 +19,7 @@ class DatumMOTION extends Equatable {
 
   const DatumMOTION({
     this.id,
+    this.currentQty,
     this.type,
     this.stampName,
     this.date,
@@ -25,6 +28,7 @@ class DatumMOTION extends Equatable {
     this.accessoryId,
     this.qty,
     this.buyPrice,
+    this.sellPrice,
     this.totalPrice,
     this.createdAt,
     this.updatedAt,
@@ -33,14 +37,16 @@ class DatumMOTION extends Equatable {
 
   factory DatumMOTION.fromJson(Map<String, dynamic> json) => DatumMOTION(
         id: json['id'] as int?,
+        currentQty: json['current_qty'] as String?,
         type: json['type'] as int?,
-        stampName: json['stamp_name'] as dynamic,
+        stampName: json['stamp_name'] as String?,
         date: json['date'] as String?,
-        notes: json['notes'] as dynamic,
+        notes: json['notes'] as String?,
         userId: json['user_id'] as int?,
         accessoryId: json['accessory_id'] as int?,
         qty: json['qty'] as int?,
         buyPrice: json['buy_price'] as String?,
+        sellPrice: json['sell_price'] as String?,
         totalPrice: json['total_price'] as String?,
         createdAt: json['created_at'] == null
             ? null
@@ -53,6 +59,7 @@ class DatumMOTION extends Equatable {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'current_qty': currentQty,
         'type': type,
         'stamp_name': stampName,
         'date': date,
@@ -61,6 +68,7 @@ class DatumMOTION extends Equatable {
         'accessory_id': accessoryId,
         'qty': qty,
         'buy_price': buyPrice,
+        'sell_price': sellPrice,
         'total_price': totalPrice,
         'created_at': createdAt?.toIso8601String(),
         'updated_at': updatedAt?.toIso8601String(),
@@ -71,6 +79,7 @@ class DatumMOTION extends Equatable {
   List<Object?> get props {
     return [
       id,
+      currentQty,
       type,
       stampName,
       date,
@@ -79,6 +88,7 @@ class DatumMOTION extends Equatable {
       accessoryId,
       qty,
       buyPrice,
+      sellPrice,
       totalPrice,
       createdAt,
       updatedAt,

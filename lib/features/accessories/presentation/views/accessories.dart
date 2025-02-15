@@ -14,6 +14,7 @@ import 'package:agman/features/accessories/presentation/views/addaccessories.dar
 import 'package:agman/features/accessories/presentation/views/widgets/alertcontent.dart';
 import 'package:agman/features/accessories/presentation/views/widgets/customtableaccessorieitem.dart';
 import 'package:agman/features/accessories/presentation/views/widgets/editdialog.dart';
+import 'package:agman/features/accessories/presentation/views/widgets/widgets/alertaccessoriesearchdate.dart';
 import 'package:agman/features/accessories/presentation/views/widgets/widgets/plasticaccessorieitem.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -97,6 +98,36 @@ class _accessoriesState extends State<accessories> {
                       Icons.search,
                       color: Colors.white,
                     )),
+                IconButton(
+                    onPressed: () {
+                      showDialog(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: Container(
+                                height: 20,
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop();
+                                    },
+                                    icon: Icon(
+                                      Icons.close,
+                                      color: appcolors.maincolor,
+                                    )),
+                              ),
+                              contentPadding: EdgeInsets.all(10),
+                              backgroundColor: Colors.white,
+                              insetPadding: EdgeInsets.all(35),
+                              content: Alertaccessoriesearchdate(),
+                            );
+                          });
+                    },
+                    icon: Icon(
+                      Icons.search_sharp,
+                      color: Colors.white,
+                    )),
               ],
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
@@ -150,6 +181,11 @@ class _accessoriesState extends State<accessories> {
                                         navigateto(
                                             context: context,
                                             page: Plasticaccessorieitem(
+                                              accessoriename: BlocProvider.of<
+                                                          plasticaccessoriesCubit>(
+                                                      context)
+                                                  .data[i]
+                                                  .name!,
                                               accessorieid: BlocProvider.of<
                                                           plasticaccessoriesCubit>(
                                                       context)

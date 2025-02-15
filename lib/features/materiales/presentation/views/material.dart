@@ -3,7 +3,6 @@ import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/toast/toast.dart';
-import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
@@ -150,7 +149,18 @@ class _plasticMaterialState extends State<plasticMaterial> {
                                   onTap: () {
                                     navigateto(
                                         context: context,
-                                        page: Plasticmaterialitem());
+                                        page: Plasticmaterialitem(
+                                          materialid: BlocProvider.of<
+                                                  plasticMaterialCubit>(context)
+                                              .data[i]
+                                              .id!,
+                                          materialname:
+                                              "${BlocProvider.of<plasticMaterialCubit>(context).data[i].name!} ${BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "pure" ? "بيور" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "kasr_elkasara" ? "كسر كساره" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "el_mkhraz" ? "مخرز" : ""}",
+                                          type: BlocProvider.of<
+                                                  plasticMaterialCubit>(context)
+                                              .data[i]
+                                              .type!,
+                                        ));
                                   },
                                   child: Customtablematerialitem(
                                     textStyle: Styles.gettabletextstyle(

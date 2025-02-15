@@ -48,6 +48,7 @@ class Accessorierepoimp extends Accessoriesrepo {
           queryParameters: queryparms);
 
       if (response.data["status"] == true && response.statusCode == 200) {
+        print("jjjjjjjjjjjjjjjjjjjjjjjj");
         return right(Accessoriemodel.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {
@@ -57,6 +58,8 @@ class Accessorierepoimp extends Accessoriesrepo {
           return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
+      print("jjjjjjjjjjjjjjjjjjjjjjjj");
+      print(e.toString());
       if (e is DioException)
         return left(requestfailure.fromdioexception(e));
       else
@@ -120,12 +123,19 @@ class Accessorierepoimp extends Accessoriesrepo {
 
   @override
   Future<Either<failure, Accessoriemotionmodel>> getaccessoriesmotion(
-      {required int page, required int accessorieid}) async {
+      {required int page,
+      required int accessorieid,
+      String? datefrom,
+      String? dateto}) async {
     try {
       Response response = await Getdata.getdata(
           token: cashhelper.getdata(key: "token"),
           path: "accessories?page=${page}",
-          queryParameters: {"accessory_id": accessorieid});
+          queryParameters: {
+            "accessory_id": accessorieid,
+            if (datefrom != null) "date_from": datefrom,
+            if (dateto != null) "date_to": dateto,
+          });
 
       if (response.data["success"] == true && response.statusCode == 200) {
         return right(Accessoriemotionmodel.fromJson(response.data));
@@ -156,7 +166,7 @@ class Accessorierepoimp extends Accessoriesrepo {
       if (response.data["success"] == true && response.statusCode == 200) {
         return right("تم التسجيل بنجاح");
       } else {
-        if (response.data["data"] != null) {
+        if (response.data["errors"] != null) {
           return left(
               requestfailure(error_message: response.data["errors"][0]));
         } else

@@ -1,15 +1,13 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/navigation.dart';
-import 'package:agman/core/common/toast/toast.dart';
+
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/dialogerror.dart';
-import 'package:agman/core/common/widgets/errorwidget.dart';
-import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
-import 'package:agman/features/factorytools/presentation/views/widgets/toolgard.dart';
-import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
+import 'package:agman/features/factorytools/presentation/views/widgets/factorytoolssearch.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -102,29 +100,17 @@ class alertfactorytoolcontent extends StatelessWidget {
                                             "برجاء تحديد التاريخ من والتاريخ الي",
                                         context: context);
                                   } else {
-                                    BlocProvider.of<FactorytoolsCubit>(context)
-                                        .getfactorytools(queryparms: {
-                                      if ((BlocProvider.of<DateCubit>(context)
-                                                  .date3 !=
-                                              "التاريخ من" &&
-                                          BlocProvider.of<DateCubit>(context)
-                                                  .date4 !=
-                                              "التاريخ الي"))
-                                        "date_from":
-                                            BlocProvider.of<DateCubit>(context)
-                                                .date3,
-                                      if ((BlocProvider.of<DateCubit>(context)
-                                                  .date3 !=
-                                              "التاريخ من" &&
-                                          BlocProvider.of<DateCubit>(context)
-                                                  .date4 !=
-                                              "التاريخ الي"))
-                                        "date_to":
-                                            BlocProvider.of<DateCubit>(context)
-                                                .date4,
-                                    });
+                                    navigateto(
+                                        context: context,
+                                        page: Factorytoolssearch(
+                                            startdate:
+                                                BlocProvider.of<DateCubit>(
+                                                        context)
+                                                    .date3,
+                                            enddate: BlocProvider.of<DateCubit>(
+                                                    context)
+                                                .date4));
                                   }
-                                  Navigator.pop(context);
                                 })
                           ]))))
             ])));

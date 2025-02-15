@@ -3,7 +3,6 @@ import 'package:agman/core/common/errors/handlingerror.dart';
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
-import 'package:agman/features/customers/data/models/clentmodel/clentmodel.dart';
 import 'package:agman/features/suppliers/data/models/suppliermodel/suppliermodel.dart';
 import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
 import 'package:agman/features/suppliers/data/repos/supplierrepo.dart';

@@ -23,6 +23,8 @@ class _DeleteorputState extends State<Deleteorput> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController quantity = TextEditingController();
+  TextEditingController sellprice = TextEditingController();
+  TextEditingController buyprice = TextEditingController();
   TextEditingController notes = TextEditingController(text: "لا يوجد");
   TextEditingController stampname = TextEditingController(text: "لا يوجد");
 
@@ -82,7 +84,7 @@ class _DeleteorputState extends State<Deleteorput> {
                                     secondradio: 1,
                                     firstradiotitle: "سحب",
                                     selltittle: "بيع",
-                                    secondradiotitle: "اضافه");
+                                    secondradiotitle: "شراء");
                               },
                             ),
                             SizedBox(
@@ -117,6 +119,36 @@ class _DeleteorputState extends State<Deleteorput> {
                             ),
                             const SizedBox(
                               height: 10,
+                            ),
+                            BlocBuilder<plasticaccessoriesCubit,
+                                plasticaccessoriesState>(
+                              builder: (context, state) {
+                                return BlocProvider.of<plasticaccessoriesCubit>(
+                                                context)
+                                            .type ==
+                                        1
+                                    ? Column(
+                                        children: [
+                                          custommytextform(
+                                            controller: sellprice,
+                                            hintText: "سعر البيع",
+                                            val: "برجاء ادخال سعر البيع",
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          custommytextform(
+                                            controller: buyprice,
+                                            hintText: "سعر الشراء",
+                                            val: "برجاء ادخال سعر الشراء",
+                                          ),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                        ],
+                                      )
+                                    : SizedBox();
+                              },
                             ),
                             custommytextform(
                                 controller: notes,
@@ -170,6 +202,13 @@ class _DeleteorputState extends State<Deleteorput> {
                                             accessorie: Deleteputmodelrequest(
                                                 id: widget.accessoreeid,
                                                 stampname: stampname.text,
+                                                sellprice:
+                                                    sellprice.text.isEmpty
+                                                        ? "0"
+                                                        : sellprice.text,
+                                                buyprice: buyprice.text.isEmpty
+                                                    ? "0"
+                                                    : buyprice.text,
                                                 quantity:
                                                     int.parse(quantity.text),
                                                 notes: notes.text,

@@ -5,6 +5,7 @@ import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/materiales/data/models/materialmodel/materialmodel.dart';
 import 'package:agman/features/materiales/data/models/materialmodelrequest.dart';
+import 'package:agman/features/materiales/data/models/materialmovemodelrequest.dart';
 import 'package:agman/features/materiales/data/repos/materialrepo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -15,7 +16,7 @@ class Materialrepoimp extends materialrepo {
       {required Materialmodelrequest material}) async {
     try {
       Response response = await Postdata.postdata(
-          path: urls.raw_material_stores,
+          path: urls.materials,
           token: cashhelper.getdata(key: "token"),
           data: material.tojson());
       if (response.statusCode == 200 && response.data["success"] == true) {
@@ -98,6 +99,29 @@ class Materialrepoimp extends materialrepo {
             "qt2": type == "kasr_elkasara" ? quantity : null,
             "qt3": type == "el_mkhraz" ? quantity : null,
           });
+      if (response.statusCode == 200 && response.data["success"] == true) {
+        return right(response.data["message"]);
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException) return left(requestfailure.fromdioexception(e));
+      return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, String>> addmaterialmove(
+      {required Materialmovemodelrequest material}) async {
+    try {
+      Response response = await Postdata.postdata(
+          path: urls.material_moves,
+          token: cashhelper.getdata(key: "token"),
+          data: material.tojson());
       if (response.statusCode == 200 && response.data["success"] == true) {
         return right(response.data["message"]);
       } else {

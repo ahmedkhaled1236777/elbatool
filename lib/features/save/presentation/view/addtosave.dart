@@ -1,13 +1,14 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/save/data/model/savemodelrequest.dart';
 import 'package:agman/features/save/presentation/view/widgets/radiossave.dart';
 import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart';
-import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -85,8 +86,8 @@ class _AddsaveState extends State<Addsave> {
                             BlocBuilder<SaveCubit, SaveState>(
                               builder: (context, state) {
                                 return radiossave(
-                                  firstradio: "DELETE",
-                                  secondradio: "PUT",
+                                  firstradio: "0",
+                                  secondradio: "1",
                                   firstradiotitle: "سحب",
                                   secondradiotitle: "ايداع",
                                 );
@@ -110,9 +111,49 @@ class _AddsaveState extends State<Addsave> {
                             const SizedBox(
                               height: 20,
                             ),
-                            custommaterialbutton(
-                              button_name: "تسجيل",
-                              onPressed: () async {},
+                            BlocConsumer<SaveCubit, SaveState>(
+                              listener: (context, state) {
+                                if (state is addsavefailure) {
+                                  showtoast(
+                                      message: state.errormessage,
+                                      toaststate: Toaststate.error,
+                                      context: context);
+                                }
+                                if (state is addsavesuccess) {
+                                  amountofmoney.clear();
+                                  notes.clear();
+                                  BlocProvider.of<DateCubit>(context)
+                                      .cleardates();
+                                  BlocProvider.of<SaveCubit>(context)
+                                      .changesavetype("0");
+                                  showtoast(
+                                      message: state.successmessage,
+                                      toaststate: Toaststate.succes,
+                                      context: context);
+                                }
+                                // TODO: implement listener
+                              },
+                              builder: (context, state) {
+                                if (state is addsaveloading) return loading();
+                                return custommaterialbutton(
+                                  button_name: "تسجيل",
+                                  onPressed: () async {
+                                    BlocProvider.of<SaveCubit>(context)
+                                        .addsavemotion(
+                                            saverequest: Savemodelrequest(
+                                                date:
+                                                    BlocProvider.of<DateCubit>(
+                                                            context)
+                                                        .date1,
+                                                status:
+                                                    BlocProvider.of<SaveCubit>(
+                                                            context)
+                                                        .savetype,
+                                                money: amountofmoney.text,
+                                                notes: notes.text));
+                                  },
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 25,

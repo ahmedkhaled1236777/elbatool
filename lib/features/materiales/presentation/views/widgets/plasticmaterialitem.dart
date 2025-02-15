@@ -1,12 +1,23 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/constants.dart';
+import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
+import 'package:agman/features/materiales/presentation/views/widgets/addmaterialmotion.dart';
 import 'package:agman/features/materiales/presentation/views/widgets/datesearch.dart';
 import 'package:agman/features/materiales/presentation/views/widgets/materialmotion.dart';
 import 'package:flutter/material.dart';
 
 class Plasticmaterialitem extends StatefulWidget {
+  final int materialid;
+  final String materialname;
+  final String type;
+
+  const Plasticmaterialitem(
+      {super.key,
+      required this.materialid,
+      required this.materialname,
+      required this.type});
   @override
   State<Plasticmaterialitem> createState() => _PlasticmaterialitemState();
 }
@@ -138,6 +149,30 @@ class _PlasticmaterialitemState extends State<Plasticmaterialitem> {
                   children: [
                     SizedBox(
                       width: 15,
+                    ),
+                    InkWell(
+                        onTap: () {
+                          navigateto(
+                              context: context,
+                              page: Addmaterialmotion(
+                                materialid: widget.materialid,
+                                materialname: widget.materialname,
+                                type: widget.type,
+                              ));
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: appcolors.primarycolor,
+                              borderRadius: BorderRadius.circular(7)),
+                          height: 45,
+                          width: 45,
+                          child: Icon(
+                            Icons.picture_as_pdf,
+                            color: Colors.white,
+                          ),
+                        )),
+                    SizedBox(
+                      width: 7,
                     ),
                     InkWell(
                         onTap: () {},

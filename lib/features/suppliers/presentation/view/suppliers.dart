@@ -123,7 +123,11 @@ class _SuppliersState extends State<Suppliers> {
                             ? nodata()
                             : ListView.separated(
                                 itemBuilder: (context, i) => InkWell(
-                                      onTap: () {},
+                                      onTap: () {
+                                        navigateto(
+                                            context: context,
+                                            page: AddSuppliersmotion());
+                                      },
                                       child: customtablsupplieritem(
                                           textStyle: Styles.gettabletextstyle(
                                               context: context),

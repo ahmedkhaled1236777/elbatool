@@ -1,10 +1,15 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/widgets/error.dart';
+import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 import 'package:agman/features/save/presentation/view/addtosave.dart';
+import 'package:agman/features/save/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/save/presentation/view/widgets/customtabletimeritem.dart';
+import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class save extends StatefulWidget {
   @override
@@ -25,7 +30,13 @@ class _saveState extends State<save> {
     "الملاحظات",
   ];
 
-  getdata() async {}
+  getdata() async {
+    BlocProvider.of<SaveCubit>(context).date =
+        '${DateTime.now().year}-${DateTime.now().month < 10 ? "0${DateTime.now().month}" : DateTime.now().month}-${DateTime.now().day < 10 ? "0${DateTime.now().day}" : DateTime.now().day}';
+    await BlocProvider.of<SaveCubit>(context).getsavemotion(
+        date:
+            '${DateTime.now().year}-${DateTime.now().month < 10 ? "0${DateTime.now().month}" : DateTime.now().month}-${DateTime.now().day < 10 ? "0${DateTime.now().day}" : DateTime.now().day}');
+  }
 
   @override
   void initState() {
@@ -53,7 +64,7 @@ class _saveState extends State<save> {
               actions: [
                 IconButton(
                     onPressed: () {
-                      /*  showDialog(
+                      showDialog(
                           barrierDismissible: false,
                           context: context,
                           builder: (context) {
@@ -73,9 +84,9 @@ class _saveState extends State<save> {
                               contentPadding: EdgeInsets.all(10),
                               backgroundColor: Colors.white,
                               insetPadding: EdgeInsets.all(35),
-                              content: Alertmoldcontent(),
+                              content: Alertsavecontent(),
                             );
-                          });*/
+                          });
                     },
                     icon: Icon(
                       Icons.search,
@@ -93,55 +104,125 @@ class _saveState extends State<save> {
                     fontWeight: FontWeight.bold),
               ),
             ),
-            body: Column(children: [
-              Container(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    style: TextStyle(
-                        fontFamily: "cairo",
-                        fontWeight: FontWeight.bold,
-                        fontSize: 15),
-                    "الاجمالي : 50000",
+            body: BlocBuilder<SaveCubit, SaveState>(
+              builder: (context, state) {
+                if (state is getsaveloading) return loading();
+                if (state is getsavefailure)
+                  return errorfailure(errormessage: state.errormessage);
+                return Column(children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(vertical: 20),
+                    width: double.infinity,
+                    child: Center(
+                      child: Text(
+                        style: TextStyle(
+                            fontFamily: "cairo",
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                        "التاريخ : ${BlocProvider.of<SaveCubit>(context).date}",
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Container(
-                height: 50,
-                color: appcolors.maincolor.withOpacity(0.7),
-                child: Row(
-                    children: saveheader
-                        .map((e) => customheadertable(
-                              textStyle:
-                                  Styles.getheadertextstyle(context: context),
-                              title: e,
-                              flex:
-                                  e == "عميل - مورد" || e == "العمليه" ? 2 : 3,
-                            ))
-                        .toList()),
-              ),
-              Expanded(
-                  child: RefreshIndicator(
-                      onRefresh: () async {},
-                      child: ListView.separated(
-                          itemBuilder: (context, i) => InkWell(
-                                onTap: () {},
-                                child: Customtablesaveitem(
-                                  date: "22/7/2024",
-                                  employer: "عماد",
-                                  type: "ايداع",
-                                  clientorcustomer: "محمد علي",
-                                  amountofmoney: "2000",
-                                  notes: "تحميل عدد خامات",
-                                  textStyle: Styles.gettabletextstyle(
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 100,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Center(
+                            child: Text(
+                              style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontFamily: "cairo",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                              "الرصيد الحالي : ${BlocProvider.of<SaveCubit>(context).total ?? 0}",
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 20),
+                          child: Center(
+                            child: Text(
+                              style: TextStyle(
+                                  overflow: TextOverflow.ellipsis,
+                                  fontFamily: "cairo",
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15),
+                              "رصيد البحث : ${BlocProvider.of<SaveCubit>(context).totalsearch ?? 0}",
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    color: appcolors.maincolor.withOpacity(0.7),
+                    child: Row(
+                        children: saveheader
+                            .map((e) => customheadertable(
+                                  textStyle: Styles.getheadertextstyle(
                                       context: context),
-                                ),
-                              ),
-                          separatorBuilder: (context, i) => Divider(
-                                color: Colors.grey,
-                              ),
-                          itemCount: 5))),
-            ])));
+                                  title: e,
+                                  flex: e == "عميل - مورد" || e == "العمليه"
+                                      ? 2
+                                      : 3,
+                                ))
+                            .toList()),
+                  ),
+                  Expanded(
+                      child: RefreshIndicator(
+                          onRefresh: () async {},
+                          child: ListView.separated(
+                              itemBuilder: (context, i) => InkWell(
+                                    onTap: () {},
+                                    child: Customtablesaveitem(
+                                      date: BlocProvider.of<SaveCubit>(context)
+                                              .data[i]
+                                              .date ??
+                                          "",
+                                      employer:
+                                          BlocProvider.of<SaveCubit>(context)
+                                                  .data[i]
+                                                  .employer ??
+                                              "",
+                                      type: BlocProvider.of<SaveCubit>(context)
+                                                  .data[i]
+                                                  .status ==
+                                              0
+                                          ? "سحب"
+                                          : "ايداع",
+                                      clientorcustomer:
+                                          BlocProvider.of<SaveCubit>(context)
+                                                  .data[i]
+                                                  .client ??
+                                              "",
+                                      amountofmoney:
+                                          BlocProvider.of<SaveCubit>(context)
+                                                  .data[i]
+                                                  .price ??
+                                              "",
+                                      notes: BlocProvider.of<SaveCubit>(context)
+                                              .data[i]
+                                              .notes ??
+                                          "",
+                                      textStyle: Styles.gettabletextstyle(
+                                          context: context),
+                                    ),
+                                  ),
+                              separatorBuilder: (context, i) => Divider(
+                                    color: Colors.grey,
+                                  ),
+                              itemCount: BlocProvider.of<SaveCubit>(context)
+                                  .data
+                                  .length))),
+                ]);
+              },
+            )));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:agman/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class Customtablewalletitem extends StatelessWidget {

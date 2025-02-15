@@ -1,9 +1,12 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
+import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
+import 'package:agman/core/common/widgets/showdialogerror.dart';
 import 'package:agman/features/users/presentation/viewmodel/addemployee/addemployee_cubit.dart';
 import 'package:agman/features/users/presentation/viewmodel/showemployeecuibt/employeecuibt.dart';
 import 'package:agman/features/users/presentation/viewmodel/showemployeecuibt/employeestates.dart';
@@ -47,7 +50,8 @@ class _customtableemployeeesState extends State<customtableemployees> {
                     .headertable
                     .map((e) => customheadertable(
                         title: e,
-                        flex: e == "تعديل" || e == "الحاله" ? 2 : 3,
+                        flex:
+                            e == "تعديل" || e == "الحاله" || e == "حذف" ? 2 : 3,
                         textStyle: Styles.getheadertextstyle(context: context)))
                     .toList()),
           ),
@@ -80,6 +84,84 @@ class _customtableemployeeesState extends State<customtableemployees> {
                           return InkWell(
                             onTap: () {},
                             child: customtableemployeeitem(
+                                delete: IconButton(
+                                    onPressed: () {
+                                      awsomdialogerror(
+                                          context: context,
+                                          mywidget: BlocConsumer<
+                                              showemployeescuibt,
+                                              showemployeesstates>(
+                                            listener: (context, state) {
+                                              if (state
+                                                  is deleteemployeesuccess) {
+                                                Navigator.pop(context);
+
+                                                showtoast(
+                                                    message:
+                                                        state.succes_message,
+                                                    toaststate:
+                                                        Toaststate.succes,
+                                                    context: context);
+                                              }
+                                              if (state
+                                                  is deleteemployeefailure) {
+                                                Navigator.pop(context);
+
+                                                showtoast(
+                                                    message: state.errormessage,
+                                                    toaststate:
+                                                        Toaststate.error,
+                                                    context: context);
+                                              }
+                                            },
+                                            builder: (context, state) {
+                                              if (state
+                                                  is deleteemployeeloading)
+                                                return deleteloading();
+                                              return SizedBox(
+                                                height: 50,
+                                                width: 100,
+                                                child: ElevatedButton(
+                                                    style: const ButtonStyle(
+                                                      backgroundColor:
+                                                          MaterialStatePropertyAll(
+                                                              Color.fromARGB(
+                                                                  255,
+                                                                  37,
+                                                                  163,
+                                                                  42)),
+                                                    ),
+                                                    onPressed: () async {
+                                                      await BlocProvider.of<
+                                                                  showemployeescuibt>(
+                                                              context)
+                                                          .deleteemployee(
+                                                              employeenumber: BlocProvider
+                                                                      .of<showemployeescuibt>(
+                                                                          context)
+                                                                  .employeesdata[
+                                                                      index]
+                                                                  .id!);
+                                                    },
+                                                    child: const Text(
+                                                      "تاكيد",
+                                                      style: TextStyle(
+                                                          fontSize: 12,
+                                                          fontFamily: "cairo",
+                                                          color: Colors.white),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    )),
+                                              );
+                                            },
+                                          ),
+                                          tittle:
+                                              "هل تريد حذف  ${BlocProvider.of<showemployeescuibt>(context).employeesdata[index].name}");
+                                    },
+                                    icon: Icon(
+                                      deleteicon,
+                                      color: Colors.red,
+                                    )),
                                 status:
                                     BlocProvider.of<showemployeescuibt>(context)
                                                 .employeesdata[index]

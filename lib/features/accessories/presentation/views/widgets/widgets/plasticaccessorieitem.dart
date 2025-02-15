@@ -19,8 +19,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class Plasticaccessorieitem extends StatefulWidget {
   ScrollController nscrollController = ScrollController();
   final int accessorieid;
+  final String accessoriename;
 
-  Plasticaccessorieitem({super.key, required this.accessorieid});
+  Plasticaccessorieitem(
+      {super.key, required this.accessorieid, required this.accessoriename});
 
   @override
   State<Plasticaccessorieitem> createState() => _PlasticaccessorieitemState();
@@ -30,8 +32,9 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
   final componentheader = [
     "التاريخ",
     "الكميه",
-    "الحاله",
-    "اسم الاسطمبه",
+    "النوع",
+    "سعر الشراء",
+    "سعر البيع",
     "الملاحظات",
     "حذف",
   ];
@@ -66,7 +69,11 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
               ),
               actions: [
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      BlocProvider.of<plasticaccessoriesCubit>(context)
+                          .getaccessoriesmotion(
+                              accessorieid: widget.accessorieid);
+                    },
                     icon: Icon(
                       Icons.refresh,
                       color: Colors.white,
@@ -93,7 +100,9 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                               contentPadding: EdgeInsets.all(10),
                               backgroundColor: Colors.white,
                               insetPadding: EdgeInsets.all(35),
-                              content: Dateaccessoriesearch(),
+                              content: Dateaccessoriesearch(
+                                accessorieid: widget.accessorieid,
+                              ),
                             );
                           });
                     },
@@ -104,8 +113,8 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
               ],
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
-              title: const Text(
-                "حركات الاكسسوار",
+              title: Text(
+                "حركات اكسسوار   ${widget.accessoriename}",
                 style: TextStyle(
                     color: Colors.white,
                     fontFamily: "cairo",
@@ -124,10 +133,9 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                                 textStyle:
                                     Styles.getheadertextstyle(context: context),
                                 title: e,
-                                flex:
-                                    e == "حذف" || e == "تعديل" || e == "الحاله"
-                                        ? 2
-                                        : 3,
+                                flex: e == "حذف" || e == "تعديل" || e == "النوع"
+                                    ? 2
+                                    : 3,
                               ))
                           .toList()),
                 ),
@@ -153,20 +161,32 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                             : InkWell(
                                 onTap: () {},
                                 child: Accessoriemotion(
-                                  textStyle: Styles.gettabletextstyle(
-                                      context: context),
-                                  moldname:
+                                  sellprice:
                                       BlocProvider.of<plasticaccessoriesCubit>(
                                                       context)
                                                   .alldata[i]
-                                                  .stampName ==
-                                              null
-                                          ? "لا يوجد"
+                                                  .type !=
+                                              1
+                                          ? ""
                                           : BlocProvider.of<
                                                       plasticaccessoriesCubit>(
                                                   context)
                                               .alldata[i]
-                                              .stampName!,
+                                              .sellPrice!,
+                                  buyprice:
+                                      BlocProvider.of<plasticaccessoriesCubit>(
+                                                      context)
+                                                  .alldata[i]
+                                                  .type !=
+                                              1
+                                          ? ""
+                                          : BlocProvider.of<
+                                                      plasticaccessoriesCubit>(
+                                                  context)
+                                              .alldata[i]
+                                              .buyPrice!,
+                                  textStyle: Styles.gettabletextstyle(
+                                      context: context),
                                   date:
                                       BlocProvider.of<plasticaccessoriesCubit>(
                                               context)
@@ -366,6 +386,37 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                 ),
                 SizedBox(
                   height: 10,
+                ),
+                BlocBuilder<plasticaccessoriesCubit, plasticaccessoriesState>(
+                  builder: (context, state) {
+                    return Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      width: double.infinity,
+                      color: Color(0xff535C91),
+                      child: Column(
+                        children: [
+                          Text(
+                            " اجمالي قطع البيع : ${BlocProvider.of<plasticaccessoriesCubit>(context).totalsell} ",
+                            style: TextStyle(
+                                fontFamily: "cairo", color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            "  اجمالي قطع الشراء : ${BlocProvider.of<plasticaccessoriesCubit>(context).totalbuy}",
+                            style: TextStyle(
+                                fontFamily: "cairo", color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                          Text(
+                            " اجمالي قطع الاستهلاك  : ${BlocProvider.of<plasticaccessoriesCubit>(context).totalconsume} ",
+                            style: TextStyle(
+                                fontFamily: "cairo", color: Colors.white),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 )
               ]);
             })));

@@ -4,7 +4,7 @@ import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 
-import 'package:agman/features/customers/presentation/view/widgets/customers/monthsearch.dart';
+import 'package:agman/features/clients/presentation/view/widgets/customers/monthsearch.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/supplieritemdesc.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/supplierusageitem.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';

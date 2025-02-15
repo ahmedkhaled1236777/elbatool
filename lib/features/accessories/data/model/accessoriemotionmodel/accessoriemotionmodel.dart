@@ -1,103 +1,33 @@
 import 'package:equatable/equatable.dart';
 
-import 'datum.dart';
-import 'link.dart';
+import 'data.dart';
+import 'summary.dart';
 
 class Accessoriemotionmodel extends Equatable {
   final bool? success;
-  final String? message;
-  final int? currentPage;
-  final List<DatumMOTION>? data;
-  final String? firstPageUrl;
-  final int? from;
-  final int? lastPage;
-  final String? lastPageUrl;
-  final List<Link>? links;
-  final String? nextPageUrl;
-  final String? path;
-  final int? perPage;
-  final dynamic prevPageUrl;
-  final int? to;
-  final int? total;
+  final Data? data;
+  final Summary? summary;
 
-  const Accessoriemotionmodel({
-    this.success,
-    this.message,
-    this.currentPage,
-    this.data,
-    this.firstPageUrl,
-    this.from,
-    this.lastPage,
-    this.lastPageUrl,
-    this.links,
-    this.nextPageUrl,
-    this.path,
-    this.perPage,
-    this.prevPageUrl,
-    this.to,
-    this.total,
-  });
+  const Accessoriemotionmodel({this.success, this.data, this.summary});
 
   factory Accessoriemotionmodel.fromJson(Map<String, dynamic> json) {
     return Accessoriemotionmodel(
       success: json['success'] as bool?,
-      message: json['message'] as String?,
-      currentPage: json['current_page'] as int?,
-      data: (json['data'] as List<dynamic>?)
-          ?.map((e) => DatumMOTION.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      firstPageUrl: json['first_page_url'] as String?,
-      from: json['from'] as int?,
-      lastPage: json['last_page'] as int?,
-      lastPageUrl: json['last_page_url'] as String?,
-      links: (json['links'] as List<dynamic>?)
-          ?.map((e) => Link.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      nextPageUrl: json['next_page_url'] as String?,
-      path: json['path'] as String?,
-      perPage: json['per_page'] as int?,
-      prevPageUrl: json['prev_page_url'] as dynamic,
-      to: json['to'] as int?,
-      total: json['total'] as int?,
+      data: json['data'] == null
+          ? null
+          : Data.fromJson(json['data'] as Map<String, dynamic>),
+      summary: json['summary'] == null
+          ? null
+          : Summary.fromJson(json['summary'] as Map<String, dynamic>),
     );
   }
 
   Map<String, dynamic> toJson() => {
         'success': success,
-        'message': message,
-        'current_page': currentPage,
-        'data': data?.map((e) => e.toJson()).toList(),
-        'first_page_url': firstPageUrl,
-        'from': from,
-        'last_page': lastPage,
-        'last_page_url': lastPageUrl,
-        'links': links?.map((e) => e.toJson()).toList(),
-        'next_page_url': nextPageUrl,
-        'path': path,
-        'per_page': perPage,
-        'prev_page_url': prevPageUrl,
-        'to': to,
-        'total': total,
+        'data': data?.toJson(),
+        'summary': summary?.toJson(),
       };
 
   @override
-  List<Object?> get props {
-    return [
-      success,
-      message,
-      currentPage,
-      data,
-      firstPageUrl,
-      from,
-      lastPage,
-      lastPageUrl,
-      links,
-      nextPageUrl,
-      path,
-      perPage,
-      prevPageUrl,
-      to,
-      total,
-    ];
-  }
+  List<Object?> get props => [success, data, summary];
 }

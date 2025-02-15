@@ -1,16 +1,14 @@
 import 'package:agman/core/common/date/date_cubit.dart';
-import 'package:agman/core/common/localdata.dart';
 import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/accessories/data/repos/accessorierepoimp.dart';
 import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
-import 'package:agman/features/accessories/presentation/views/accessories.dart';
 import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
 import 'package:agman/features/components/presentation/viewmodel/cubit/component_cubit.dart';
-import 'package:agman/features/customers/data/repos/clientsrepoimp.dart';
-import 'package:agman/features/customers/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/features/clients/data/repos/clientsrepoimp.dart';
+import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
 import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
 import 'package:agman/features/home/presentation/view/home2.dart';
@@ -25,12 +23,9 @@ import 'package:agman/features/moldmanufacture/presentation/view/industerialcost
 import 'package:agman/features/moldmanufacture/presentation/view/industerialcost/presentation/viewmodel/cubit/industerialcostcuibt.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/machinecost/data/repos/machinerepoimp.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/machinecost/presentation/viewmodel/cubit/induxterialcost_cubit.dart';
-import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/moldmanufacture/presentation/viewmodel/costcuibt/costcuibt.dart';
-import 'package:agman/features/oldproj/view/home.dart';
-import 'package:agman/features/save/presentation/view/saves.dart';
+import 'package:agman/features/save/data/repos/saverepoimp.dart';
 import 'package:agman/features/suppliers/data/repos/supplierrepoimp.dart';
-import 'package:agman/features/suppliers/presentation/view/suppliers.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
 import 'package:agman/features/users/presentation/viewmodel/addemployee/addemployee_cubit.dart';
@@ -151,7 +146,7 @@ class MyApp extends StatelessWidget {
                 SupplierssCubit(supplierepo: suppliersrepoimp()),
           ),
           BlocProvider(
-            create: (context) => SaveCubit(),
+            create: (context) => SaveCubit(Saverepoimp()),
           ),
           BlocProvider(
             create: (context) => WalletCubit(Walletrepoimp()),

@@ -1,6 +1,6 @@
 abstract class urls {
   static const String baseurl =
-      "https://qapp-sa.com/queapp/public/warehouses/public/api/";
+      "https://warehousepk.store/warehouses/public/api/";
   static const String addaccessorie = "accessories";
 
   static const String login = "login";
@@ -13,9 +13,12 @@ abstract class urls {
   static const String suppliers = "suppliers";
   static const String addmove = "add-move";
   static const String factorytools = "stocks";
+  static const String material_moves = "material_moves";
   static const String factorytoolsmoves = "stockmoves";
   static const String deletemov = "delete-move";
   static const String electronicwallets = "stores";
+  static const String addcash = "add-cash";
+  static const String cash = "cash";
   static const String electronicwalletsmoves = "storemoves";
   static const String orders = "orders";
   static const String logout = "logout";
@@ -25,8 +28,10 @@ abstract class urls {
   static const String adduser = "register";
   static const String users = "users";
   static const String clients = "clients";
+  static const String clientmoves = "clientmoves";
   static const String updateprofile = "profile";
   static const String machines = "machines";
+  static const String materials = "materials";
   static const String imageurl =
-      "https://qapp-sa.com/queapp/public/warehouses/public/storage/";
+      "https://warehousepk.store/warehouses/public/storage/";
 }

@@ -3,12 +3,12 @@ import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class radios extends StatelessWidget {
+class radiosmaterialtype extends StatelessWidget {
   final String firstradio;
   final String secondradio;
   final String firstradiotitle;
   final String secondradiotitle;
-  radios(
+  radiosmaterialtype(
       {super.key,
       required this.firstradio,
       required this.secondradio,

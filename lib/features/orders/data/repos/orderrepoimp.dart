@@ -91,11 +91,12 @@ class orderrepoimp extends orderrepo {
           path: "ordermoves",
           queryParameters: {"order_id": orderid});
 
-      if (response.statusCode == 200 && response.data["status"] == true) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(Ordermoves.fromJson(response.data));
       } else {
-        if (response.data["data"] != null) {
-          return left(requestfailure(error_message: response.data["data"][0]));
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }

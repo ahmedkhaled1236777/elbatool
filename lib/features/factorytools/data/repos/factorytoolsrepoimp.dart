@@ -7,7 +7,9 @@ import 'package:agman/features/factorytools/data/models/factorytoolmodelrequest.
 import 'package:agman/features/factorytools/data/models/factorytoolmotionrequest.dart';
 import 'package:agman/features/factorytools/data/models/factorytools/factorytools.dart';
 import 'package:agman/features/factorytools/data/models/factorytoolsmoves/factorytoolsmoves.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolssearch/factorytoolssearch.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrep.dart';
+import 'package:agman/features/factorytools/presentation/views/widgets/factorytoolssearch.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -114,6 +116,32 @@ class Factorytoolsrepoimp extends factorytoolsrepo {
   }
 
   @override
+  Future<Either<failure, Factorytoolssearchmodel>> getfactorytoolssearch(
+      {Map<String, dynamic>? queryparms}) async {
+    try {
+      Response response = await Getdata.getdata(
+          token: cashhelper.getdata(key: "token"),
+          path: urls.factorytools,
+          queryParameters: queryparms);
+
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return right(Factorytoolssearchmodel.fromJson(response.data));
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException)
+        return left(requestfailure.fromdioexception(e));
+      else
+        return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
   Future<Either<failure, Factorytoolsmoves>> getfactorytoolsmotion(
       {required int factorytoolid}) async {
     try {
@@ -122,7 +150,7 @@ class Factorytoolsrepoimp extends factorytoolsrepo {
           path: urls.factorytoolsmoves,
           queryParameters: {"stock_id": factorytoolid});
 
-      if (response.statusCode == 200 && response.data["status"] == true) {
+      if (response.statusCode == 200 && response.data["success"] == true) {
         return right(Factorytoolsmoves.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {

@@ -4,7 +4,8 @@ class Accessoriemotion extends StatelessWidget {
   final String date;
   final String quantity;
   final String status;
-  final String moldname;
+  final String sellprice;
+  final String buyprice;
   final String notes;
 
   Widget delet;
@@ -15,7 +16,8 @@ class Accessoriemotion extends StatelessWidget {
     required this.date,
     required this.status,
     required this.notes,
-    required this.moldname,
+    required this.sellprice,
+    required this.buyprice,
     required this.textStyle,
     required this.quantity,
     required this.delet,
@@ -63,7 +65,17 @@ class Accessoriemotion extends StatelessWidget {
           Expanded(
               flex: 3,
               child: Text(
-                moldname,
+                sellprice,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+              flex: 3,
+              child: Text(
+                buyprice,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),

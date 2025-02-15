@@ -2,6 +2,7 @@ import 'dart:ffi';
 
 import 'package:agman/features/factorytools/data/models/factorytoolmodelrequest.dart';
 import 'package:agman/features/factorytools/data/models/factorytoolmotionrequest.dart';
+import 'package:agman/features/factorytools/data/models/factorytoolssearch/datum.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +19,7 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
   String toolname = "اختر الاداه";
   bool firstloading = false;
   List<Datum> data = [];
+  List<Datumsearch> factools = [];
   List<String> tools = [];
   List<datummoves> datamoves = [];
   changetype({required String value}) {
@@ -111,6 +113,23 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
         tools.add(e.name!);
       });
       firstloading = true;
+
+      emit(gettoolsuccess(successmessage: ""));
+    });
+  }
+
+  getfactorytoolswithsearch(
+      {required String datefrom, required String dateto}) async {
+    emit(gettoolloading());
+    var result = await factorytoolsrepoimp.getfactorytoolssearch(
+        queryparms: {"date_from": datefrom, "date_to": dateto});
+    result.fold((failue) {
+      emit(gettoolfailure(errormessage: failue.error_message));
+    }, (success) {
+      factools.clear();
+      success.data!.forEach((e) {
+        factools.add(e);
+      });
 
       emit(gettoolsuccess(successmessage: ""));
     });

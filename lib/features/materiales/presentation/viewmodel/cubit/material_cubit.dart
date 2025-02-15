@@ -1,4 +1,5 @@
 import 'package:agman/features/materiales/data/models/materialmodelrequest.dart';
+import 'package:agman/features/materiales/data/models/materialmovemodelrequest.dart';
 import 'package:agman/features/materiales/data/repos/materialrepoimp.dart';
 import 'package:bloc/bloc.dart';
 
@@ -8,7 +9,7 @@ part 'material_state.dart';
 
 class plasticMaterialCubit extends Cubit<plasticMaterialState> {
   String type = "1";
-  String materialtype = "MATERIAL";
+  String materialtype = "material";
   String materialname = "اختر الخامه";
   String colorname = "اختر اللون";
   List<String> materialsnames = [];
@@ -22,7 +23,7 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
   }
 
   changematerialtype({required String value}) {
-    materialname = value;
+    materialtype = value;
     emit(changetypematerialstate());
   }
 
@@ -55,6 +56,16 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
       emit(AddMaterialFailure(errormessage: failure.error_message));
     }, (success) {
       emit(AddMaterialSuccess(successmessage: success));
+    });
+  }
+
+  addmaterialmove({required Materialmovemodelrequest material}) async {
+    emit(AddMaterialmoveLoading());
+    var result = await materialrepoimp.addmaterialmove(material: material);
+    result.fold((failure) {
+      emit(AddMaterialmovefailure(errormessage: failure.error_message));
+    }, (success) {
+      emit(AddMaterialmovesuccess(successmessage: success));
     });
   }
 

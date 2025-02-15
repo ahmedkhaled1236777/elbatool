@@ -8,6 +8,7 @@ class customtableemployeeitem extends StatelessWidget {
   final String status;
 
   Widget edit;
+  Widget delete;
   TextStyle textStyle;
   double iconsize;
   // ignore: non_constant_identifier_names
@@ -16,6 +17,7 @@ class customtableemployeeitem extends StatelessWidget {
       required this.employeename,
       required this.phone,
       required this.status,
+      required this.delete,
       required this.job,
       required this.edit,
       this.iconsize = 22,
@@ -59,6 +61,10 @@ class customtableemployeeitem extends StatelessWidget {
               )),
           Expanded(
             child: edit,
+            flex: 2,
+          ),
+          Expanded(
+            child: delete,
             flex: 2,
           ),
         ],

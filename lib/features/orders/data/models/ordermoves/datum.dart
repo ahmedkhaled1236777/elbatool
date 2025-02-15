@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 
 class Datummoves extends Equatable {
   final int? id;
+  final int? reportId;
   final int? userId;
   final int? orderId;
   final String? date;
@@ -14,6 +15,7 @@ class Datummoves extends Equatable {
 
   const Datummoves({
     this.id,
+    this.reportId,
     this.userId,
     this.orderId,
     this.date,
@@ -27,6 +29,7 @@ class Datummoves extends Equatable {
 
   factory Datummoves.fromJson(Map<String, dynamic> json) => Datummoves(
         id: json['id'] as int?,
+        reportId: json['report_id'] as int?,
         userId: json['user_id'] as int?,
         orderId: json['order_id'] as int?,
         date: json['date'] as String?,
@@ -44,6 +47,7 @@ class Datummoves extends Equatable {
 
   Map<String, dynamic> toJson() => {
         'id': id,
+        'report_id': reportId,
         'user_id': userId,
         'order_id': orderId,
         'date': date,
@@ -59,6 +63,7 @@ class Datummoves extends Equatable {
   List<Object?> get props {
     return [
       id,
+      reportId,
       userId,
       orderId,
       date,

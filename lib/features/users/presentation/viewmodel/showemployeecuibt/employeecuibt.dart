@@ -28,10 +28,10 @@ class showemployeescuibt extends Cubit<showemployeesstates> {
     });
   }
 
-  deleteemployee({required String token, required int employeenumber}) async {
+  deleteemployee({required int employeenumber}) async {
     emit(deleteemployeeloading());
-    var result = await employeerepo.deleteemployee(
-        token: token, employeenumber: employeenumber);
+    var result =
+        await employeerepo.deleteemployee(employeenumber: employeenumber);
     result.fold((failure) {
       emit(deleteemployeefailure(errormessage: failure.error_message));
     }, (success) {
