@@ -18,6 +18,11 @@ class MoldCubit extends Cubit<MoldState> {
     emit(changemoldstate());
   }
 
+  resetmold() {
+    moldname = "اختر الاسطمبه";
+    emit(changemoldstate());
+  }
+
   MoldCubit(this.moldrepo) : super(MoldInitial());
   getmolds() async {
     if (firstloading) emit(GetMoldLoading());

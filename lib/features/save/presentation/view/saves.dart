@@ -150,6 +150,7 @@ class _saveState extends State<save> {
                             child: Text(
                               style: TextStyle(
                                   overflow: TextOverflow.ellipsis,
+                                  color: Colors.green,
                                   fontFamily: "cairo",
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),

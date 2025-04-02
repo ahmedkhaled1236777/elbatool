@@ -19,7 +19,7 @@ class orderrepoimp extends orderrepo {
           token: cashhelper.getdata(key: "token"),
           path: urls.orders,
           data: orderrequest.tojson());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 && response.data["success"]) {
         return right(response.data["message"]);
       } else {
         if (response.data["errors"] != null) {

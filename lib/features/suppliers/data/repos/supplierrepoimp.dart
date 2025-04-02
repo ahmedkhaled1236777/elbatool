@@ -4,6 +4,8 @@ import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/suppliers/data/models/suppliermodel/suppliermodel.dart';
+import 'package:agman/features/suppliers/data/models/suppliermotionmodel/suppliermotionmodel.dart';
+import 'package:agman/features/suppliers/data/models/suppliermotionrequest.dart';
 import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
 import 'package:agman/features/suppliers/data/repos/supplierrepo.dart';
 import 'package:dartz/dartz.dart';
@@ -62,6 +64,7 @@ class suppliersrepoimp extends Supplierrepo {
     try {
       Response response = await Getdata.getdata(
         token: cashhelper.getdata(key: "token"),
+        queryParameters: queryparms,
         path: urls.suppliers,
       );
 
@@ -89,6 +92,84 @@ class suppliersrepoimp extends Supplierrepo {
       Response response = await Deletedata.deletedata(
         token: cashhelper.getdata(key: "token"),
         path: "suppliers/${supplierid}",
+      );
+
+      if (response.statusCode == 200 && response.data["success"] == true) {
+        return right("تم حذف التقرير بنجاح");
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException)
+        return left(requestfailure.fromdioexception(e));
+      else
+        return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, String>> addsuppliermotion(
+      {required Suppliermotionrequest supppliermotion}) async {
+    try {
+      Response response = await Postdata.postdata(
+          token: cashhelper.getdata(key: "token"),
+          path: urls.supplier_moves,
+          data: supppliermotion.tojson());
+      if (response.statusCode == 200 && response.data["success"] == true) {
+        return right(response.data["message"]);
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      print("lllllllllllllllllllllllllllllll");
+      print(e.toString());
+      if (e is DioException) return left(requestfailure.fromdioexception(e));
+      return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, Suppliermotionmodel>> getsuppliersmotion(
+      {Map<String, dynamic>? queryparms}) async {
+    try {
+      Response response = await Getdata.getdata(
+        token: cashhelper.getdata(key: "token"),
+        queryParameters: queryparms,
+        path: urls.supplier_moves,
+      );
+
+      if (response.statusCode == 200 && response.data["status"] == true) {
+        return right(Suppliermotionmodel.fromJson(response.data));
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException)
+        return left(requestfailure.fromdioexception(e));
+      else
+        return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, String>> deletesuppliermotion(
+      {required int suppliermotionid}) async {
+    try {
+      Response response = await Deletedata.deletedata(
+        token: cashhelper.getdata(key: "token"),
+        path: "supplier_moves/${suppliermotionid}",
       );
 
       if (response.statusCode == 200 && response.data["success"] == true) {

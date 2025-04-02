@@ -9,7 +9,6 @@ import 'package:agman/features/factorytools/data/models/factorytools/factorytool
 import 'package:agman/features/factorytools/data/models/factorytoolsmoves/factorytoolsmoves.dart';
 import 'package:agman/features/factorytools/data/models/factorytoolssearch/factorytoolssearch.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrep.dart';
-import 'package:agman/features/factorytools/presentation/views/widgets/factorytoolssearch.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 
@@ -125,6 +124,7 @@ class Factorytoolsrepoimp extends factorytoolsrepo {
           queryParameters: queryparms);
 
       if (response.statusCode == 200 && response.data["status"] == true) {
+        print("llllllllllllllllllllllllllllll");
         return right(Factorytoolssearchmodel.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {
@@ -132,8 +132,11 @@ class Factorytoolsrepoimp extends factorytoolsrepo {
               requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
+        print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
       }
     } catch (e) {
+      print("mmmmmmmmmmmmmmmmmmmmmmmmmmmmmm");
+      print(e.toString());
       if (e is DioException)
         return left(requestfailure.fromdioexception(e));
       else

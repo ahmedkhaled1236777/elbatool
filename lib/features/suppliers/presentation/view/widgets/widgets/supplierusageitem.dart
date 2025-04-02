@@ -1,6 +1,4 @@
-import 'package:agman/core/colors/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class supplierusageitem extends StatelessWidget {
   final String type;
@@ -11,11 +9,13 @@ class supplierusageitem extends StatelessWidget {
   final String total;
 
   Widget delet;
+  Widget check;
   final TextStyle textStyle;
 
   supplierusageitem({
     super.key,
     required this.type,
+    required this.check,
     required this.textStyle,
     required this.pieceprice,
     required this.desc,
@@ -64,17 +64,21 @@ class supplierusageitem extends StatelessWidget {
           Expanded(
               flex: 3,
               child: Text(
-                total,
+                pieceprice,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),
           Expanded(
               flex: 3,
               child: Text(
-                pieceprice,
+                total,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),
+          Expanded(
+            flex: 2,
+            child: check,
+          ),
           Expanded(
             flex: 2,
             child: delet,

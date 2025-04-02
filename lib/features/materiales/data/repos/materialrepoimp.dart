@@ -6,6 +6,7 @@ import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/materiales/data/models/materialmodel/materialmodel.dart';
 import 'package:agman/features/materiales/data/models/materialmodelrequest.dart';
 import 'package:agman/features/materiales/data/models/materialmovemodelrequest.dart';
+import 'package:agman/features/materiales/data/models/materialmoves/materialmoves.dart';
 import 'package:agman/features/materiales/data/repos/materialrepo.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
@@ -134,6 +135,67 @@ class Materialrepoimp extends materialrepo {
     } catch (e) {
       if (e is DioException) return left(requestfailure.fromdioexception(e));
       return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, Materialmoves>> getmaterialesmoves(
+      {required int page,
+      String? type,
+      required int materialid,
+      String? datefrom,
+      String? dateto}) async {
+    try {
+      Response response = await Getdata.getdata(
+          token: cashhelper.getdata(key: "token"),
+          path: "material_moves?page=${page}",
+          queryParameters: {
+            "material_id": materialid,
+            if (type != null) "name": type,
+            if (datefrom != null) "date_from": datefrom,
+            if (dateto != null) "date_to": dateto,
+          });
+
+      if (response.data["success"] == true && response.statusCode == 200) {
+        return right(Materialmoves.fromJson(response.data));
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException)
+        return left(requestfailure.fromdioexception(e));
+      else
+        return left(requestfailure(error_message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<failure, String>> deleteMaterialmove(
+      {required int Materialid, String? type}) async {
+    try {
+      Response response = await Deletedata.deletedata(
+        token: cashhelper.getdata(key: "token"),
+        path: "material_moves/${Materialid}",
+      );
+
+      if (response.statusCode == 200 && response.data["success"] == true) {
+        return right("تم حذف الاوردر بنجاح");
+      } else {
+        if (response.data["errors"] != null) {
+          return left(
+              requestfailure(error_message: response.data["errors"][0]));
+        } else
+          return left(requestfailure(error_message: response.data["message"]));
+      }
+    } catch (e) {
+      if (e is DioException)
+        return left(requestfailure.fromdioexception(e));
+      else
+        return left(requestfailure(error_message: e.toString()));
     }
   }
 }

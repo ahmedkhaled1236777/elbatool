@@ -9,6 +9,7 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/features/clients/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customermoves.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customeritem.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customers/addcustomer.dart';
@@ -29,6 +30,7 @@ class _injectioncustomersState extends State<injectioncustomers> {
     "رقم الهاتف",
     "اجمالي الحقن",
     "اجمالي الاسطمبات",
+    "الاجمالي",
     "تعديل",
     "حذف",
   ];
@@ -60,13 +62,40 @@ class _injectioncustomersState extends State<injectioncustomers> {
           ),
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () async {
+                  await BlocProvider.of<CustomersCubit>(context).getCustomers();
+                },
                 icon: Icon(
                   Icons.refresh,
                   color: Colors.white,
                 )),
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0)),
+                            title: Container(
+                              height: 20,
+                              alignment: Alignment.topLeft,
+                              child: IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.close,
+                                    color: appcolors.maincolor,
+                                  )),
+                            ),
+                            contentPadding: EdgeInsets.all(10),
+                            backgroundColor: Colors.white,
+                            insetPadding: EdgeInsets.all(35),
+                            content: Alertcontent());
+                      });
+                },
                 icon: Icon(
                   Icons.search,
                   color: Colors.white,
@@ -128,6 +157,10 @@ class _injectioncustomersState extends State<injectioncustomers> {
                                                 .name!));
                               },
                               child: customtablcustomeritem(
+                                  total:
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .total[i]
+                                          .toString(),
                                   textStyle: Styles.gettabletextstyle(
                                       context: context),
                                   name: BlocProvider.of<CustomersCubit>(context)

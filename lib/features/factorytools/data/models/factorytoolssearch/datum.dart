@@ -6,8 +6,8 @@ class Datumsearch extends Equatable {
   final String? qty;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final String? dateFrom;
-  final String? dateTo;
+  final int? dateFrom;
+  final int? dateTo;
   final int? buyQty;
   final int? dilapidatedQty;
   final int? salesQty;
@@ -37,8 +37,8 @@ class Datumsearch extends Equatable {
         updatedAt: json['updated_at'] == null
             ? null
             : DateTime.parse(json['updated_at'] as String),
-        dateFrom: json['date_from'] as String?,
-        dateTo: json['date_to'] as String?,
+        dateFrom: json['date_from'] as int?,
+        dateTo: json['date_to'] as int?,
         buyQty: json['buy_qty'] as int?,
         dilapidatedQty: json['dilapidated_qty'] as int?,
         salesQty: json['sales_qty'] as int?,

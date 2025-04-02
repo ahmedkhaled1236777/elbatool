@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class customtablsupplieritem extends StatelessWidget {
   final String name;
   final String phone;
-  final String place;
 
   Widget edit;
   Widget delet;
@@ -14,7 +13,6 @@ class customtablsupplieritem extends StatelessWidget {
     super.key,
     required this.phone,
     required this.textStyle,
-    required this.place,
     required this.name,
     required this.delet,
     required this.edit,
@@ -39,13 +37,6 @@ class customtablsupplieritem extends StatelessWidget {
               flex: 3,
               child: Text(
                 phone,
-                style: textStyle,
-                textAlign: TextAlign.center,
-              )),
-          Expanded(
-              flex: 2,
-              child: Text(
-                place,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),

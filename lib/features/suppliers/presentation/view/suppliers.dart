@@ -13,7 +13,7 @@ import 'package:agman/features/suppliers/presentation/view/addsupplier.dart';
 import 'package:agman/features/suppliers/presentation/view/supplieritem.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/addSUPPLIERmotion.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/alertcontent.dart';
-import 'package:agman/features/suppliers/presentation/view/widgets/widgets/SUPPLIERdesc.dart';
+import 'package:agman/features/suppliers/presentation/view/widgets/widgets/suppliermoves.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/editsupplierdialog.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,6 @@ class _SuppliersState extends State<Suppliers> {
   final supplierheader = [
     "اسم المورد",
     "رقم الهاتف",
-    "الجهه",
     "تعديل",
     "حذف",
   ];
@@ -126,7 +125,12 @@ class _SuppliersState extends State<Suppliers> {
                                       onTap: () {
                                         navigateto(
                                             context: context,
-                                            page: AddSuppliersmotion());
+                                            page: supplierdesc(
+                                              supplierid: BlocProvider.of<
+                                                      SupplierssCubit>(context)
+                                                  .suppliers[i]
+                                                  .id!,
+                                            ));
                                       },
                                       child: customtablsupplieritem(
                                           textStyle: Styles.gettabletextstyle(
@@ -142,12 +146,6 @@ class _SuppliersState extends State<Suppliers> {
                                                           context)
                                                       .suppliers[i]
                                                       .phone ??
-                                                  "",
-                                          place:
-                                              BlocProvider.of<SupplierssCubit>(
-                                                          context)
-                                                      .suppliers[i]
-                                                      .industry ??
                                                   "",
                                           edit: IconButton(
                                               onPressed: () {

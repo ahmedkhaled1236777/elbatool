@@ -131,16 +131,16 @@ class _DeleteorputState extends State<Deleteorput> {
                                         children: [
                                           custommytextform(
                                             controller: sellprice,
-                                            hintText: "سعر البيع",
-                                            val: "برجاء ادخال سعر البيع",
+                                            hintText: "سعر الشراء",
+                                            val: "برجاء ادخال سعر الشراء",
                                           ),
                                           const SizedBox(
                                             height: 10,
                                           ),
                                           custommytextform(
                                             controller: buyprice,
-                                            hintText: "سعر الشراء",
-                                            val: "برجاء ادخال سعر الشراء",
+                                            hintText: "سعر البيع",
+                                            val: "برجاء ادخال سعر البيع",
                                           ),
                                           const SizedBox(
                                             height: 10,

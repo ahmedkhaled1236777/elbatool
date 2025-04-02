@@ -35,7 +35,6 @@ class editAlertcontent extends StatelessWidget {
                   child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(0),
-                        color: Colors.white,
                       ),
                       padding: const EdgeInsets.symmetric(
                           vertical: 20, horizontal: 0),

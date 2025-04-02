@@ -11,6 +11,9 @@ import 'package:agman/features/clients/data/repos/clientsrepoimp.dart';
 import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
 import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
+import 'package:agman/features/fingerprint/fingerprint.dart';
+import 'package:agman/features/fingerprint/fingerprint/fingerprint_cubit.dart';
+import 'package:agman/features/fingerprint/fingerprint/fingerprintreop.dart';
 import 'package:agman/features/home/presentation/view/home2.dart';
 import 'package:agman/features/injection/data/repo/injectiomrepoimp.dart';
 import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
@@ -89,6 +92,9 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) =>
                 showemployeescuibt(employeerepo: emplyeerepoimplementaion()),
+          ),
+          BlocProvider(
+            create: (context) => FingerprintCubit(fingerprintrepo()),
           ),
           BlocProvider(
             create: (context) =>
@@ -172,6 +178,6 @@ class MyApp extends StatelessWidget {
               );
             },
             child:
-                cashhelper.getdata(key: "token") == null ? Login() : home2()));
+                Fingerprint() /* cashhelper.getdata(key: "token") == null ? Login() : home2()*/));
   }
 }

@@ -25,7 +25,9 @@ class plasticMaterial extends StatefulWidget {
 class _plasticMaterialState extends State<plasticMaterial> {
   final materialheader = [
     "اسم الخامه",
-    "الكميه",
+    "الكميه قبل الجرد",
+    "الكميه بعد الجرد",
+    "الكميه الحاليه",
     "تعديل",
     "حذف",
   ];
@@ -150,23 +152,43 @@ class _plasticMaterialState extends State<plasticMaterial> {
                                     navigateto(
                                         context: context,
                                         page: Plasticmaterialitem(
+                                          materialtype: BlocProvider.of<
+                                                          plasticMaterialCubit>(
+                                                      context)
+                                                  .data[i]
+                                                  .materialType ??
+                                              "",
                                           materialid: BlocProvider.of<
                                                   plasticMaterialCubit>(context)
                                               .data[i]
                                               .id!,
                                           materialname:
-                                              "${BlocProvider.of<plasticMaterialCubit>(context).data[i].name!} ${BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "pure" ? "بيور" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "kasr_elkasara" ? "كسر كساره" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "el_mkhraz" ? "مخرز" : ""}",
+                                              "${BlocProvider.of<plasticMaterialCubit>(context).data[i].name ?? ""} ${BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "pure" ? "بيور" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "kasr_elkasara" ? "كسر كساره" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "el_mkhraz" ? "مخرز" : ""}",
                                           type: BlocProvider.of<
-                                                  plasticMaterialCubit>(context)
-                                              .data[i]
-                                              .type!,
+                                                          plasticMaterialCubit>(
+                                                      context)
+                                                  .data[i]
+                                                  .type ??
+                                              "",
                                         ));
                                   },
                                   child: Customtablematerialitem(
+                                    datefrom:
+                                        BlocProvider.of<plasticMaterialCubit>(
+                                                context)
+                                            .data[i]
+                                            .dateFrom
+                                            .toString(),
+                                    dateto:
+                                        BlocProvider.of<plasticMaterialCubit>(
+                                                context)
+                                            .data[i]
+                                            .dateTo
+                                            .toString(),
                                     textStyle: Styles.gettabletextstyle(
                                         context: context),
                                     materialname:
-                                        "${BlocProvider.of<plasticMaterialCubit>(context).data[i].name!} ${BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "pure" ? "بيور" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "kasr_elkasara" ? "كسر كساره" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "el_mkhraz" ? "مخرز" : ""}",
+                                        "${BlocProvider.of<plasticMaterialCubit>(context).data[i].name ?? ""} ${BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "pure" ? "بيور" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "kasr_elkasara" ? "كسر كساره" : BlocProvider.of<plasticMaterialCubit>(context).data[i].materialType == "el_mkhraz" ? "مخرز" : ""}",
                                     quantity:
                                         BlocProvider.of<plasticMaterialCubit>(
                                                     context)

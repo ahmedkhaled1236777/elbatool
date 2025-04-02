@@ -18,7 +18,6 @@ class _addmaterialState extends State<addmaterial> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
   TextEditingController materialname = TextEditingController();
-  TextEditingController quantity = TextEditingController(text: "0");
   TextEditingController qt1 = TextEditingController(text: "0");
   TextEditingController qt2 = TextEditingController(text: "0");
   TextEditingController qt3 = TextEditingController(text: "0");
@@ -108,71 +107,68 @@ class _addmaterialState extends State<addmaterial> {
                             BlocBuilder<plasticMaterialCubit,
                                 plasticMaterialState>(
                               builder: (context, state) {
-                                return BlocProvider.of<plasticMaterialCubit>(
-                                                context)
-                                            .materialtype ==
-                                        "material"
-                                    ? SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: [
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 100,
-                                              child: custommytextform(
-                                                  val: "ادخل الكمبه",
-                                                  controller: qt1,
-                                                  hintText: "البيور"),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 100,
-                                              child: custommytextform(
-                                                  val: "ادخل الكمبه",
-                                                  controller: qt2,
-                                                  hintText: "كسر الكساره"),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            SizedBox(
-                                              width: 100,
-                                              child: custommytextform(
-                                                  val: "ادخل الكمبه",
-                                                  controller: qt3,
-                                                  hintText: "كسر المخرز"),
-                                            ),
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                          ],
+                                return SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      SizedBox(
+                                        width:
+                                            BlocProvider.of<plasticMaterialCubit>(
+                                                            context)
+                                                        .materialtype ==
+                                                    "material"
+                                                ? 100
+                                                : 580,
+                                        child: custommytextform(
+                                            val: "ادخل الكمبه",
+                                            controller: qt1,
+                                            hintText:
+                                                BlocProvider.of<plasticMaterialCubit>(
+                                                                context)
+                                                            .materialtype ==
+                                                        "material"
+                                                    ? "البيور"
+                                                    : "كمية الماستر"),
+                                      ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      if (BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialtype ==
+                                          "material")
+                                        SizedBox(
+                                          width: 100,
+                                          child: custommytextform(
+                                              val: "ادخل الكمبه",
+                                              controller: qt2,
+                                              hintText: "كسر الكساره"),
                                         ),
-                                      )
-                                    : SizedBox();
-                              },
-                            ),
-                            SizedBox(
-                              height: 10,
-                            ),
-                            BlocBuilder<plasticMaterialCubit,
-                                plasticMaterialState>(
-                              builder: (context, state) {
-                                return BlocProvider.of<plasticMaterialCubit>(
-                                                context)
-                                            .materialtype ==
-                                        "material"
-                                    ? SizedBox()
-                                    : custommytextform(
-                                        controller: quantity,
-                                        hintText: "الكميه",
-                                        val: "برجاء ادخال الكميه",
-                                      );
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                      if (BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialtype ==
+                                          "material")
+                                        SizedBox(
+                                          width: 100,
+                                          child: custommytextform(
+                                              val: "ادخل الكمبه",
+                                              controller: qt3,
+                                              hintText: "كسر المخرز"),
+                                        ),
+                                      SizedBox(
+                                        width: 10,
+                                      ),
+                                    ],
+                                  ),
+                                );
                               },
                             ),
                             SizedBox(
@@ -189,7 +185,6 @@ class _addmaterialState extends State<addmaterial> {
                               }
                               if (state is AddMaterialSuccess) {
                                 materialname.clear();
-                                quantity = TextEditingController(text: "0");
                                 qt1.clear();
                                 qt2.clear();
                                 qt3.clear();
@@ -214,8 +209,6 @@ class _addmaterialState extends State<addmaterial> {
                                               qty2: qt2.text,
                                               qty3: qt3.text,
                                               name: materialname.text,
-                                              quantity:
-                                                  double.parse(quantity.text),
                                               type: BlocProvider.of<
                                                           plasticMaterialCubit>(
                                                       context)

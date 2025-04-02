@@ -7,12 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class RadiosSUPPLIERtypes extends StatelessWidget {
   final String firstradio;
   final String secondradio;
+  final String thirdradio;
   final String firstradiotitle;
   final String secondradiotitle;
+  final String thirdradiotitle;
   RadiosSUPPLIERtypes(
       {super.key,
       required this.firstradio,
       required this.secondradio,
+      required this.thirdradio,
+      required this.thirdradiotitle,
       required this.firstradiotitle,
       required this.secondradiotitle});
   @override
@@ -46,6 +50,88 @@ class RadiosSUPPLIERtypes extends StatelessWidget {
               }),
           Text(
             secondradiotitle,
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: thirdradio,
+              groupValue: customerbloc.type,
+              onChanged: (val) {
+                customerbloc.changetype(value: val!);
+              }),
+          Text(
+            thirdradiotitle,
+            style: Styles.textStyle12,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class RadiosSUPPLIERtypesformaterial extends StatelessWidget {
+  final String firstradio;
+  final String secondradio;
+  final String thirdradio;
+  final String firstradiotitle;
+  final String secondradiotitle;
+  final String thirdradiotitle;
+  RadiosSUPPLIERtypesformaterial(
+      {super.key,
+      required this.firstradio,
+      required this.secondradio,
+      required this.thirdradio,
+      required this.thirdradiotitle,
+      required this.firstradiotitle,
+      required this.secondradiotitle});
+  @override
+  Widget build(BuildContext context) {
+    var customerbloc = BlocProvider.of<SupplierssCubit>(context);
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: firstradio,
+              groupValue: customerbloc.materialtype,
+              onChanged: (val) {
+                customerbloc.changesupplymaterialtype(value: val!);
+              }),
+          Text(
+            firstradiotitle,
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: secondradio,
+              groupValue: customerbloc.materialtype,
+              onChanged: (val) {
+                customerbloc.changesupplymaterialtype(value: val!);
+              }),
+          Text(
+            secondradiotitle,
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: thirdradio,
+              groupValue: customerbloc.materialtype,
+              onChanged: (val) {
+                customerbloc.changesupplymaterialtype(value: val!);
+              }),
+          Text(
+            thirdradiotitle,
             style: Styles.textStyle12,
           ),
         ],

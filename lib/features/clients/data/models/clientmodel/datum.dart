@@ -6,10 +6,10 @@ class Datum extends Equatable {
   final String? phone;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final int? total7aan;
-  final int? totalStamba;
+  var total7aan;
+  var totalStamba;
 
-  const Datum({
+  Datum({
     this.id,
     this.name,
     this.phone,
@@ -29,8 +29,8 @@ class Datum extends Equatable {
         updatedAt: json['updated_at'] == null
             ? null
             : DateTime.parse(json['updated_at'] as String),
-        total7aan: json['total_7aan'] as int?,
-        totalStamba: json['total_stamba'] as int?,
+        total7aan: json['total_7aan'],
+        totalStamba: json['total_stamba'],
       );
 
   Map<String, dynamic> toJson() => {

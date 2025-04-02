@@ -132,30 +132,29 @@ class _accessoriecostState extends State<accessoriecost> {
                                         child: accessoriecostitem(
                                             notes:
                                                 BlocProvider.of<accessoriecostCubit>(context)
-                                                    .data[i]
-                                                    .notes!,
+                                                        .data[i]
+                                                        .notes ??
+                                                    "",
                                             accessoriename:
                                                 BlocProvider.of<accessoriecostCubit>(context)
-                                                    .data[i]
-                                                    .accessoryName!,
+                                                        .data[i]
+                                                        .accessoryName ??
+                                                    "",
                                             textStyle: Styles.gettabletextstyle(
                                                 context: context),
                                             edit: IconButton(
                                                 onPressed: () {},
                                                 icon: Icon(editeicon)),
                                             quantity:
-                                                BlocProvider.of<accessoriecostCubit>(
-                                                        context)
+                                                BlocProvider.of<accessoriecostCubit>(context)
                                                     .data[i]
                                                     .quantity
                                                     .toString()!,
-                                            cost:
-                                                BlocProvider.of<accessoriecostCubit>(
-                                                        context)
-                                                    .data[i]
-                                                    .buyPrice!,
-                                            date: BlocProvider.of<
-                                                    accessoriecostCubit>(context)
+                                            cost: BlocProvider.of<accessoriecostCubit>(context)
+                                                .data[i]
+                                                .buyPrice!,
+                                            date: BlocProvider.of<accessoriecostCubit>(
+                                                    context)
                                                 .data[i]
                                                 .date!,
                                             delete: IconButton(

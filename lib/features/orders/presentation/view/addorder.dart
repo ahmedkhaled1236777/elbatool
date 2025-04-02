@@ -30,6 +30,18 @@ class _AddorderState extends State<Addorder> {
       TextEditingController(text: "0");
 
   TextEditingController broken_awl_quantity = TextEditingController(text: "0");
+  getdata() async {
+    if (BlocProvider.of<MoldCubit>(context).molds.isEmpty)
+      await BlocProvider.of<MoldCubit>(context).getmolds();
+    if (BlocProvider.of<plasticMaterialCubit>(context).materialsnames.isEmpty)
+      await BlocProvider.of<plasticMaterialCubit>(context)
+          .getMaterials(page: 1);
+  }
+
+  @override
+  void initState() {
+    getdata();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,99 +106,119 @@ class _AddorderState extends State<Addorder> {
                             SizedBox(
                               height: 10,
                             ),
-                            Container(
-                              color: Color(0xff535C91),
-                              child: Center(
-                                child: DropdownSearch<String>(
-                                  dropdownButtonProps:
-                                      DropdownButtonProps(color: Colors.white),
-                                  popupProps: PopupProps.menu(
-                                      showSelectedItems: true,
-                                      showSearchBox: true,
-                                      searchFieldProps: TextFieldProps()),
-                                  selectedItem:
-                                      BlocProvider.of<MoldCubit>(context)
-                                          .moldname,
-                                  items: BlocProvider.of<MoldCubit>(context)
-                                      .mymold,
-                                  onChanged: (value) {
-                                    BlocProvider.of<MoldCubit>(context)
-                                        .changemold(value!);
-                                  },
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                          baseStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "cairo"),
-                                          textAlign: TextAlign.center,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            enabled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          )),
-                                ),
-                              ),
+                            BlocBuilder<MoldCubit, MoldState>(
+                              builder: (context, state) {
+                                if (state is GetMoldLoading) return loading();
+                                if (state is GetMoldFailure)
+                                  return Text(state.errormessage);
+
+                                return Container(
+                                  color: Color(0xff535C91),
+                                  child: Center(
+                                    child: DropdownSearch<String>(
+                                      dropdownButtonProps: DropdownButtonProps(
+                                          color: Colors.white),
+                                      popupProps: PopupProps.menu(
+                                          showSelectedItems: true,
+                                          showSearchBox: true,
+                                          searchFieldProps: TextFieldProps()),
+                                      selectedItem:
+                                          BlocProvider.of<MoldCubit>(context)
+                                              .moldname,
+                                      items: BlocProvider.of<MoldCubit>(context)
+                                          .mymold,
+                                      onChanged: (value) {
+                                        BlocProvider.of<MoldCubit>(context)
+                                            .changemold(value!);
+                                      },
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                              baseStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "cairo"),
+                                              textAlign: TextAlign.center,
+                                              dropdownSearchDecoration:
+                                                  InputDecoration(
+                                                enabled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 10,
                             ),
-                            Container(
-                              color: Color(0xff535C91),
-                              child: Center(
-                                child: DropdownSearch<String>(
-                                  dropdownButtonProps:
-                                      DropdownButtonProps(color: Colors.white),
-                                  popupProps: PopupProps.menu(
-                                      showSelectedItems: true,
-                                      showSearchBox: true,
-                                      searchFieldProps: TextFieldProps()),
-                                  selectedItem:
-                                      BlocProvider.of<plasticMaterialCubit>(
-                                              context)
-                                          .materialname,
-                                  items: BlocProvider.of<plasticMaterialCubit>(
-                                          context)
-                                      .materialsnames,
-                                  onChanged: (value) {
-                                    BlocProvider.of<plasticMaterialCubit>(
-                                            context)
-                                        .changematerialtype(value: value!);
-                                  },
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                          baseStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "cairo"),
-                                          textAlign: TextAlign.center,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            enabled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          )),
-                                ),
-                              ),
+                            BlocBuilder<plasticMaterialCubit,
+                                plasticMaterialState>(
+                              builder: (context, state) {
+                                if (state is GetMaterialsLoading)
+                                  return loading();
+                                if (state is GetMaterialsFailure)
+                                  return Text(state.errormessage);
+                                return Container(
+                                  color: Color(0xff535C91),
+                                  child: Center(
+                                    child: DropdownSearch<String>(
+                                      dropdownButtonProps: DropdownButtonProps(
+                                          color: Colors.white),
+                                      popupProps: PopupProps.menu(
+                                          showSelectedItems: true,
+                                          showSearchBox: true,
+                                          searchFieldProps: TextFieldProps()),
+                                      selectedItem:
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialname,
+                                      items:
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .materialsnames,
+                                      onChanged: (value) {
+                                        BlocProvider.of<plasticMaterialCubit>(
+                                                context)
+                                            .changematerialname(value!);
+                                      },
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                              baseStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "cairo"),
+                                              textAlign: TextAlign.center,
+                                              dropdownSearchDecoration:
+                                                  InputDecoration(
+                                                enabled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 10,
@@ -236,52 +268,63 @@ class _AddorderState extends State<Addorder> {
                             SizedBox(
                               height: 10,
                             ),
-                            Container(
-                              color: Color(0xff535C91),
-                              child: Center(
-                                child: DropdownSearch<String>(
-                                  dropdownButtonProps:
-                                      DropdownButtonProps(color: Colors.white),
-                                  popupProps: PopupProps.menu(
-                                      showSelectedItems: true,
-                                      showSearchBox: true,
-                                      searchFieldProps: TextFieldProps()),
-                                  selectedItem:
-                                      BlocProvider.of<plasticMaterialCubit>(
-                                              context)
-                                          .colorname,
-                                  items: BlocProvider.of<plasticMaterialCubit>(
-                                          context)
-                                      .colorsnames,
-                                  onChanged: (value) {
-                                    BlocProvider.of<plasticMaterialCubit>(
-                                            context)
-                                        .changecolorname(value!);
-                                  },
-                                  dropdownDecoratorProps:
-                                      DropDownDecoratorProps(
-                                          baseStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "cairo"),
-                                          textAlign: TextAlign.center,
-                                          dropdownSearchDecoration:
-                                              InputDecoration(
-                                            enabled: true,
-                                            enabledBorder: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                            border: OutlineInputBorder(
-                                              borderSide: BorderSide(
-                                                  color: Color(0xff535C91)),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          )),
-                                ),
-                              ),
+                            BlocBuilder<plasticMaterialCubit,
+                                plasticMaterialState>(
+                              builder: (context, state) {
+                                if (state is GetMaterialsLoading)
+                                  return loading();
+                                if (state is GetMaterialsFailure)
+                                  return Text(state.errormessage);
+                                return Container(
+                                  color: Color(0xff535C91),
+                                  child: Center(
+                                    child: DropdownSearch<String>(
+                                      dropdownButtonProps: DropdownButtonProps(
+                                          color: Colors.white),
+                                      popupProps: PopupProps.menu(
+                                          showSelectedItems: true,
+                                          showSearchBox: true,
+                                          searchFieldProps: TextFieldProps()),
+                                      selectedItem:
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .colorname,
+                                      items:
+                                          BlocProvider.of<plasticMaterialCubit>(
+                                                  context)
+                                              .colorsnames,
+                                      onChanged: (value) {
+                                        BlocProvider.of<plasticMaterialCubit>(
+                                                context)
+                                            .changecolorname(value!);
+                                      },
+                                      dropdownDecoratorProps:
+                                          DropDownDecoratorProps(
+                                              baseStyle: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "cairo"),
+                                              textAlign: TextAlign.center,
+                                              dropdownSearchDecoration:
+                                                  InputDecoration(
+                                                enabled: true,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                border: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                      color: Color(0xff535C91)),
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )),
+                                    ),
+                                  ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: 10,
@@ -314,6 +357,8 @@ class _AddorderState extends State<Addorder> {
                                   purematerial.clear();
                                   break_crusher_quantity.clear();
                                   broken_awl_quantity.clear();
+                                  BlocProvider.of<MoldCubit>(context)
+                                      .resetmold();
                                   BlocProvider.of<plasticMaterialCubit>(context)
                                       .resetdata();
                                   BlocProvider.of<OrdersCubit>(context)
@@ -352,6 +397,7 @@ class _AddorderState extends State<Addorder> {
                                           BlocProvider.of<plasticMaterialCubit>(
                                                   context)
                                               .materialid);
+
                                       print(BlocProvider.of<
                                                   plasticMaterialCubit>(context)
                                               .materialid[

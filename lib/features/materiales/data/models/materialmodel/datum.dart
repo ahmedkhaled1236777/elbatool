@@ -6,15 +6,17 @@ class Datum extends Equatable {
   final String? name;
   final String? qty;
   final String? materialType;
-  final String? masterpatchQty;
+  var dateFrom;
+  var dateTo;
 
-  const Datum({
+  Datum({
     this.id,
     this.type,
     this.name,
     this.qty,
     this.materialType,
-    this.masterpatchQty,
+    this.dateFrom,
+    this.dateTo,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
@@ -23,7 +25,8 @@ class Datum extends Equatable {
         name: json['name'] as String?,
         qty: json['qty'] as String?,
         materialType: json['material_type'] as String?,
-        masterpatchQty: json['masterpatch_qty'] as String?,
+        dateFrom: json['date_from'],
+        dateTo: json['date_to'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -32,7 +35,8 @@ class Datum extends Equatable {
         'name': name,
         'qty': qty,
         'material_type': materialType,
-        'masterpatch_qty': masterpatchQty,
+        'date_from': dateFrom,
+        'date_to': dateTo,
       };
 
   @override
@@ -43,7 +47,8 @@ class Datum extends Equatable {
       name,
       qty,
       materialType,
-      masterpatchQty,
+      dateFrom,
+      dateTo,
     ];
   }
 }

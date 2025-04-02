@@ -46,6 +46,8 @@ class addclientmovefailure extends CustomersState {
 
 class addclientmoveloading extends CustomersState {}
 
+class searchtypechange extends CustomersState {}
+
 class CustomersChangeType extends CustomersState {}
 
 class ChangeTypeState extends CustomersState {}

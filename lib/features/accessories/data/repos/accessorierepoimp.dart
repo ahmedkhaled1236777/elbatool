@@ -58,8 +58,6 @@ class Accessorierepoimp extends Accessoriesrepo {
           return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
-      print("jjjjjjjjjjjjjjjjjjjjjjjj");
-      print(e.toString());
       if (e is DioException)
         return left(requestfailure.fromdioexception(e));
       else

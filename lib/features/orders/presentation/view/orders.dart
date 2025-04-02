@@ -9,6 +9,7 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
 import 'package:agman/features/orders/presentation/view/addorder.dart';
 import 'package:agman/features/orders/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/orders/presentation/view/widgets/customtableproductionitem.dart';
@@ -35,7 +36,10 @@ class _OrdersState extends State<Orders> {
 
   getdata() async {
     BlocProvider.of<OrdersCubit>(context).queryparms = null;
-    BlocProvider.of<OrdersCubit>(context).getorders();
+    await BlocProvider.of<OrdersCubit>(context).getorders();
+    if (BlocProvider.of<MoldCubit>(context).molds.isEmpty) {
+      await BlocProvider.of<MoldCubit>(context).getmolds();
+    }
   }
 
   @override

@@ -1,8 +1,10 @@
+import 'package:agman/features/suppliers/data/models/suppliermotionrequest.dart';
 import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
 import 'package:agman/features/suppliers/data/repos/supplierrepoimp.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../../data/models/suppliermodel/datum.dart';
+import '../../../data/models/suppliermotionmodel/datum.dart';
 
 part 'suppliers.dart';
 
@@ -10,9 +12,18 @@ class SupplierssCubit extends Cubit<SupplierssState> {
   final suppliersrepoimp supplierepo;
   SupplierssCubit({required this.supplierepo}) : super(SupplierssInitial());
   String type = "SUPPLY";
+  String materialtype = "pure";
   String paymenttype = "cash";
-  String supplypart = "materiel";
+  String supplypart = "material";
   List<Datum> suppliers = [];
+  List<bool> checks = [];
+  String totaldaen = "0";
+  String totalmaden = "0";
+  List<Datummove> mymoves = [];
+  bool loading = false;
+
+  int page = 1;
+  bool firstloading = false;
   changetype({required String value}) {
     type = value;
     emit(ChangesupplierTypeState());
@@ -20,6 +31,11 @@ class SupplierssCubit extends Cubit<SupplierssState> {
 
   changesupplytype({required String value}) {
     supplypart = value;
+    emit(ChangesupplierTypeState());
+  }
+
+  changesupplymaterialtype({required String value}) {
+    materialtype = value;
     emit(ChangesupplierTypeState());
   }
 
@@ -36,6 +52,17 @@ class SupplierssCubit extends Cubit<SupplierssState> {
       emit(addSupplierfailure(errormessage: failure.error_message));
     }, (success) {
       emit(addSuppliersuccess(successmessage: success));
+    });
+  }
+
+  addsuppliermotion({required Suppliermotionrequest supplier}) async {
+    emit(addsuppliermotionloading());
+    var result = await supplierepo.addsuppliermotion(supppliermotion: supplier);
+
+    result.fold((failure) {
+      emit(addsuppliermotionfailure(errormessage: failure.error_message));
+    }, (success) {
+      emit(addsuppliermotionsuccess(successmessage: success));
     });
   }
 
@@ -64,6 +91,51 @@ class SupplierssCubit extends Cubit<SupplierssState> {
     });
   }
 
+  getsuppliermovesmoves({Map<String, dynamic>? queryparmes}) async {
+    if (firstloading == false) emit(getSuppliersmovesloading());
+    this.page = 1;
+
+    var result = await supplierepo.getsuppliersmotion(queryparms: queryparmes);
+    loading = true;
+    result.fold((failue) {
+      emit(getSuppliersmovesfailure(errormessage: failue.error_message));
+    }, (success) {
+      if (success.moves!.nextPageUrl == null) {
+        loading = false;
+      }
+      totaldaen = success.totalCredit.toString();
+      totalmaden = success.totalDue.toString();
+      mymoves.clear();
+      checks.clear();
+
+      firstloading = true;
+      success.moves!.data!.forEach((e) {
+        mymoves.add(e);
+        checks.add(false);
+      });
+
+      emit(getSuppliersmovessuccess(successmessage: ""));
+    });
+  }
+
+  getamoresuppliermoves({Map<String, dynamic>? queryparmes}) async {
+    page++;
+    var result = await supplierepo.getsuppliersmotion(queryparms: queryparmes);
+    loading = true;
+    result.fold((failue) {
+      emit(getSuppliersmovesfailure(errormessage: failue.error_message));
+    }, (success) {
+      if (success.moves!.nextPageUrl == null) {
+        loading = false;
+      }
+      success.moves!.data!.forEach((e) {
+        mymoves.add(e);
+        checks.add(false);
+      });
+      emit(getSuppliersmovessuccess(successmessage: ""));
+    });
+  }
+
   deletesupplier({required int supplierid}) async {
     emit(deleteSupplierloading());
     var result = await supplierepo.deletesupplier(
@@ -77,5 +149,25 @@ class SupplierssCubit extends Cubit<SupplierssState> {
       });
       emit(deleteSuppliersuccess(successmesssage: success));
     });
+  }
+
+  deletesuppliermove({required int moveid}) async {
+    emit(deleteSuppliermoveloading());
+    var result = await supplierepo.deletesuppliermotion(
+      suppliermotionid: moveid,
+    );
+    result.fold((failure) {
+      emit(deletesuppliermovefailure(errormessage: failure.error_message));
+    }, (success) {
+      mymoves.removeWhere((e) {
+        return e.id == moveid;
+      });
+      emit(deletesuppliermovesuccess(successmessage: success));
+    });
+  }
+
+  changecheckbox(bool val, int i) {
+    checks[i] = val;
+    emit(changechecboxstate());
   }
 }

@@ -66,6 +66,34 @@ class DeleteMaterialsFailure extends plasticMaterialState {
 
 class GetMaterialsLoading extends plasticMaterialState {}
 
+class deletematerialmovesloading extends plasticMaterialState {}
+
+class deletematerialmovessuccess extends plasticMaterialState {
+  final String successmessage;
+
+  deletematerialmovessuccess({required this.successmessage});
+}
+
+class deletematerialmovesfailure extends plasticMaterialState {
+  final String errormessage;
+
+  deletematerialmovesfailure({required this.errormessage});
+}
+
+class GetMaterialsmovesLoading extends plasticMaterialState {}
+
+class GetMaterialsmovessuccess extends plasticMaterialState {
+  final String successmessage;
+
+  GetMaterialsmovessuccess({required this.successmessage});
+}
+
+class GetMaterialsmovesfailure extends plasticMaterialState {
+  final String errormessage;
+
+  GetMaterialsmovesfailure({required this.errormessage});
+}
+
 class GetMaterialsSuccess extends plasticMaterialState {
   final String successmessage;
 

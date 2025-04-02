@@ -1,4 +1,3 @@
-import 'package:agman/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class customtablcustomeritem extends StatelessWidget {
@@ -6,6 +5,7 @@ class customtablcustomeritem extends StatelessWidget {
   final String phone;
   final String totalinjection;
   final String totalmold;
+  final String total;
 
   Widget edit;
   Widget delet;
@@ -16,6 +16,7 @@ class customtablcustomeritem extends StatelessWidget {
     required this.textStyle,
     required this.totalinjection,
     required this.totalmold,
+    required this.total,
     required this.name,
     required this.delet,
     required this.edit,
@@ -54,6 +55,13 @@ class customtablcustomeritem extends StatelessWidget {
               flex: 3,
               child: Text(
                 totalmold,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
+          Expanded(
+              flex: 3,
+              child: Text(
+                total,
                 style: textStyle,
                 textAlign: TextAlign.center,
               )),

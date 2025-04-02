@@ -49,12 +49,16 @@ class Walletrepoimp extends walletrepo {
         return right(Walletmodel.fromJson(response.data));
       } else {
         if (response.data["errors"] != null) {
+          print("kkkkkkkkkkkkkkkkkkkkkkkkkk");
           return left(
               requestfailure(error_message: response.data["errors"][0]));
         } else
           return left(requestfailure(error_message: response.data["message"]));
       }
     } catch (e) {
+      print("kkkkkkkkkkkkkkkkkkkkkkkkkk");
+      print(e.toString());
+
       if (e is DioException)
         return left(requestfailure.fromdioexception(e));
       else

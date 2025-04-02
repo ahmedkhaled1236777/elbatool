@@ -53,10 +53,14 @@ class OrdersCubit extends Cubit<OrdersState> {
       data.clear();
       success.data!.forEach((e) {
         data.add(e);
-        orders.add(e.orderNum!);
-        ordermold.addAll({e.orderNum!: e.stampName!});
+        orders.add("${e.orderNum}-${e.stampName}");
+        ordermold.addAll({"${e.orderNum}-${e.stampName}": e.stampName!});
         orderid.addAll({
-          e.orderNum!: {"id": e.id, "color": e.colorName, "mold": e.stampId}
+          "${e.orderNum}-${e.stampName}": {
+            "id": e.id,
+            "color": e.colorName,
+            "mold": e.stampId
+          }
         });
       });
       emit(GetOrdersSuccess(successmessage: ""));

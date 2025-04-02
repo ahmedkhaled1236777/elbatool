@@ -1,18 +1,24 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
-import 'package:agman/features/clients/data/models/clientmoverequest/clientmoverequest.dart';
+import 'package:agman/features/clients/data/models/clientmodelrequestmotion.dart';
 import 'package:agman/features/clients/presentation/view/widgets/mold/radios.dart';
 import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Addinjectionmotion extends StatefulWidget {
+  final int clientid;
+  final String clientname;
+  const Addinjectionmotion(
+      {super.key, required this.clientid, required this.clientname});
   @override
   State<Addinjectionmotion> createState() => _AddinjectionmotionState();
 }
@@ -20,15 +26,20 @@ class Addinjectionmotion extends StatefulWidget {
 class _AddinjectionmotionState extends State<Addinjectionmotion> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  TextEditingController type = TextEditingController();
-
   TextEditingController desc = TextEditingController();
 
   TextEditingController quantity = TextEditingController();
   TextEditingController putcost = TextEditingController();
   TextEditingController pieceprice = TextEditingController();
-  TextEditingController totalvalue = TextEditingController();
-  TextEditingController payedvalue = TextEditingController();
+  getdata() async {
+    if (BlocProvider.of<WalletCubit>(context).data.isEmpty && this.mounted)
+      await BlocProvider.of<WalletCubit>(context).getwallets();
+  }
+
+  @override
+  void initState() {
+    getdata();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,8 +52,8 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
               ),
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
-              title: const Text(
-                "اضافة حركة عميل",
+              title: Text(
+                "اضافة حركة عميل ${widget.clientname}",
                 style: Styles.appbarstyle,
               ),
             ),
@@ -80,12 +91,16 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 7,
                                 ),
                                 radiostypes(
-                                  fourthradio: "maintenance",
-                                  firstradio: "INJECTION",
-                                  secondradio: "PAYMENT",
-                                  thirdradio: "mold",
+                                  sixradio: "ta7weel",
+                                  sixradiotittle: "تحويل",
+                                  fifthradio: "back",
+                                  fifthradiotitle: "مرتجع",
+                                  fourthradio: "syana",
+                                  firstradio: "7aan",
+                                  secondradio: "naqdi",
+                                  thirdradio: "stampa",
                                   firstradiotitle: "حقن",
-                                  secondradiotitle: "دفعه",
+                                  secondradiotitle: "نقدي",
                                   thirdradiotittle: "اسطمبه",
                                   fourthradiotittle: "صيانه",
                                 ),
@@ -93,31 +108,19 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                            .type !=
-                                        "INJECTION" &&
+                                            .type ==
+                                        "naqdi" ||
                                     BlocProvider.of<CustomersCubit>(context)
-                                            .type !=
-                                        "maintenance" &&
+                                            .type ==
+                                        "ta7weel" ||
                                     BlocProvider.of<CustomersCubit>(context)
-                                            .type !=
-                                        "mold")
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      customerradios(
-                                        firstradio: "cash",
-                                        secondradio: "transported",
-                                        firstradiotitle: "نقدي",
-                                        secondradiotitle: "تحويل",
-                                      ),
-                                      customerradiospay(
-                                        firstradio: "inj",
-                                        secondradio: "moldandmain",
-                                        firstradiotitle: "حقن",
-                                        secondradiotitle: "اسطمبات وصيانه",
-                                      ),
-                                    ],
+                                            .type ==
+                                        "back")
+                                  monytypesradios(
+                                    firstradio: "7aan",
+                                    secondradio: "syana",
+                                    firstradiotitle: "حقن",
+                                    secondradiotitle: "صيانه",
                                   ),
                                 SizedBox(
                                   height: 10,
@@ -138,11 +141,8 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 10,
                                 ),
                                 if (BlocProvider.of<CustomersCubit>(context)
-                                            .paymenttype ==
-                                        "transported" &&
-                                    BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "PAYMENT")
+                                        .type ==
+                                    "ta7weel")
                                   Column(
                                     children: [
                                       Container(
@@ -157,9 +157,18 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                                 showSearchBox: true,
                                                 searchFieldProps:
                                                     TextFieldProps()),
-                                            selectedItem: "اختر المحفظه",
-                                            items: [],
-                                            onChanged: (value) {},
+                                            selectedItem:
+                                                BlocProvider.of<WalletCubit>(
+                                                        context)
+                                                    .walletname,
+                                            items: BlocProvider.of<WalletCubit>(
+                                                    context)
+                                                .wallets,
+                                            onChanged: (value) {
+                                              BlocProvider.of<WalletCubit>(
+                                                      context)
+                                                  .changewalletname(value!);
+                                            },
                                             dropdownDecoratorProps:
                                                 DropDownDecoratorProps(
                                                     baseStyle: TextStyle(
@@ -190,7 +199,7 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                                     )),
                                           ),
                                         ),
-                                      ),
+                                      )
                                     ],
                                   ),
                                 SizedBox(height: 10),
@@ -205,13 +214,16 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                 SizedBox(height: 10),
                                 if (BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "INJECTION" ||
+                                        "stampa" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "mold" ||
+                                        "7aan" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "maintenance")
+                                        "back" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "syana")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: quantity,
@@ -220,58 +232,48 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   ),
                                 if (BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "INJECTION" ||
+                                        "stampa" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "mold" ||
+                                        "syana" ||
                                     BlocProvider.of<CustomersCubit>(context)
                                             .type ==
-                                        "maintenance")
+                                        "back" ||
+                                    BlocProvider.of<CustomersCubit>(context)
+                                            .type ==
+                                        "7aan")
                                   const SizedBox(
                                     height: 10,
                                   ),
-                                if (BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "INJECTION" ||
-                                    BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "mold" ||
-                                    BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "maintenance")
-                                  custommytextform(
-                                    keyboardType: TextInputType.number,
-                                    controller: pieceprice,
-                                    hintText: "سعر الوحده",
-                                    val: "برجاء ادخال سعر الوحده",
-                                  ),
-                                if (BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "INJECTION" ||
-                                    BlocProvider.of<CustomersCubit>(context)
-                                            .type ==
-                                        "mold")
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                if (BlocProvider.of<CustomersCubit>(context)
-                                        .type ==
-                                    "PAYMENT")
-                                  custommytextform(
-                                    keyboardType: TextInputType.number,
-                                    controller: payedvalue,
-                                    hintText: "المبلغ المدفوع",
-                                    val: "برجاء ادخال المبلغ المدفوع",
-                                  ),
+                                custommytextform(
+                                  keyboardType: TextInputType.number,
+                                  controller: pieceprice,
+                                  hintText: BlocProvider.of<CustomersCubit>(
+                                                      context)
+                                                  .type ==
+                                              "7aan" ||
+                                          BlocProvider.of<CustomersCubit>(
+                                                      context)
+                                                  .type ==
+                                              "syana" ||
+                                          BlocProvider.of<CustomersCubit>(
+                                                      context)
+                                                  .type ==
+                                              "back" ||
+                                          BlocProvider.of<CustomersCubit>(
+                                                      context)
+                                                  .type ==
+                                              "stampa"
+                                      ? "سعر الوحده"
+                                      : "المبلغ المدفوع",
+                                  val: "برجاء ادخال المبلغ",
+                                ),
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 if (BlocProvider.of<CustomersCubit>(context)
                                         .paymenttype ==
-                                    "transported")
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                if (BlocProvider.of<CustomersCubit>(context)
-                                        .paymenttype ==
-                                    "transported")
+                                    "ta7weel")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
                                     controller: putcost,
@@ -282,13 +284,70 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   height: 20,
                                 ),
                                 BlocConsumer<CustomersCubit, CustomersState>(
-                                  listener: (context, state) {},
+                                  listener: (context, state) {
+                                    if (state is addclientmovefailure) {
+                                      showtoast(
+                                          message: state.errormessage,
+                                          toaststate: Toaststate.error,
+                                          context: context);
+                                    }
+                                    if (state is addclientmovesuccess) {
+                                      quantity.clear();
+                                      pieceprice.clear();
+                                      desc.clear();
+                                      showtoast(
+                                          message: state.successmessage,
+                                          toaststate: Toaststate.succes,
+                                          context: context);
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .queryparms = {
+                                        "client_id": widget.clientid,
+                                      };
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .getclientmoves();
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .getCustomers();
+                                    }
+                                  },
                                   builder: (context, state) {
                                     if (state is addclientmoveloading)
                                       return loading();
                                     return custommaterialbutton(
                                       button_name: "تسجيل عميل",
-                                      onPressed: () async {},
+                                      onPressed: () async {
+                                        BlocProvider.of<CustomersCubit>(context)
+                                            .addclientmove(
+                                                clientmove: clientmoverequest(
+                                                    moneytype: BlocProvider.of<CustomersCubit>(context).type ==
+                                                                "naqdi" ||
+                                                            BlocProvider.of<CustomersCubit>(context).type ==
+                                                                "ta7weel" ||
+                                                            BlocProvider.of<CustomersCubit>(context).type ==
+                                                                "back"
+                                                        ? BlocProvider.of<CustomersCubit>(context)
+                                                            .moneytype
+                                                        : BlocProvider.of<CustomersCubit>(context).type ==
+                                                                "7aan"
+                                                            ? "7aan"
+                                                            : "syana",
+                                                    saveid: BlocProvider.of<CustomersCubit>(context).type == "ta7weel"
+                                                        ? BlocProvider.of<WalletCubit>(context)
+                                                                .walletid[
+                                                            BlocProvider.of<WalletCubit>(context)
+                                                                .walletname]
+                                                        : null,
+                                                    qty: quantity.text.isEmpty
+                                                        ? "1"
+                                                        : quantity.text,
+                                                    pieceprice:
+                                                        pieceprice.text.isEmpty
+                                                            ? null
+                                                            : pieceprice.text,
+                                                    date: BlocProvider.of<DateCubit>(context).date1,
+                                                    type: BlocProvider.of<CustomersCubit>(context).type,
+                                                    notes: desc.text.isEmpty ? "لا يوجد" : desc.text,
+                                                    clientid: widget.clientid));
+                                      },
                                     );
                                   },
                                 ),

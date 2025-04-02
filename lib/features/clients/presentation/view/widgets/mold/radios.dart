@@ -4,12 +4,12 @@ import 'package:agman/features/clients/presentation/viewmodel/customers/customer
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class radios extends StatelessWidget {
+class monytypesradios extends StatelessWidget {
   final String firstradio;
   final String secondradio;
   final String firstradiotitle;
   final String secondradiotitle;
-  radios(
+  monytypesradios(
       {super.key,
       required this.firstradio,
       required this.secondradio,
@@ -26,9 +26,9 @@ class radios extends StatelessWidget {
           Radio(
               activeColor: appcolors.seconderycolor,
               value: firstradio,
-              groupValue: customerbloc.customeertype,
+              groupValue: customerbloc.moneytype,
               onChanged: (val) {
-                customerbloc.changetcustomerype(value: val!);
+                customerbloc.changemonetytype(value: val!);
               }),
           Text(
             firstradiotitle,
@@ -43,9 +43,9 @@ class radios extends StatelessWidget {
           Radio(
               activeColor: appcolors.seconderycolor,
               value: secondradio,
-              groupValue: customerbloc.customeertype,
+              groupValue: customerbloc.moneytype,
               onChanged: (val) {
-                customerbloc.changetcustomerype(value: val!);
+                customerbloc.changemonetytype(value: val!);
               }),
           Text(
             secondradiotitle,
@@ -62,18 +62,26 @@ class radiostypes extends StatelessWidget {
   final String secondradio;
   final String thirdradio;
   final String fourthradio;
+  final String sixradio;
+  final String sixradiotittle;
+  final String fifthradio;
   final String firstradiotitle;
   final String secondradiotitle;
   final String thirdradiotittle;
   final String fourthradiotittle;
+  final String fifthradiotitle;
   radiostypes(
       {super.key,
       required this.firstradio,
       required this.secondradio,
+      required this.fifthradio,
       required this.thirdradio,
+      required this.sixradio,
+      required this.sixradiotittle,
       required this.fourthradio,
       required this.thirdradiotittle,
       required this.fourthradiotittle,
+      required this.fifthradiotitle,
       required this.firstradiotitle,
       required this.secondradiotitle});
   @override
@@ -128,6 +136,20 @@ class radiostypes extends StatelessWidget {
           ),
           Radio(
               activeColor: appcolors.seconderycolor,
+              value: fifthradio,
+              groupValue: customerbloc.type,
+              onChanged: (val) {
+                customerbloc.changetype(value: val!);
+              }),
+          Text(
+            fifthradiotitle,
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
               value: secondradio,
               groupValue: customerbloc.type,
               onChanged: (val) {
@@ -135,7 +157,21 @@ class radiostypes extends StatelessWidget {
               }),
           Text(
             secondradiotitle,
-            style: Styles.textStyle12.copyWith(color: Colors.green),
+            style: Styles.textStyle12,
+          ),
+          SizedBox(
+            width: 10,
+          ),
+          Radio(
+              activeColor: appcolors.seconderycolor,
+              value: sixradio,
+              groupValue: customerbloc.type,
+              onChanged: (val) {
+                customerbloc.changetype(value: val!);
+              }),
+          Text(
+            sixradiotittle,
+            style: Styles.textStyle12,
           ),
         ],
       ),

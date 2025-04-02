@@ -3,6 +3,7 @@ import 'package:agman/core/common/constants.dart';
 import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/toast/toast.dart';
+import 'package:agman/core/common/widgets/error.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
 import 'package:agman/core/common/widgets/loading.dart';
@@ -144,7 +145,9 @@ class _PlasticaccessorieitemState extends State<Plasticaccessorieitem> {
                   if (state is getaccessoriesmotionloading)
                     return loadingshimmer();
                   if (state is getaccessoriesmotionfailure)
-                    return SizedBox();
+                    return errorfailure(
+                      errormessage: state.errormessage,
+                    );
                   else {
                     if (BlocProvider.of<plasticaccessoriesCubit>(context)
                         .alldata

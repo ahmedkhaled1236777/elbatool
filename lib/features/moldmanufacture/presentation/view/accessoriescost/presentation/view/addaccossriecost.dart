@@ -35,6 +35,11 @@ class _AddaccessoriecostState extends State<Addaccessoriecost> {
   }
 
   @override
+  void initState() {
+    getdata();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(

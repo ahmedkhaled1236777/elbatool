@@ -1,4 +1,4 @@
-import 'package:agman/features/clients/data/models/clientmoverequest/clientmoverequest.dart';
+import 'package:agman/features/clients/data/models/clientmodelrequestmotion.dart';
 import 'package:agman/features/clients/data/models/clientmovesmodel/datum.dart';
 import 'package:agman/features/clients/data/models/clientrequest.dart';
 import 'package:agman/features/clients/data/repos/clientsrepoimp.dart';
@@ -11,9 +11,26 @@ part 'customers_state.dart';
 class CustomersCubit extends Cubit<CustomersState> {
   final Clientsrepoimp clientsrepoimp;
   CustomersCubit({required this.clientsrepoimp}) : super(CustomersInitial());
-  String customeertype = "Customer";
-  String type = "MANUFACTURE";
+  String moneytype = "7aan";
+  String type = "7aan";
   String paymenttype = "cash";
+  String searchtype = "اختر مجال البحث";
+  List<String> searchtypes = [
+    "حقن",
+    "اسطمبات",
+    "مرتجع وحقن",
+    "صيانه",
+    "نقدي",
+    "تحويل"
+  ];
+  Map<String, String> searchtypemap = {
+    "حقن": "7aan",
+    "نقدي": "naqdi",
+    "تحويل": "ta7weel",
+    "اسطمبات": "stampa",
+    "صيانه": "stampasyana",
+    "مرتجع وحقن": "7aanback",
+  };
   String paymenttypesec = "inj";
   List<Datum> data = [];
   List<bool> checks = [];
@@ -23,6 +40,7 @@ class CustomersCubit extends Cubit<CustomersState> {
 
   int page = 1;
   bool firstloading = false;
+  List total = [];
   List<bool> injchecks = [
     true,
     true,
@@ -37,15 +55,21 @@ class CustomersCubit extends Cubit<CustomersState> {
     true,
     true,
   ];
+  Map<String, dynamic> queryparms = {};
   List<Datum> clients = [];
   changecheckbox(bool val, int i) {
     checks[i] = val;
     emit(changechecboxstate());
   }
 
-  changetcustomerype({required String value}) {
-    customeertype = value;
+  changemonetytype({required String value}) {
+    moneytype = value;
     emit(CustomersChangeType());
+  }
+
+  changesearchtype({required String value}) {
+    searchtype = value;
+    emit(searchtypechange());
   }
 
   changepaymenttypepay({required String value}) {
@@ -74,7 +98,7 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
-  addclientmove({required Clientmoverequest clientmove}) async {
+  addclientmove({required clientmoverequest clientmove}) async {
     emit(addclientmoveloading());
     var result = await clientsrepoimp.addclientmove(Clientmovere: clientmove);
 
@@ -96,15 +120,17 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
-  getCustomers() async {
+  getCustomers({Map<String, dynamic>? parms}) async {
     emit(getCustomersloading());
-    var result = await clientsrepoimp.getclients();
+    var result = await clientsrepoimp.getclients(queryparms: parms);
     result.fold((failure) {
       emit(getCustomergfailure(errormessage: failure.error_message));
     }, (success) {
       clients.clear();
+      total.clear();
       success.data!.forEach((e) {
         clients.add(e);
+        total.add(e.total7aan + e.totalStamba);
       });
       emit(getCustomerssuccess(successmessage: "تم الحصول علي البيانات بنجاح"));
     });
@@ -118,7 +144,7 @@ class CustomersCubit extends Cubit<CustomersState> {
     result.fold((failure) {
       emit(deleteCustomerfailure(errormessage: failure.error_message));
     }, (success) {
-      clients.removeWhere((e) {
+      mymoves.removeWhere((e) {
         return e.id == clientid;
       });
       emit(deleteCustomersuccess(successmesssage: success));
@@ -126,26 +152,28 @@ class CustomersCubit extends Cubit<CustomersState> {
   }
 
   deleteclientmove({required int moveid}) async {
-    emit(deleteCustomerloading());
+    emit(deleteclientmoveloading());
     var result = await clientsrepoimp.deleteclientmove(
       moveid: moveid,
     );
     result.fold((failure) {
       emit(deleteclientmovefailure(errormessage: failure.error_message));
     }, (success) {
-      /*  clients.removeWhere((e) {
-        return e.id == clientid;
-      });*/
+      mymoves.removeWhere((e) {
+        return e.id == moveid;
+      });
       emit(deleteclientmovesuccess(successmessage: success));
     });
   }
 
-  getclientmoves({required int client_id, String? status, String? date}) async {
+  getclientmoves() async {
     if (firstloading == false) emit(getclientmovesloading());
     this.page = 1;
 
     var result = await clientsrepoimp.getclientmoves(
-        page: page, clientid: client_id, status: status, date: date);
+      queryparms: queryparms,
+      page: page,
+    );
     loading = true;
     result.fold((failue) {
       emit(getclientmovesfailure(errormessage: failue.error_message));
@@ -166,11 +194,10 @@ class CustomersCubit extends Cubit<CustomersState> {
     });
   }
 
-  getamoreclientmoves(
-      {required int client_id, String? status, String? date}) async {
+  getamoreclientmoves() async {
     page++;
-    var result = await clientsrepoimp.getclientmoves(
-        page: page, clientid: client_id, date: date, status: status);
+    var result =
+        await clientsrepoimp.getclientmoves(page: page, queryparms: queryparms);
     loading = true;
     result.fold((failue) {
       emit(getclientmovesfailure(errormessage: failue.error_message));

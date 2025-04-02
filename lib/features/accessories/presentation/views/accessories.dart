@@ -29,7 +29,7 @@ class accessories extends StatefulWidget {
 class _accessoriesState extends State<accessories> {
   final accessoriesheader = [
     "اسم الاكسسوار",
-    "الكميه",
+    "الكميه الحاليه",
     "سعر البيع",
     "سعر الشراء",
     "تعديل",

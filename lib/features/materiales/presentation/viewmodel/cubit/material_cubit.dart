@@ -4,17 +4,26 @@ import 'package:agman/features/materiales/data/repos/materialrepoimp.dart';
 import 'package:bloc/bloc.dart';
 
 import '../../../data/models/materialmodel/datum.dart';
+import '../../../data/models/materialmoves/datum.dart';
 
 part 'material_state.dart';
 
 class plasticMaterialCubit extends Cubit<plasticMaterialState> {
   String type = "1";
   String materialtype = "material";
+  bool loading = false;
+  List<Datum> data = [];
+  List<datummoves> datamoves = [];
+  bool firstloading = false;
+  bool firstloadingmotion = false;
+  int motionpage = 1;
   String materialname = "اختر الخامه";
   String colorname = "اختر اللون";
   List<String> materialsnames = [];
   List<String> colorsnames = [];
   Map<String, int> colorid = {};
+  bool motionloading = false;
+
   Map<String, int> materialid = {};
   plasticMaterialCubit(this.materialrepoimp) : super(MaterialInitial());
   changetype({required String value}) {
@@ -44,10 +53,7 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
   }
 
   final Materialrepoimp materialrepoimp;
-  int page = 1;
-  bool loading = false;
-  List<Datum> data = [];
-  bool firstloading = false;
+
   Map<String, dynamic>? queryparms;
   addmaterial({required Materialmodelrequest material}) async {
     emit(AddMaterialLoading());
@@ -123,6 +129,52 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
       }
 
       emit(DeleteMaterialSuccess(successmessage: success));
+    });
+  }
+
+  deleteMaterialmoves({required int Materialid}) async {
+    emit(deletematerialmovesloading());
+    var result =
+        await materialrepoimp.deleteMaterialmove(Materialid: Materialid);
+    result.fold((failure) {
+      emit(deletematerialmovesfailure(errormessage: failure.error_message));
+    }, (success) {
+      for (int i = 0; i < datamoves.length; i++) {
+        if (datamoves[i].id == Materialid) datamoves.removeAt(i);
+      }
+
+      emit(deletematerialmovessuccess(successmessage: success));
+    });
+  }
+
+  gematerialesmoves(
+      {required int materialid,
+      String? datefrom,
+      String? dateto,
+      String? type}) async {
+    if (firstloadingmotion == false) emit(GetMaterialsmovesLoading());
+    this.motionpage = 1;
+    var result = await materialrepoimp.getmaterialesmoves(
+        datefrom: datefrom,
+        dateto: dateto,
+        type: type,
+        page: motionpage,
+        materialid: materialid);
+    motionloading = true;
+    result.fold((failue) {
+      emit(GetMaterialsmovesfailure(errormessage: failue.error_message));
+    }, (success) {
+      if (success.nextPageUrl == null) {
+        motionloading = false;
+      }
+      datamoves.clear();
+
+      firstloadingmotion = true;
+      success.data!.forEach((e) {
+        datamoves.add(e);
+      });
+
+      emit(GetMaterialsmovessuccess(successmessage: ""));
     });
   }
 }

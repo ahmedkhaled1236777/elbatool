@@ -1,13 +1,17 @@
 import 'package:agman/core/colors/colors.dart';
+import 'package:agman/core/common/date/date_cubit.dart';
 import 'package:agman/core/common/styles/styles.dart';
+import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
+import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:mat_month_picker_dialog/mat_month_picker_dialog.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Monthsearch extends StatefulWidget {
-  final int clientid;
+  int clientid;
 
-  const Monthsearch({super.key, required this.clientid});
+  Monthsearch({required this.clientid});
   @override
   State<Monthsearch> createState() => _MonthsearchState();
 }
@@ -45,36 +49,78 @@ class _MonthsearchState extends State<Monthsearch> {
                             const SizedBox(
                               height: 15,
                             ),
-                            InkWell(
-                              onTap: () async {
-                                final selected = await showMonthPicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1970),
-                                    lastDate: DateTime(2050),
-                                    locale: Locale('ar'));
-                                if (selected != null) {
-                                  month = selected.month;
-                                  year = selected.year;
-                                  setState(() {});
-                                }
+                            BlocBuilder<DateCubit, DateState>(
+                              builder: (context, state) {
+                                return choosedate(
+                                  onPressed: () {
+                                    BlocProvider.of<DateCubit>(context)
+                                        .changedate3(context);
+                                  },
+                                  date:
+                                      BlocProvider.of<DateCubit>(context).date3,
+                                );
                               },
-                              child: Container(
-                                height: 55,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                    color: appcolors.dropcolor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(color: Colors.grey)),
-                                child: Center(
-                                  child: Text(
-                                    month == null
-                                        ? "اختر التاريخ"
-                                        : "${month}-${year}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            BlocBuilder<DateCubit, DateState>(
+                              builder: (context, state) {
+                                return choosedate(
+                                  onPressed: () {
+                                    BlocProvider.of<DateCubit>(context)
+                                        .changedate4(context);
+                                  },
+                                  date:
+                                      BlocProvider.of<DateCubit>(context).date4,
+                                );
+                              },
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              color: Color(0xff535C91),
+                              child: Center(
+                                child: DropdownSearch<String>(
+                                  dropdownButtonProps:
+                                      DropdownButtonProps(color: Colors.white),
+                                  popupProps: PopupProps.menu(
+                                      showSelectedItems: true,
+                                      showSearchBox: true,
+                                      searchFieldProps: TextFieldProps()),
+                                  selectedItem:
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .searchtype,
+                                  items:
+                                      BlocProvider.of<CustomersCubit>(context)
+                                          .searchtypes,
+                                  onChanged: (value) {
+                                    BlocProvider.of<CustomersCubit>(context)
+                                        .changesearchtype(value: value!);
+                                  },
+                                  dropdownDecoratorProps:
+                                      DropDownDecoratorProps(
+                                          baseStyle: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "cairo"),
+                                          textAlign: TextAlign.center,
+                                          dropdownSearchDecoration:
+                                              InputDecoration(
+                                            enabled: true,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color(0xff535C91)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                  color: Color(0xff535C91)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                          )),
                                 ),
                               ),
                             ),
@@ -83,7 +129,36 @@ class _MonthsearchState extends State<Monthsearch> {
                             ),
                             custommaterialbutton(
                               button_name: "بحث",
-                              onPressed: () {
+                              onPressed: () async {
+                                BlocProvider.of<CustomersCubit>(context)
+                                    .queryparms = {
+                                  "client_id": widget.clientid,
+                                  if (BlocProvider.of<DateCubit>(context)
+                                          .date3 !=
+                                      "التاريخ من")
+                                    "date_from":
+                                        BlocProvider.of<DateCubit>(context)
+                                            .date3,
+                                  if (BlocProvider.of<DateCubit>(context)
+                                          .date4 !=
+                                      "التاريخ الي")
+                                    "date_to":
+                                        BlocProvider.of<DateCubit>(context)
+                                            .date4,
+                                  if (BlocProvider.of<CustomersCubit>(context)
+                                          .searchtype !=
+                                      "اختر مجال البحث")
+                                    "type": BlocProvider.of<CustomersCubit>(
+                                                context)
+                                            .searchtypemap[
+                                        BlocProvider.of<CustomersCubit>(context)
+                                            .searchtype]
+                                };
+                                print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
+                                print(BlocProvider.of<CustomersCubit>(context)
+                                    .queryparms);
+                                await BlocProvider.of<CustomersCubit>(context)
+                                    .getclientmoves();
                                 Navigator.pop(context);
                               },
                             )

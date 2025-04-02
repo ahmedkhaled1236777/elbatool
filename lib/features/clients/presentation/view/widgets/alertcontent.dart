@@ -1,15 +1,13 @@
 import 'package:agman/core/colors/colors.dart';
-import 'package:agman/core/common/date/date_cubit.dart';
-import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
+import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Alertcontent extends StatelessWidget {
   TextEditingController customername = TextEditingController();
-  TextEditingController phone = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -47,18 +45,16 @@ class Alertcontent extends StatelessWidget {
                               keyboardType: TextInputType.number,
                             ),
                             const SizedBox(
-                              height: 15,
-                            ),
-                            custommytextform(
-                              controller: phone,
-                              hintText: "رقم الهاتف",
-                              keyboardType: TextInputType.number,
-                            ),
-                            const SizedBox(
                               height: 20,
                             ),
                             custommaterialbutton(
-                                button_name: "بحث", onPressed: () async {})
+                                button_name: "بحث",
+                                onPressed: () async {
+                                  await BlocProvider.of<CustomersCubit>(context)
+                                      .getCustomers(
+                                          parms: {"name": customername.text});
+                                  Navigator.pop(context);
+                                })
                           ]))))
             ])));
   }

@@ -1,9 +1,10 @@
-import 'package:agman/core/colors/colors.dart';
 import 'package:flutter/material.dart';
 
 class Customtablematerialitem extends StatelessWidget {
   final String materialname;
   final String quantity;
+  final String datefrom;
+  final String dateto;
   final TextStyle textStyle;
   Widget delet;
   Widget edit;
@@ -13,6 +14,8 @@ class Customtablematerialitem extends StatelessWidget {
     required this.textStyle,
     required this.materialname,
     required this.quantity,
+    required this.datefrom,
+    required this.dateto,
     required this.edit,
     required this.delet,
   });
@@ -33,6 +36,26 @@ class Customtablematerialitem extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
           ),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+              flex: 3,
+              child: Text(
+                datefrom,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
+          const SizedBox(
+            width: 3,
+          ),
+          Expanded(
+              flex: 3,
+              child: Text(
+                dateto,
+                style: textStyle,
+                textAlign: TextAlign.center,
+              )),
           const SizedBox(
             width: 3,
           ),

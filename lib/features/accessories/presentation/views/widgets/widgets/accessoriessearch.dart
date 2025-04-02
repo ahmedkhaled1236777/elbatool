@@ -23,10 +23,11 @@ class Accessoriessearch extends StatefulWidget {
 
 class _AccessoriessearchState extends State<Accessoriessearch> {
   final accessoriesheader = [
+    "الاسم",
     "الكميه قبل الجرد",
     "اجمالي الشراء",
-    "اجمالي البيع",
     "اجمالي الاستهلاك",
+    "اجمالي البيع",
     "الكميه بعد الجرد",
   ];
 
@@ -95,37 +96,40 @@ class _AccessoriessearchState extends State<Accessoriessearch> {
                                     itemBuilder: (context, i) => Accessoriesearchitem(
                                         textStyle: Styles.gettabletextstyle(
                                             context: context),
-                                        totalsell:
+                                        totalsell: BlocProvider.of<plasticaccessoriesCubit>(context)
+                                            .datasearch[i]
+                                            .summary!
+                                            .saleQuantity
+                                            .toString(),
+                                        accessoriename:
                                             BlocProvider.of<plasticaccessoriesCubit>(context)
                                                 .datasearch[i]
-                                                .sellPrice!,
-                                        firsttime:
-                                            BlocProvider.of<plasticaccessoriesCubit>(context)
-                                                .datasearch[i]
-                                                .dateFrom!
-                                                .toString(),
-                                        lasttime:
-                                            BlocProvider.of<plasticaccessoriesCubit>(context)
-                                                .datasearch[i]
-                                                .dateTo!
-                                                .toString(),
+                                                .name!,
+                                        firsttime: BlocProvider.of<plasticaccessoriesCubit>(context)
+                                            .datasearch[i]
+                                            .dateFrom!
+                                            .toString(),
+                                        lasttime: BlocProvider.of<plasticaccessoriesCubit>(context)
+                                            .datasearch[i]
+                                            .dateTo!
+                                            .toString(),
                                         totalconsume:
                                             BlocProvider.of<plasticaccessoriesCubit>(context)
                                                 .datasearch[i]
-                                                .dateFrom!
+                                                .summary!
+                                                .consumedQuantity!
                                                 .toString(),
-                                        totalbuy:
-                                            BlocProvider.of<plasticaccessoriesCubit>(context)
-                                                .datasearch[i]
-                                                .dateFrom!
-                                                .toString()),
+                                        totalbuy: BlocProvider.of<plasticaccessoriesCubit>(context)
+                                            .datasearch[i]
+                                            .summary!
+                                            .addedQuantity
+                                            .toString()),
                                     separatorBuilder: (context, i) => Divider(
                                           color: Colors.grey,
                                         ),
-                                    itemCount:
-                                        BlocProvider.of<plasticaccessoriesCubit>(context)
-                                            .datasearch
-                                            .length);
+                                    itemCount: BlocProvider.of<plasticaccessoriesCubit>(context)
+                                        .datasearch
+                                        .length);
                           },
                         ))),
                 SizedBox(

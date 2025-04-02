@@ -1,11 +1,9 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/date/date_cubit.dart';
-import 'package:agman/core/common/navigation.dart';
 import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
-import 'package:agman/core/common/widgets/dialogerror.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/features/injection/data/models/productionmodel.dart';
 import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';

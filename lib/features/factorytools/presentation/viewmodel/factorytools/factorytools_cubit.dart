@@ -21,6 +21,7 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
   List<Datum> data = [];
   List<Datumsearch> factools = [];
   List<String> tools = [];
+  Map<String, int> factorytoolsid = {};
   List<datummoves> datamoves = [];
   changetype({required String value}) {
     type = value;
@@ -111,6 +112,7 @@ class FactorytoolsCubit extends Cubit<FactorytoolsState> {
       success.data!.forEach((e) {
         data.add(e);
         tools.add(e.name!);
+        factorytoolsid.addAll({e.name!: e.id!});
       });
       firstloading = true;
 

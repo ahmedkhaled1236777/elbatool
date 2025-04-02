@@ -78,6 +78,18 @@ class Customtablefactorytoolitem extends StatelessWidget {
           const SizedBox(
             width: 3,
           ),
+          if (quantity != null)
+            Expanded(
+                flex: 3,
+                child: Text(
+                  quantity!,
+                  style: textStyle,
+                  textAlign: TextAlign.center,
+                )),
+          if (quantity != null)
+            const SizedBox(
+              width: 3,
+            ),
           if (firsttime != null)
             Expanded(
                 flex: 3,
@@ -102,16 +114,6 @@ class Customtablefactorytoolitem extends StatelessWidget {
             const SizedBox(
               width: 3,
             ),
-          Expanded(
-              flex: 3,
-              child: Text(
-                quantity,
-                style: textStyle,
-                textAlign: TextAlign.center,
-              )),
-          const SizedBox(
-            width: 3,
-          ),
           if (this.edit != null)
             Expanded(
               flex: 2,

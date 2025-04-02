@@ -16,13 +16,13 @@ class ordermoves extends StatefulWidget {
   final String ordernumber;
   final String actualquantity;
   final String orderquantity;
-  final String stampname;
-  const ordermoves(
+  String? stampname;
+  ordermoves(
       {super.key,
       required this.orderid,
       required this.ordernumber,
       required this.actualquantity,
-      required this.stampname,
+      this.stampname,
       required this.orderquantity});
   @override
   State<ordermoves> createState() => _ordermovesState();
@@ -156,7 +156,7 @@ class _ordermovesState extends State<ordermoves> {
               SizedBox(
                 height: 5,
               ),
-              if (widget.stampname != "")
+              if (widget.stampname != "" || widget.stampname != null)
                 Container(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   width: double.infinity,
@@ -175,12 +175,19 @@ class _ordermovesState extends State<ordermoves> {
                             TextStyle(fontFamily: "cairo", color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
-                      Text(
-                        " الوقت المتبقي لانتهاء الاوردر : ${((((int.parse(widget.orderquantity) - int.parse(widget.actualquantity)) * BlocProvider.of<MoldCubit>(context).moldid[widget.stampname]!["cycletime"]) / int.parse(BlocProvider.of<MoldCubit>(context).moldid[widget.stampname]!["numberofpieces"])) / (60 * 60)).toStringAsFixed(1)} ساعه  ",
-                        style:
-                            TextStyle(fontFamily: "cairo", color: Colors.white),
-                        textAlign: TextAlign.center,
-                      ),
+                      if (BlocProvider.of<MoldCubit>(context)
+                                  .moldid[widget.stampname]?["cycletime"] !=
+                              null &&
+                          BlocProvider.of<MoldCubit>(context)
+                                      .moldid[widget.stampname]
+                                  ?["numberofpieces"] !=
+                              null)
+                        Text(
+                          " الوقت المتبقي لانتهاء الاوردر : ${((((int.parse(widget.orderquantity) - int.parse(widget.actualquantity)) * BlocProvider.of<MoldCubit>(context).moldid[widget.stampname]!["cycletime"]) / int.parse(BlocProvider.of<MoldCubit>(context).moldid[widget.stampname]!["numberofpieces"])) / (60 * 60)).toStringAsFixed(1)} ساعه  ",
+                          style: TextStyle(
+                              fontFamily: "cairo", color: Colors.white),
+                          textAlign: TextAlign.center,
+                        ),
                     ],
                   ),
                 )

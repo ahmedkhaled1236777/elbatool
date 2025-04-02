@@ -12,6 +12,7 @@ abstract class urls {
   static const String stamp_accessories = "stamp_accessories";
   static const String suppliers = "suppliers";
   static const String addmove = "add-move";
+  static const String supplier_moves = "supplier_moves";
   static const String factorytools = "stocks";
   static const String material_moves = "material_moves";
   static const String factorytoolsmoves = "stockmoves";

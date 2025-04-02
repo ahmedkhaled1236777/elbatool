@@ -4,7 +4,7 @@ import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/common/urls.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/clients/data/models/clientmodel/clientmodel.dart';
-import 'package:agman/features/clients/data/models/clientmoverequest/clientmoverequest.dart';
+import 'package:agman/features/clients/data/models/clientmodelrequestmotion.dart';
 import 'package:agman/features/clients/data/models/clientmovesmodel/clientmovesmodel.dart';
 import 'package:agman/features/clients/data/models/clientrequest.dart';
 import 'package:agman/features/clients/data/repos/clientsrepo.dart';
@@ -64,6 +64,7 @@ class Clientsrepoimp extends Clientsrepo {
       {Map<String, dynamic>? queryparms}) async {
     try {
       Response response = await Getdata.getdata(
+        queryParameters: queryparms,
         token: cashhelper.getdata(key: "token"),
         path: urls.clients,
       );
@@ -112,7 +113,7 @@ class Clientsrepoimp extends Clientsrepo {
 
   @override
   Future<Either<failure, String>> addclientmove(
-      {required Clientmoverequest Clientmovere}) async {
+      {required clientmoverequest Clientmovere}) async {
     try {
       Response response = await Postdata.postdata(
           token: cashhelper.getdata(key: "token"),
@@ -161,19 +162,12 @@ class Clientsrepoimp extends Clientsrepo {
 
   @override
   Future<Either<failure, Clientmovesmodel>> getclientmoves(
-      {required int page,
-      required int clientid,
-      String? date,
-      String? status}) async {
+      {required int page, required Map<String, dynamic> queryparms}) async {
     try {
       Response response = await Getdata.getdata(
           token: cashhelper.getdata(key: "token"),
           path: "clientmoves?page=${page}",
-          queryParameters: {
-            "client_id": clientid,
-            "date": date,
-            "status": status
-          });
+          queryParameters: queryparms);
 
       if (response.data["success"] == true && response.statusCode == 200) {
         return right(Clientmovesmodel.fromJson(response.data));

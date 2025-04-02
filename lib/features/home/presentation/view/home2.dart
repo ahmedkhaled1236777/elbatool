@@ -92,12 +92,6 @@ class home2 extends StatelessWidget {
       "page": accessories()
     },
     {
-      "name": "مخزن المكونات",
-      "name-en": "components_store",
-      "image": "assets/images/plastic-houhold.png",
-      "page": plasticcomponent()
-    },
-    {
       "name": "مخزن ادوات المصنع",
       "name-en": "warehouse",
       "image": "assets/images/wa.png",

@@ -2,6 +2,7 @@ import 'package:agman/core/common/errors/failure.dart';
 import 'package:agman/features/materiales/data/models/materialmodel/materialmodel.dart';
 import 'package:agman/features/materiales/data/models/materialmodelrequest.dart';
 import 'package:agman/features/materiales/data/models/materialmovemodelrequest.dart';
+import 'package:agman/features/materiales/data/models/materialmoves/materialmoves.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class materialrepo {
@@ -15,4 +16,11 @@ abstract class materialrepo {
       {required int page, Map<String, dynamic>? queryparms});
   Future<Either<failure, String>> deleteMaterial(
       {required int Materialid, String? type});
+  Future<Either<failure, String>> deleteMaterialmove(
+      {required int Materialid, String? type});
+  Future<Either<failure, Materialmoves>> getmaterialesmoves({
+    required int page,
+    String? type,
+    required int materialid,
+  });
 }

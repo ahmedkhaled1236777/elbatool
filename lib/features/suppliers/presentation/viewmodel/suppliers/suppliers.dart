@@ -26,7 +26,37 @@ class deleteSuppliersuccess extends SupplierssState {
 
 class addSupplierloading extends SupplierssState {}
 
+class changechecboxstate extends SupplierssState {}
+
+class deleteSuppliermoveloading extends SupplierssState {}
+
+class deletesuppliermovesuccess extends SupplierssState {
+  final String successmessage;
+
+  deletesuppliermovesuccess({required this.successmessage});
+}
+
+class deletesuppliermovefailure extends SupplierssState {
+  final String errormessage;
+
+  deletesuppliermovefailure({required this.errormessage});
+}
+
 class getSuppliersloading extends SupplierssState {}
+
+class getSuppliersmovesloading extends SupplierssState {}
+
+class getSuppliersmovessuccess extends SupplierssState {
+  final String successmessage;
+
+  getSuppliersmovessuccess({required this.successmessage});
+}
+
+class getSuppliersmovesfailure extends SupplierssState {
+  final String errormessage;
+
+  getSuppliersmovesfailure({required this.errormessage});
+}
 
 class getSupplierssuccess extends SupplierssState {
   final String successmessage;
@@ -65,3 +95,17 @@ class editSupplierfailure extends SupplierssState {
 }
 
 class editSupplierloading extends SupplierssState {}
+
+class addsuppliermotionloading extends SupplierssState {}
+
+class addsuppliermotionsuccess extends SupplierssState {
+  final String successmessage;
+
+  addsuppliermotionsuccess({required this.successmessage});
+}
+
+class addsuppliermotionfailure extends SupplierssState {
+  final String errormessage;
+
+  addsuppliermotionfailure({required this.errormessage});
+}

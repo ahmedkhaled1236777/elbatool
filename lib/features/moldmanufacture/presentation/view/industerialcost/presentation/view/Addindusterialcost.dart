@@ -35,6 +35,11 @@ class _AddindusterialcostState extends State<Addindusterialcost> {
   }
 
   @override
+  void initState() {
+    getdata();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(

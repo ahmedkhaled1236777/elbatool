@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Accessoriesearchitem extends StatelessWidget {
+  final String accessoriename;
   final String firsttime;
   final String lasttime;
   final String totalbuy;
@@ -12,6 +13,7 @@ class Accessoriesearchitem extends StatelessWidget {
   Accessoriesearchitem({
     super.key,
     required this.textStyle,
+    required this.accessoriename,
     required this.totalsell,
     required this.firsttime,
     required this.lasttime,
@@ -27,6 +29,17 @@ class Accessoriesearchitem extends StatelessWidget {
           BoxConstraints(minHeight: MediaQuery.of(context).size.height / 19),
       child: Row(
         children: [
+          Expanded(
+            flex: 3,
+            child: Text(
+              accessoriename,
+              style: textStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+          const SizedBox(
+            width: 3,
+          ),
           Expanded(
             flex: 3,
             child: Text(

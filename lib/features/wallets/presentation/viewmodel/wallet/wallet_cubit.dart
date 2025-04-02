@@ -4,14 +4,15 @@ import 'package:agman/features/wallets/data/model/walletmotionmodel.dart';
 import 'package:agman/features/wallets/data/model/walletmotionmodel/datum.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
 
 part 'wallet_state.dart';
 
 class WalletCubit extends Cubit<walletState> {
   WalletCubit(this.walletrepoimp) : super(WalletInitial());
-
+  Map<String, int> walletid = {};
+  List<String> wallets = [];
   int wallettype = 0;
+  String walletname = "اختر المحفظه";
   int motionpage = 1;
   Map<String, dynamic>? queryparms;
   bool motionloading = false;
@@ -19,6 +20,11 @@ class WalletCubit extends Cubit<walletState> {
   bool firstloadingmotion = false;
   changewallettype(int val) {
     wallettype = val;
+    emit(changewalletstate());
+  }
+
+  changewalletname(String val) {
+    walletname = val;
     emit(changewalletstate());
   }
 
@@ -83,8 +89,13 @@ class WalletCubit extends Cubit<walletState> {
     result.fold((failue) {
       emit(getwalletfailure(errormessage: failue.error_message));
     }, (success) {
-      data = success.data!;
-
+      data.clear();
+      wallets.clear();
+      success.data!.forEach((e) {
+        data.add(e);
+        wallets.add(e.name!);
+        walletid.addAll({e.name!: e.id!});
+      });
       emit(getwalletsuccess(successmessage: ""));
     });
   }
