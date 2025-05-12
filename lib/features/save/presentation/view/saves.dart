@@ -4,6 +4,7 @@ import 'package:agman/core/common/styles/styles.dart';
 import 'package:agman/core/common/widgets/error.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/core/common/widgets/headerwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/save/presentation/view/addtosave.dart';
 import 'package:agman/features/save/presentation/view/widgets/alertcontent.dart';
 import 'package:agman/features/save/presentation/view/widgets/customtabletimeritem.dart';
@@ -140,7 +141,7 @@ class _saveState extends State<save> {
                                   fontFamily: "cairo",
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),
-                              "الرصيد الحالي : ${BlocProvider.of<SaveCubit>(context).total ?? 0}",
+                              "الرصيد الحالي : ${gettext(value: BlocProvider.of<SaveCubit>(context).total.toString())}",
                             ),
                           ),
                         ),
@@ -154,7 +155,7 @@ class _saveState extends State<save> {
                                   fontFamily: "cairo",
                                   fontWeight: FontWeight.bold,
                                   fontSize: 15),
-                              "رصيد البحث : ${BlocProvider.of<SaveCubit>(context).totalsearch ?? 0}",
+                              "رصيد البحث : ${gettext(value: BlocProvider.of<SaveCubit>(context).totalsearch.toString())}",
                             ),
                           ),
                         ),
@@ -205,9 +206,15 @@ class _saveState extends State<save> {
                                               "",
                                       amountofmoney:
                                           BlocProvider.of<SaveCubit>(context)
-                                                  .data[i]
-                                                  .price ??
-                                              "",
+                                                      .data[i]
+                                                      .price ==
+                                                  null
+                                              ? ""
+                                              : gettext(
+                                                  value: BlocProvider.of<
+                                                          SaveCubit>(context)
+                                                      .data[i]
+                                                      .price!),
                                       notes: BlocProvider.of<SaveCubit>(context)
                                               .data[i]
                                               .notes ??

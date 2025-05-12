@@ -9,11 +9,12 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/clients/presentation/view/widgets/alertcontent.dart';
-import 'package:agman/features/clients/presentation/view/widgets/customermoves.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customeritem.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customers/addcustomer.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customers/editdialog.dart';
+import 'package:agman/features/clients/presentation/view/widgets/mold/cliemovestabbars.dart';
 import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -144,7 +145,7 @@ class _injectioncustomersState extends State<injectioncustomers> {
                               onTap: () {
                                 navigateto(
                                     context: context,
-                                    page: Customermoves(
+                                    page: clientmovestabbars(
                                         clientid:
                                             BlocProvider.of<CustomersCubit>(
                                                     context)
@@ -157,31 +158,32 @@ class _injectioncustomersState extends State<injectioncustomers> {
                                                 .name!));
                               },
                               child: customtablcustomeritem(
-                                  total:
-                                      BlocProvider.of<CustomersCubit>(context)
+                                  total: gettext(
+                                      value: BlocProvider.of<CustomersCubit>(context)
                                           .total[i]
-                                          .toString(),
+                                          .toString()),
                                   textStyle: Styles.gettabletextstyle(
                                       context: context),
                                   name: BlocProvider.of<CustomersCubit>(context)
                                           .clients[i]
                                           .name ??
                                       "",
-                                  phone:
-                                      BlocProvider.of<CustomersCubit>(context)
+                                  phone: BlocProvider.of<CustomersCubit>(context)
+                                          .clients[i]
+                                          .phone ??
+                                      "",
+                                  totalinjection: gettext(
+                                      value:
+                                          BlocProvider.of<CustomersCubit>(context)
                                               .clients[i]
-                                              .phone ??
-                                          "",
-                                  totalinjection:
-                                      BlocProvider.of<CustomersCubit>(context)
-                                          .clients[i]
-                                          .total7aan
-                                          .toString(),
-                                  totalmold:
-                                      BlocProvider.of<CustomersCubit>(context)
-                                          .clients[i]
-                                          .totalStamba
-                                          .toString(),
+                                              .total7aan
+                                              .toString()),
+                                  totalmold: gettext(
+                                      value:
+                                          BlocProvider.of<CustomersCubit>(context)
+                                              .clients[i]
+                                              .totalStamba
+                                              .toString()),
                                   edit: IconButton(
                                       onPressed: () {
                                         showDialog(

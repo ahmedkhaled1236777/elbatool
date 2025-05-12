@@ -10,6 +10,7 @@ import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_
 import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
 import 'package:agman/features/orders/presentation/viewmodel/cubit/orders_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 
@@ -70,9 +71,6 @@ class _addreportState extends State<addreport> {
             ),
             body: BlocBuilder<InjectionCubit, InjectionState>(
               builder: (context, state) {
-                print("gggggggggggggggggggggggggggggggg");
-                print(state);
-
                 if (state is getmoldandordersfailure) return SizedBox();
                 if (state is getmoldandordersloading) return loading();
                 return Container(
@@ -192,6 +190,10 @@ class _addreportState extends State<addreport> {
                                   height: 10,
                                 ),
                                 custommytextform(
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp("[0-9-.]")),
+                                  ],
                                   keyboardType: TextInputType.number,
                                   controller: shift,
                                   hintText: "رقم الورديه",
@@ -201,6 +203,10 @@ class _addreportState extends State<addreport> {
                                   height: 10,
                                 ),
                                 custommytextform(
+                                  inputFormatters: <TextInputFormatter>[
+                                    FilteringTextInputFormatter.allow(
+                                        RegExp("[0-9-.]")),
+                                  ],
                                   controller: machinenumber,
                                   hintText: "رقم الماكينه",
                                   val: "برجاء ادخال رقم الماكينه",
@@ -209,10 +215,11 @@ class _addreportState extends State<addreport> {
                                 const SizedBox(
                                   height: 10,
                                 ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
                                 custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     controller: workhours,
                                     hintText: "عدد ساعات التشغيل",
                                     val: "برجاء ادخال عدد ساعات التشغيل",
@@ -221,6 +228,10 @@ class _addreportState extends State<addreport> {
                                   height: 10,
                                 ),
                                 custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     controller: counterstart,
                                     hintText: "بداية العداد",
                                     val: "برجاء ادخال بداية العداد",
@@ -229,6 +240,10 @@ class _addreportState extends State<addreport> {
                                   height: 10,
                                 ),
                                 custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     controller: counterend,
                                     hintText: "نهاية العداد",
                                     val: "برجاء ادخال نهاية العداد",
@@ -237,6 +252,10 @@ class _addreportState extends State<addreport> {
                                   height: 10,
                                 ),
                                 custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     controller: realprodcountity,
                                     hintText: "كمية الانتاج الفعلي",
                                     val: "برجاء ادخال كمية الانتاج الفعلي",

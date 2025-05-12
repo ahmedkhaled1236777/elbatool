@@ -3,18 +3,17 @@ import 'package:agman/core/common/sharedpref/cashhelper.dart';
 import 'package:agman/core/services/apiservice.dart';
 import 'package:agman/features/accessories/data/repos/accessorierepoimp.dart';
 import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
+import 'package:agman/features/attendance/data/repos/attendancerepoimp.dart';
+import 'package:agman/features/attendance/presentation/view/attendance.dart';
+import 'package:agman/features/attendance/presentation/viewmodel/attendance/attendancecuibt.dart';
 import 'package:agman/features/auth/login/data/repos/authrepoimp.dart';
-import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
 import 'package:agman/features/components/presentation/viewmodel/cubit/component_cubit.dart';
 import 'package:agman/features/clients/data/repos/clientsrepoimp.dart';
 import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/factorytools/data/repos/factorytoolsrepoimp.dart';
 import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
-import 'package:agman/features/fingerprint/fingerprint.dart';
-import 'package:agman/features/fingerprint/fingerprint/fingerprint_cubit.dart';
-import 'package:agman/features/fingerprint/fingerprint/fingerprintreop.dart';
-import 'package:agman/features/home/presentation/view/home2.dart';
+
 import 'package:agman/features/injection/data/repo/injectiomrepoimp.dart';
 import 'package:agman/features/injection/presentation/viewmodel/cubit/injection_cubit.dart';
 import 'package:agman/features/moldmanufacture/data/repo/moldmanufacturerepoimp.dart';
@@ -28,6 +27,7 @@ import 'package:agman/features/moldmanufacture/presentation/view/machinecost/dat
 import 'package:agman/features/moldmanufacture/presentation/view/machinecost/presentation/viewmodel/cubit/induxterialcost_cubit.dart';
 import 'package:agman/features/moldmanufacture/presentation/viewmodel/costcuibt/costcuibt.dart';
 import 'package:agman/features/save/data/repos/saverepoimp.dart';
+import 'package:agman/features/splash/splash.dart';
 import 'package:agman/features/suppliers/data/repos/supplierrepoimp.dart';
 import 'package:agman/features/wallets/data/repos/walletrepoimp.dart';
 import 'package:agman/features/users/data/repos/addemployeerepoimplementation.dart';
@@ -43,6 +43,9 @@ import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart'
 
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
+import 'package:agman/features/workers/data/repos/workerrepoimp.dart';
+import 'package:agman/features/workers/presentation/viewmodel/cubit/workers_cubit.dart';
+import 'package:agman/features/workers/presentation/views/workers.dart';
 import 'package:agman/firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -94,9 +97,6 @@ class MyApp extends StatelessWidget {
                 showemployeescuibt(employeerepo: emplyeerepoimplementaion()),
           ),
           BlocProvider(
-            create: (context) => FingerprintCubit(fingerprintrepo()),
-          ),
-          BlocProvider(
             create: (context) =>
                 IntialcostCubit(intialcostrepoimp: Intialcostrepoimp()),
           ),
@@ -113,6 +113,12 @@ class MyApp extends StatelessWidget {
           BlocProvider(
             create: (context) => accessoriecostCubit(
                 accessoriecostrepo: Accessoriecostrepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => Attendancecuibt(attendancerepoimp()),
+          ),
+          BlocProvider(
+            create: (context) => WorkersCubit(workerrepoimp: Workerrepoimp()),
           ),
           BlocProvider(
             create: (context) =>
@@ -177,7 +183,6 @@ class MyApp extends StatelessWidget {
                 home: child,
               );
             },
-            child:
-                Fingerprint() /* cashhelper.getdata(key: "token") == null ? Login() : home2()*/));
+            child: attendance()));
   }
 }

@@ -8,6 +8,7 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/wallets/presentation/view/addwallet.dart';
 import 'package:agman/features/wallets/presentation/view/walletsmotion.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/customtabletimeritem.dart';
@@ -225,9 +226,15 @@ class _walletsState extends State<wallets> {
                                         color: Colors.red,
                                       )),
                                   salary: BlocProvider.of<WalletCubit>(context)
-                                          .data[i]
-                                          .money ??
-                                      "",
+                                              .data[i]
+                                              .money ==
+                                          null
+                                      ? ""
+                                      : gettext(
+                                          value: BlocProvider.of<WalletCubit>(
+                                                  context)
+                                              .data[i]
+                                              .money!),
                                   date: BlocProvider.of<WalletCubit>(context)
                                           .data[i]
                                           .date ??

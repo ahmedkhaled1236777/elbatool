@@ -10,9 +10,10 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 
-import 'package:agman/features/clients/presentation/view/widgets/customers/monthsearch.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/addSUPPLIERmotion.dart';
+import 'package:agman/features/suppliers/presentation/view/widgets/widgets/monthsearch.dart';
 import 'package:agman/features/suppliers/presentation/view/widgets/widgets/supplierusageitem.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
@@ -89,7 +90,7 @@ class _supplierdescState extends State<supplierdesc> {
                             contentPadding: EdgeInsets.all(10),
                             backgroundColor: Colors.white,
                             insetPadding: EdgeInsets.all(35),
-                            content: Monthsearch(
+                            content: Monthsearchsupplier(
                               clientid: 1,
                             ));
                       });
@@ -165,9 +166,9 @@ class _supplierdescState extends State<supplierdesc> {
                                         : BlocProvider.of<SupplierssCubit>(context)
                                                     .mymoves[i]
                                                     .type ==
-                                                "accessory"
+                                                "accessories"
                                             ? "توريد اكسسوارات"
-                                            : BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "stock"
+                                            : BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "factorytools"
                                                 ? "توريد ادوات مصنع"
                                                 : BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "back"
                                                     ? "مرتجع"
@@ -176,7 +177,7 @@ class _supplierdescState extends State<supplierdesc> {
                                                         : "تحويل",
                                     desc: BlocProvider.of<SupplierssCubit>(context).mymoves[i].notes ?? "",
                                     quantity: BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "naqdi" || BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "ta7weel" ? "" : BlocProvider.of<SupplierssCubit>(context).mymoves[i].qty!.toString(),
-                                    total: BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "naqdi" || BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "ta7weel" ? BlocProvider.of<SupplierssCubit>(context).mymoves[i].price!.toString() : (BlocProvider.of<SupplierssCubit>(context).mymoves[i].qty! * BlocProvider.of<SupplierssCubit>(context).mymoves[i].price!).toStringAsFixed(1),
+                                    total: gettext(value: BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "naqdi" || BlocProvider.of<SupplierssCubit>(context).mymoves[i].type == "ta7weel" ? BlocProvider.of<SupplierssCubit>(context).mymoves[i].price!.toString() : (BlocProvider.of<SupplierssCubit>(context).mymoves[i].qty! * BlocProvider.of<SupplierssCubit>(context).mymoves[i].price!).toStringAsFixed(1)),
                                     delet: IconButton(
                                         onPressed: () {
                                           awsomdialogerror(

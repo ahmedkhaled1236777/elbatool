@@ -10,6 +10,7 @@ import 'package:agman/core/common/widgets/loading.dart';
 import 'package:agman/core/common/widgets/nodata.dart';
 import 'package:agman/core/common/widgets/shimmerloading.dart';
 import 'package:agman/core/common/widgets/showdialogerror.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/addwalletmotion.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/widgets/customtabletimeritem.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
@@ -226,10 +227,11 @@ class _walletsmotionsState extends State<walletsmotions> {
                                               .datamotions[i]
                                               .clientName ??
                                           "",
-                                  amountofmoney:
-                                      BlocProvider.of<WalletCubit>(context)
-                                          .datamotions[i]
-                                          .money!,
+                                  amountofmoney: gettext(
+                                      value:
+                                          BlocProvider.of<WalletCubit>(context)
+                                              .datamotions[i]
+                                              .money!),
                                   notes: BlocProvider.of<WalletCubit>(context)
                                           .datamotions[i]
                                           .notes ??

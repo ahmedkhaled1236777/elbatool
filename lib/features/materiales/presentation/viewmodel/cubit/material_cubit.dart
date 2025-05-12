@@ -23,6 +23,8 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
   List<String> colorsnames = [];
   Map<String, int> colorid = {};
   bool motionloading = false;
+  List<Datum> materiales = [];
+  List<Datum> masters = [];
 
   Map<String, int> materialid = {};
   plasticMaterialCubit(this.materialrepoimp) : super(MaterialInitial());
@@ -98,16 +100,20 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
       data.clear();
       materialsnames.clear();
       colorsnames.clear();
+      materiales.clear();
+      masters.clear();
       firstloading = true;
       success.data!.forEach((e) {
         data.add(e);
 
         if (e.type == "masterpatch") {
           colorsnames.add(e.name!);
+          masters.add(e);
           colorid.addAll({e.name!: e.id!});
         } else {
           if (!materialsnames.contains(e.name)) {
             materialsnames.add(e.name!);
+            materiales.add(e);
             materialid.addAll({e.name!: e.id!});
           }
         }
@@ -176,5 +182,14 @@ class plasticMaterialCubit extends Cubit<plasticMaterialState> {
 
       emit(GetMaterialsmovessuccess(successmessage: ""));
     });
+  }
+
+  changetomasterandmaterial({required String status}) {
+    if (status == "master") {
+      data = materiales;
+    } else {
+      data = masters;
+    }
+    emit(materialmastersearchstate());
   }
 }

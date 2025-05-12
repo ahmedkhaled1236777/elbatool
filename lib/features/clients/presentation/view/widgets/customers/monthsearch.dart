@@ -10,8 +10,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Monthsearch extends StatefulWidget {
   int clientid;
+  final String status;
 
-  Monthsearch({required this.clientid});
+  Monthsearch({required this.clientid, required this.status});
   @override
   State<Monthsearch> createState() => _MonthsearchState();
 }
@@ -132,6 +133,7 @@ class _MonthsearchState extends State<Monthsearch> {
                               onPressed: () async {
                                 BlocProvider.of<CustomersCubit>(context)
                                     .queryparms = {
+                                  "status": widget.status,
                                   "client_id": widget.clientid,
                                   if (BlocProvider.of<DateCubit>(context)
                                           .date3 !=
@@ -145,16 +147,7 @@ class _MonthsearchState extends State<Monthsearch> {
                                     "date_to":
                                         BlocProvider.of<DateCubit>(context)
                                             .date4,
-                                  if (BlocProvider.of<CustomersCubit>(context)
-                                          .searchtype !=
-                                      "اختر مجال البحث")
-                                    "type": BlocProvider.of<CustomersCubit>(
-                                                context)
-                                            .searchtypemap[
-                                        BlocProvider.of<CustomersCubit>(context)
-                                            .searchtype]
                                 };
-                                print("kkkkkkkkkkkkkkkkkkkkkkkkkkkkk");
                                 print(BlocProvider.of<CustomersCubit>(context)
                                     .queryparms);
                                 await BlocProvider.of<CustomersCubit>(context)

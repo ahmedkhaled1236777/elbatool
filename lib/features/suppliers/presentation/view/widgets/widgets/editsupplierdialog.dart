@@ -7,6 +7,7 @@ import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,6 +58,10 @@ class editsupplierdialog extends StatelessWidget {
                               height: 15,
                             ),
                             custommytextform(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9-.]")),
+                              ],
                               controller: phone,
                               hintText: "رقم الهاتف",
                               keyboardType: TextInputType.number,

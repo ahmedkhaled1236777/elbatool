@@ -6,6 +6,7 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/wallets/data/model/walletmodelrequest.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 
@@ -83,13 +84,14 @@ class _AddwalletState extends State<Addwallet> {
                               height: 10,
                             ),
                             custommytextform(
-                              keyboardType: TextInputType.number,
                               controller: wallwtname,
                               hintText: "اسم المحفظه",
                               val: "برجاء ادخال اسم المحفظه",
                             ),
                             SizedBox(height: 10),
                             custommytextform(
+                              inputFormatters: [DecimalFormatter()],
+                              keyboardType: TextInputType.number,
                               controller: moneyinwallet,
                               hintText: "المبلغ بداخل المحفظه",
                               val: "برجاء ادخال المبلغ الموجود بالمحفظه",
@@ -125,15 +127,16 @@ class _AddwalletState extends State<Addwallet> {
                                   button_name: "تسجيل محفظه",
                                   onPressed: () async {
                                     if (formkey.currentState!.validate()) {
-                                      await BlocProvider.of<
-                                              WalletCubit>(context)
+                                      await BlocProvider.of<WalletCubit>(
+                                              context)
                                           .addwallet(
                                               wallet: Walletmodelrequest(
                                                   name: wallwtname.text,
                                                   date: BlocProvider.of<
                                                           DateCubit>(context)
                                                       .date1,
-                                                  money: moneyinwallet.text));
+                                                  money: moneyinwallet.text
+                                                      .replaceAll(',', '')));
                                     }
                                   },
                                 );

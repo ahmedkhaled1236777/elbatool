@@ -7,6 +7,7 @@ import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/features/suppliers/data/models/supplierrequest.dart';
 import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppliers_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class addsupplier extends StatefulWidget {
@@ -77,6 +78,10 @@ class _addsupplierState extends State<addsupplier> {
                               height: 10,
                             ),
                             custommytextform(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9]")),
+                              ],
                               keyboardType: TextInputType.number,
                               controller: phone,
                               hintText: "رقم هاتف المورد",

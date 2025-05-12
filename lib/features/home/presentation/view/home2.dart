@@ -5,14 +5,13 @@ import 'package:agman/core/common/widgets/dialogerror.dart';
 import 'package:agman/features/accessories/presentation/views/accessories.dart';
 import 'package:agman/features/auth/login/presentation/view/login.dart';
 import 'package:agman/features/auth/profile/profile.dart';
-import 'package:agman/features/components/presentation/views/components.dart';
 import 'package:agman/features/clients/presentation/view/widgets/customers/customers.dart';
 import 'package:agman/features/factorytools/presentation/views/factorytools.dart';
+import 'package:agman/features/materiales/presentation/views/widgets/materialtabbars.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/molmanufacture.dart';
 import 'package:agman/features/users/presentation/views/widgets/employees.dart';
 import 'package:agman/features/injection/presentation/view/production.dart';
 import 'package:agman/features/home/presentation/view/widgets/gridelement.dart';
-import 'package:agman/features/materiales/presentation/views/material.dart';
 import 'package:agman/features/orders/presentation/view/orders.dart';
 import 'package:agman/features/save/presentation/view/saves.dart';
 import 'package:agman/features/suppliers/presentation/view/suppliers.dart';
@@ -83,7 +82,7 @@ class home2 extends StatelessWidget {
       "name": "مخزن الخامات",
       "name-en": "material_store",
       "image": "assets/images/material-removebg-preview.png",
-      "page": plasticMaterial()
+      "page": Materialtabbars()
     },
     {
       "name": "مخزن الاكسسوارات",

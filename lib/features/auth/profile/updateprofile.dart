@@ -10,6 +10,7 @@ import 'package:agman/core/common/widgets/errorwidget.dart';
 import 'package:agman/features/auth/login/presentation/viewmodel/cubit/auth_cubit.dart';
 import 'package:agman/features/home/presentation/view/home2.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -131,6 +132,9 @@ class _UpdateprofileState extends State<Updateprofile> {
                   height: 10,
                 ),
                 customtextform(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   keyboardType: TextInputType.number,
                   controller: widget.phone,
                   prefixicon: Icon(Icons.phone),

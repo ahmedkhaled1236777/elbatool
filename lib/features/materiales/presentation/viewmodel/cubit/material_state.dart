@@ -8,6 +8,8 @@ class changetypestate extends plasticMaterialState {}
 
 class Updatematerialloading extends plasticMaterialState {}
 
+class materialmastersearchstate extends plasticMaterialState {}
+
 class updatematerialsuccess extends plasticMaterialState {
   final String successmessage;
 

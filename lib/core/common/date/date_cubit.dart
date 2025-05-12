@@ -13,6 +13,8 @@ class DateCubit extends Cubit<DateState> {
   String date4 = "التاريخ الي";
   String date5 = "تاريخ بداية الصيانه";
   String date6 = "تاريخ نهاية الصيانه";
+  String timefrom = "وقت البصمه";
+
   String producthalldate =
       '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : "0${DateTime.now().month}"}-${DateTime.now().day > 9 ? DateTime.now().day : "0${DateTime.now().day}"}';
 
@@ -233,10 +235,16 @@ class DateCubit extends Cubit<DateState> {
     date5 = "تاريخ بداية الصيانه";
     date6 = "تاريخ نهاية الصيانه";
     date7 = "اختر التاريخ";
+    timefrom = "وقت البصمه";
 
     producthalldate =
         '${DateTime.now().year}-${DateTime.now().month > 9 ? DateTime.now().month : "0${DateTime.now().month}"}-${DateTime.now().day > 9 ? DateTime.now().day : "0${DateTime.now().day}"}';
 
     emit(changedatestate());
+  }
+
+  changetimefrom(DateTime date) {
+    timefrom =
+        "${date.hour == 0 ? 24 : date.hour.toString()}:${date.minute.toString()}";
   }
 }

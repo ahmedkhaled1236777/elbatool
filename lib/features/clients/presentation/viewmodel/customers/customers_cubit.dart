@@ -14,6 +14,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   String moneytype = "7aan";
   String type = "7aan";
   String paymenttype = "cash";
+  String customername = "اسم العميل";
   String searchtype = "اختر مجال البحث";
   List<String> searchtypes = [
     "حقن",
@@ -57,6 +58,7 @@ class CustomersCubit extends Cubit<CustomersState> {
   ];
   Map<String, dynamic> queryparms = {};
   List<Datum> clients = [];
+  List<String> clientsbames = [];
   changecheckbox(bool val, int i) {
     checks[i] = val;
     emit(changechecboxstate());
@@ -64,6 +66,11 @@ class CustomersCubit extends Cubit<CustomersState> {
 
   changemonetytype({required String value}) {
     moneytype = value;
+    emit(CustomersChangeType());
+  }
+
+  changecustomername({required String value}) {
+    customername = value;
     emit(CustomersChangeType());
   }
 
@@ -128,8 +135,10 @@ class CustomersCubit extends Cubit<CustomersState> {
     }, (success) {
       clients.clear();
       total.clear();
+      clientsbames.clear();
       success.data!.forEach((e) {
         clients.add(e);
+        clientsbames.add(e.name!);
         total.add(e.total7aan + e.totalStamba);
       });
       emit(getCustomerssuccess(successmessage: "تم الحصول علي البيانات بنجاح"));
@@ -159,9 +168,9 @@ class CustomersCubit extends Cubit<CustomersState> {
     result.fold((failure) {
       emit(deleteclientmovefailure(errormessage: failure.error_message));
     }, (success) {
-      mymoves.removeWhere((e) {
+      /*  mymoves.removeWhere((e) {
         return e.id == moveid;
-      });
+      });*/
       emit(deleteclientmovesuccess(successmessage: success));
     });
   }

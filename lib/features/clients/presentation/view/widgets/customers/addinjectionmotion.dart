@@ -6,19 +6,25 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/clients/data/models/clientmodelrequestmotion.dart';
 import 'package:agman/features/clients/presentation/view/widgets/mold/radios.dart';
 import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Addinjectionmotion extends StatefulWidget {
   final int clientid;
   final String clientname;
+  final String status;
   const Addinjectionmotion(
-      {super.key, required this.clientid, required this.clientname});
+      {super.key,
+      required this.clientid,
+      required this.clientname,
+      required this.status});
   @override
   State<Addinjectionmotion> createState() => _AddinjectionmotionState();
 }
@@ -226,6 +232,9 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                         "syana")
                                   custommytextform(
                                     keyboardType: TextInputType.number,
+                                    inputFormatters: [
+                                      DecimalFormatter(),
+                                    ],
                                     controller: quantity,
                                     hintText: "الكميه",
                                     val: "برجاء ادخال الكميه",
@@ -247,6 +256,9 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                   ),
                                 custommytextform(
                                   keyboardType: TextInputType.number,
+                                  inputFormatters: [
+                                    DecimalFormatter(),
+                                  ],
                                   controller: pieceprice,
                                   hintText: BlocProvider.of<CustomersCubit>(
                                                       context)
@@ -302,6 +314,7 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                       BlocProvider.of<CustomersCubit>(context)
                                           .queryparms = {
                                         "client_id": widget.clientid,
+                                        "status": widget.status
                                       };
                                       BlocProvider.of<CustomersCubit>(context)
                                           .getclientmoves();
@@ -313,13 +326,12 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                     if (state is addclientmoveloading)
                                       return loading();
                                     return custommaterialbutton(
-                                      button_name: "تسجيل عميل",
+                                      button_name: "تسجيل حركه",
                                       onPressed: () async {
                                         BlocProvider.of<CustomersCubit>(context)
                                             .addclientmove(
                                                 clientmove: clientmoverequest(
-                                                    moneytype: BlocProvider.of<CustomersCubit>(context).type ==
-                                                                "naqdi" ||
+                                                    moneytype: BlocProvider.of<CustomersCubit>(context).type == "naqdi" ||
                                                             BlocProvider.of<CustomersCubit>(context).type ==
                                                                 "ta7weel" ||
                                                             BlocProvider.of<CustomersCubit>(context).type ==
@@ -331,18 +343,18 @@ class _AddinjectionmotionState extends State<Addinjectionmotion> {
                                                             ? "7aan"
                                                             : "syana",
                                                     saveid: BlocProvider.of<CustomersCubit>(context).type == "ta7weel"
-                                                        ? BlocProvider.of<WalletCubit>(context)
-                                                                .walletid[
+                                                        ? BlocProvider.of<WalletCubit>(context).walletid[
                                                             BlocProvider.of<WalletCubit>(context)
                                                                 .walletname]
                                                         : null,
                                                     qty: quantity.text.isEmpty
                                                         ? "1"
-                                                        : quantity.text,
-                                                    pieceprice:
-                                                        pieceprice.text.isEmpty
-                                                            ? null
-                                                            : pieceprice.text,
+                                                        : pieceprice.text.replaceAll(
+                                                            ',', ''),
+                                                    pieceprice: pieceprice.text.isEmpty
+                                                        ? null
+                                                        : double.tryParse(pieceprice.text.replaceAll(',', ''))
+                                                            .toString(),
                                                     date: BlocProvider.of<DateCubit>(context).date1,
                                                     type: BlocProvider.of<CustomersCubit>(context).type,
                                                     notes: desc.text.isEmpty ? "لا يوجد" : desc.text,

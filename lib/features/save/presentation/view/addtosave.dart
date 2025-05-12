@@ -6,6 +6,7 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/save/data/model/savemodelrequest.dart';
 import 'package:agman/features/save/presentation/view/widgets/radiossave.dart';
 import 'package:agman/features/save/presentation/viewmodel/save/save_cubit.dart';
@@ -97,6 +98,7 @@ class _AddsaveState extends State<Addsave> {
                               height: 10,
                             ),
                             custommytextform(
+                              inputFormatters: [DecimalFormatter()],
                               keyboardType: TextInputType.number,
                               controller: amountofmoney,
                               hintText: "المبلغ",
@@ -145,11 +147,11 @@ class _AddsaveState extends State<Addsave> {
                                                     BlocProvider.of<DateCubit>(
                                                             context)
                                                         .date1,
-                                                status:
-                                                    BlocProvider.of<SaveCubit>(
-                                                            context)
-                                                        .savetype,
-                                                money: amountofmoney.text,
+                                                status: BlocProvider.of<
+                                                        SaveCubit>(context)
+                                                    .savetype,
+                                                money: amountofmoney.text
+                                                    .replaceAll(',', ''),
                                                 notes: notes.text));
                                   },
                                 );

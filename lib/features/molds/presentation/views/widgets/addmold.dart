@@ -3,12 +3,14 @@ import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/features/clients/presentation/viewmodel/customers/customers_cubit.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/view/customgridimages.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/view/pickedimage.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/firstcost/presentation/viewmodel/cubit/intialcost_cubit.dart';
 import 'package:agman/features/molds/data/models/moldmodelrequest.dart';
 import 'package:agman/features/molds/presentation/viewmodel/mold/mold_cubit.dart';
 import 'package:dio/dio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -64,6 +66,52 @@ class Addmold extends StatelessWidget {
                       children: [
                         const SizedBox(
                           height: 50,
+                        ),
+                        BlocBuilder<CustomersCubit, CustomersState>(
+                          builder: (context, state) {
+                            if (state is getCustomersloading) return loading();
+                            if (state is getCustomergfailure)
+                              return Text(state.errormessage);
+                            return Container(
+                              color: Color(0xff535C91),
+                              child: Center(
+                                  child: DropdownSearch<String>(
+                                dropdownButtonProps:
+                                    DropdownButtonProps(color: Colors.white),
+                                popupProps: PopupProps.menu(
+                                    showSelectedItems: true,
+                                    showSearchBox: true,
+                                    searchFieldProps: TextFieldProps()),
+                                selectedItem:
+                                    BlocProvider.of<CustomersCubit>(context)
+                                        .customername,
+                                items: BlocProvider.of<CustomersCubit>(context)
+                                    .clientsbames,
+                                onChanged: (value) {
+                                  BlocProvider.of<CustomersCubit>(context)
+                                      .changecustomername(value: value!);
+                                },
+                                dropdownDecoratorProps: DropDownDecoratorProps(
+                                    baseStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "cairo"),
+                                    textAlign: TextAlign.center,
+                                    dropdownSearchDecoration: InputDecoration(
+                                      enabled: true,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff535C91)),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                            color: Color(0xff535C91)),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                    )),
+                              )),
+                            );
+                          },
                         ),
                         custommytextform(
                           val: "برجاء ادخال اسم الاسطمبه",

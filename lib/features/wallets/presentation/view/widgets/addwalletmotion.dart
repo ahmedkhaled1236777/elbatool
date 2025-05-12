@@ -6,6 +6,7 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/wallets/data/model/walletmotionmodel.dart';
 import 'package:agman/features/wallets/presentation/view/widgets/widgets/radioswallet.dart';
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
@@ -101,6 +102,7 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                               height: 10,
                             ),
                             custommytextform(
+                              inputFormatters: [DecimalFormatter()],
                               keyboardType: TextInputType.number,
                               controller: amountofmoney,
                               hintText: "المبلغ",
@@ -155,7 +157,8 @@ class _AddwalletmotionState extends State<Addwalletmotion> {
                                                           WalletCubit>(context)
                                                       .wallettype,
                                                   notes: notes.text,
-                                                  money: amountofmoney.text,
+                                                  money: amountofmoney.text
+                                                      .replaceAll(',', ''),
                                                   walletid: widget.walletid));
                                     }
                                   },

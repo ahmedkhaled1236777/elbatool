@@ -3,9 +3,11 @@ import 'package:agman/core/common/toast/toast.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/accessories/data/model/accessoriemodelrequest.dart';
 import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class addaccessories extends StatefulWidget {
@@ -77,6 +79,11 @@ class _addaccessoriesState extends State<addaccessories> {
                               height: 10,
                             ),
                             custommytextform(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp("[0-9]")),
+                              ],
+                              keyboardType: TextInputType.number,
                               controller: quantity,
                               hintText: "الكميه",
                               val: "برجاء ادخال الكميه",
@@ -85,6 +92,10 @@ class _addaccessoriesState extends State<addaccessories> {
                               height: 10,
                             ),
                             custommytextform(
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9-.]")),
+                                ],
                                 controller: buymoney,
                                 hintText: "سعر الشراء",
                                 val: "برجاء ادخال سعر الشراء",
@@ -93,6 +104,10 @@ class _addaccessoriesState extends State<addaccessories> {
                               height: 10,
                             ),
                             custommytextform(
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp("[0-9-.]")),
+                                ],
                                 controller: sellmoney,
                                 hintText: "ٍسعر البيع",
                                 val: "برجاء ادخال سعر البيع",

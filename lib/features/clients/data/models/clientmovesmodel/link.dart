@@ -1,9 +1,11 @@
-class Link {
-  dynamic url;
-  String? label;
-  bool? active;
+import 'package:equatable/equatable.dart';
 
-  Link({this.url, this.label, this.active});
+class Link extends Equatable {
+  final dynamic url;
+  final String? label;
+  final bool? active;
+
+  const Link({this.url, this.label, this.active});
 
   factory Link.fromJson(Map<String, dynamic> json) => Link(
         url: json['url'] as dynamic,
@@ -16,4 +18,7 @@ class Link {
         'label': label,
         'active': active,
       };
+
+  @override
+  List<Object?> get props => [url, label, active];
 }

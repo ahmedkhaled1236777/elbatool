@@ -1,24 +1,26 @@
+import 'package:equatable/equatable.dart';
+
 import 'datum.dart';
 import 'link.dart';
 
-class Clientmovesmodel {
-  bool? success;
-  String? message;
-  int? currentPage;
-  List<Datummove>? data;
-  String? firstPageUrl;
-  int? from;
-  int? lastPage;
-  String? lastPageUrl;
-  List<Link>? links;
-  dynamic nextPageUrl;
-  String? path;
-  int? perPage;
-  dynamic prevPageUrl;
-  int? to;
-  int? total;
+class Clientmovesmodel extends Equatable {
+  final bool? success;
+  final String? message;
+  final int? currentPage;
+  final List<Datummove>? data;
+  final String? firstPageUrl;
+  final int? from;
+  final int? lastPage;
+  final String? lastPageUrl;
+  final List<Link>? links;
+  final dynamic nextPageUrl;
+  final String? path;
+  final int? perPage;
+  final dynamic prevPageUrl;
+  final int? to;
+  final int? total;
 
-  Clientmovesmodel({
+  const Clientmovesmodel({
     this.success,
     this.message,
     this.currentPage,
@@ -77,4 +79,25 @@ class Clientmovesmodel {
         'to': to,
         'total': total,
       };
+
+  @override
+  List<Object?> get props {
+    return [
+      success,
+      message,
+      currentPage,
+      data,
+      firstPageUrl,
+      from,
+      lastPage,
+      lastPageUrl,
+      links,
+      nextPageUrl,
+      path,
+      perPage,
+      prevPageUrl,
+      to,
+      total,
+    ];
+  }
 }

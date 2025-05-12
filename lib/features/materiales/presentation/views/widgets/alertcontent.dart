@@ -12,6 +12,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Alertmaterialcontent extends StatelessWidget {
   TextEditingController material = TextEditingController();
+  final String status;
+
+  Alertmaterialcontent({super.key, required this.status});
 
   @override
   Widget build(BuildContext context) {
@@ -100,12 +103,20 @@ class Alertmaterialcontent extends StatelessWidget {
                                               context)
                                           .queryparms = {
                                         "name": material.text,
-                                        "date_from":
-                                            BlocProvider.of<DateCubit>(context)
-                                                .date3,
-                                        "date_to":
-                                            BlocProvider.of<DateCubit>(context)
-                                                .date4
+                                        "type": status,
+                                        if (BlocProvider.of<DateCubit>(context)
+                                                .date3 !=
+                                            "التاريخ من")
+                                          "date_from":
+                                              BlocProvider.of<DateCubit>(
+                                                      context)
+                                                  .date3,
+                                        if (BlocProvider.of<DateCubit>(context)
+                                                .date4 !=
+                                            "التاريخ الي")
+                                          "date_to": BlocProvider.of<DateCubit>(
+                                                  context)
+                                              .date4
                                       };
                                       await BlocProvider.of<
                                               plasticMaterialCubit>(context)

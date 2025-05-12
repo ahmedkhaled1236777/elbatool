@@ -6,6 +6,7 @@ import 'package:agman/core/common/widgets/choosedate.dart';
 import 'package:agman/core/common/widgets/custommaterialbutton%20copy.dart';
 import 'package:agman/core/common/widgets/customtextform.dart';
 import 'package:agman/core/common/widgets/errorwidget.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
 import 'package:agman/features/accessories/presentation/viewmodel/cubit/accessories_cubit.dart';
 import 'package:agman/features/factorytools/presentation/viewmodel/factorytools/factorytools_cubit.dart';
 import 'package:agman/features/materiales/presentation/viewmodel/cubit/material_cubit.dart';
@@ -15,6 +16,7 @@ import 'package:agman/features/suppliers/presentation/viewmodel/suppliers/suppli
 import 'package:agman/features/wallets/presentation/viewmodel/wallet/wallet_cubit.dart';
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AddSuppliersmotion extends StatefulWidget {
@@ -28,21 +30,17 @@ class AddSuppliersmotion extends StatefulWidget {
 class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
 
-  TextEditingController type = TextEditingController();
-
   TextEditingController desc = TextEditingController();
 
   TextEditingController quantity = TextEditingController();
-  TextEditingController accessoriesell = TextEditingController();
   TextEditingController accessoriebuy = TextEditingController();
   TextEditingController putcost = TextEditingController();
   TextEditingController pieceprice = TextEditingController();
   TextEditingController totalvalue = TextEditingController();
   TextEditingController payedvalue = TextEditingController();
   Getdata() async {
-    if (BlocProvider.of<plasticMaterialCubit>(context).materialsnames.isEmpty)
-      await BlocProvider.of<plasticMaterialCubit>(context)
-          .getMaterials(page: 1);
+    BlocProvider.of<plasticMaterialCubit>(context).queryparms = null;
+    await BlocProvider.of<plasticMaterialCubit>(context).getMaterials(page: 1);
     if (BlocProvider.of<plasticaccessoriesCubit>(context)
         .accessoriesnames
         .isEmpty)
@@ -162,7 +160,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                     secondradio: "kasr_elkasara",
                                     thirdradio: "el_mkhraz",
                                     firstradiotitle: "بيور",
-                                    secondradiotitle: "كشر كساره",
+                                    secondradiotitle: "كسر كساره",
                                     thirdradiotitle: "مخرز",
                                   ),
                                 SizedBox(
@@ -284,9 +282,13 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                                         context)
                                                     .materialname,
                                                 items: BlocProvider.of<
-                                                            plasticMaterialCubit>(
-                                                        context)
-                                                    .materialsnames,
+                                                                plasticMaterialCubit>(
+                                                            context)
+                                                        .materialsnames +
+                                                    BlocProvider.of<
+                                                                plasticMaterialCubit>(
+                                                            context)
+                                                        .colorsnames,
                                                 onChanged: (value) {
                                                   BlocProvider.of<
                                                               plasticMaterialCubit>(
@@ -527,6 +529,10 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                             .type ==
                                         "Back")
                                   custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     keyboardType: TextInputType.number,
                                     controller: quantity,
                                     hintText: "الكميه",
@@ -552,22 +558,11 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                                 .supplypart !=
                                             "accessories")
                                   custommytextform(
+                                    inputFormatters: [DecimalFormatter()],
                                     keyboardType: TextInputType.number,
                                     controller: pieceprice,
                                     hintText: "سعر الوحده",
                                     val: "برجاء ادخال سعر الوحده",
-                                  ),
-                                if (BlocProvider.of<SupplierssCubit>(context)
-                                            .type ==
-                                        "SUPPLY" &&
-                                    BlocProvider.of<SupplierssCubit>(context)
-                                            .supplypart ==
-                                        "accessories")
-                                  custommytextform(
-                                    keyboardType: TextInputType.number,
-                                    controller: accessoriesell,
-                                    hintText: "سعر الشراء",
-                                    val: "برجاء ادخال سعر الشراء",
                                   ),
                                 SizedBox(
                                   height: 10,
@@ -579,6 +574,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                             .supplypart ==
                                         "accessories")
                                   custommytextform(
+                                    inputFormatters: [DecimalFormatter()],
                                     keyboardType: TextInputType.number,
                                     controller: accessoriebuy,
                                     hintText: "سعر البيع",
@@ -594,6 +590,7 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                         .type ==
                                     "PAYMENT")
                                   custommytextform(
+                                    inputFormatters: [DecimalFormatter()],
                                     keyboardType: TextInputType.number,
                                     controller: payedvalue,
                                     hintText: "المبلغ المدفوع",
@@ -616,6 +613,10 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                             .type !=
                                         "Back")
                                   custommytextform(
+                                    inputFormatters: <TextInputFormatter>[
+                                      FilteringTextInputFormatter.allow(
+                                          RegExp("[0-9-.]")),
+                                    ],
                                     keyboardType: TextInputType.number,
                                     controller: putcost,
                                     hintText: "رسوم التحويل",
@@ -632,6 +633,12 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                           .getsuppliermovesmoves(queryparmes: {
                                         "supplier_id": widget.supplierid
                                       });
+                                      quantity.clear();
+                                      desc.clear();
+                                      payedvalue.clear();
+                                      pieceprice.clear();
+                                      putcost.clear();
+                                      totalvalue.clear();
                                       showtoast(
                                           message: state.successmessage,
                                           toaststate: Toaststate.succes,
@@ -676,9 +683,9 @@ class _AddSuppliersmotionState extends State<AddSuppliersmotion> {
                                                     quantity: quantity.text.isEmpty
                                                         ? 1
                                                         : double.parse(quantity.text),
-                                                    price: double.parse(pieceprice.text),
+                                                    price: double.parse(pieceprice.text.replaceAll(',', '')),
                                                     materialtype: BlocProvider.of<SupplierssCubit>(context).supplypart == "material" && BlocProvider.of<SupplierssCubit>(context).type == "SUPPLY" ? BlocProvider.of<SupplierssCubit>(context).materialtype : null,
-                                                    sellprice: accessoriebuy.text.isEmpty ? 10 : double.parse(accessoriebuy.text),
+                                                    sellprice: accessoriebuy.text.isEmpty ? 0 : double.parse(accessoriebuy.text.replaceAll(',', '')),
                                                     type: BlocProvider.of<SupplierssCubit>(context).type == "Back" ? null : BlocProvider.of<SupplierssCubit>(context).supplypart,
                                                     typeid: BlocProvider.of<SupplierssCubit>(context).type == "SUPPLY"
                                                         ? BlocProvider.of<SupplierssCubit>(context).supplypart == "material"
