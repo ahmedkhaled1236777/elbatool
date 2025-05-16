@@ -38,12 +38,7 @@ class Addworker extends StatelessWidget {
               ),
             ),
             body: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage(
-                          "assets/images/home.png",
-                        ))),
+                decoration: BoxDecoration(),
                 child: Center(
                     child: Form(
                         key: formkey,
@@ -154,7 +149,7 @@ class Addworker extends StatelessWidget {
                                     custommytextform(
                                       inputFormatters: <TextInputFormatter>[
                                         FilteringTextInputFormatter.allow(
-                                            RegExp("[0-9-.]")),
+                                            RegExp("[1-3]")),
                                       ],
                                       keyboardType: TextInputType.number,
                                       controller: shift,
@@ -201,6 +196,11 @@ class Addworker extends StatelessWidget {
                                                 "اختر التاريخ") {
                                               showdialogerror(
                                                   error: "برجاء اختيار التاريخ",
+                                                  context: context);
+                                            } else if (int.parse(shift.text) >
+                                                3) {
+                                              showdialogerror(
+                                                  error: "رقم الورديه غير صحيح",
                                                   context: context);
                                             } else {
                                               if (formkey.currentState!

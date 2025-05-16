@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:agman/features/attendance/presentation/view/cuts/addpermession.dart';
+import 'package:agman/features/attendance/presentation/view/holidays/addholiday.dart';
+import 'package:agman/features/attendance/presentation/view/money/addmoney.dart';
 import 'package:agman/features/attendance/presentation/view/widgets/attendancemoves.dart';
+import 'package:agman/features/workers/presentation/views/addworker.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agman/core/colors/colors.dart';
@@ -32,8 +36,8 @@ class _attendanceState extends State<attendance> {
   final attendanceheader = [
     "اسم\nالموظف",
     "ايام\nالحضور",
-    "ايام\nالغياب",
     "ايام\nالاجازه",
+    "ايام\nالغياب",
     "الراتب",
     "عرض",
   ];
@@ -127,6 +131,83 @@ class _attendanceState extends State<attendance> {
                 },
               ),
             ),
+            floatingActionButton: SingleChildScrollView(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  SizedBox(width: 15),
+                  FloatingActionButton(
+                    heroTag: "1",
+                    backgroundColor: appcolors.primarycolor,
+                    child: Text(
+                      "pdf",
+                      style:
+                          TextStyle(fontFamily: "cairo", color: Colors.white),
+                    ),
+                    onPressed: () async {
+                      final img =
+                          await rootBundle.load('assets/images/logo.jpeg');
+                      final imageBytes = img.buffer.asUint8List();
+                      File file = await Attendancepdf.generatepdf(
+                          context: context,
+                          imageBytes: imageBytes,
+                          date:
+                              "${BlocProvider.of<Attendancecuibt>(context).month}-${BlocProvider.of<Attendancecuibt>(context).year}",
+                          categories: BlocProvider.of<Attendancecuibt>(context)
+                              .attendances);
+                      Attendancepdf.openfile(file);
+                    },
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    heroTag: "2",
+                    backgroundColor: appcolors.primarycolor,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Text(
+                        " الغياب\nوالخصم ",
+                        style:
+                            TextStyle(fontFamily: "cairo", color: Colors.white),
+                      ),
+                    ),
+                    onPressed: () async {
+                      navigateto(context: context, page: Addpermession());
+                    },
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    heroTag: "4",
+                    backgroundColor: appcolors.primarycolor,
+                    child: FittedBox(
+                      child: Text(
+                        " الاجازات ",
+                        style:
+                            TextStyle(fontFamily: "cairo", color: Colors.white),
+                      ),
+                    ),
+                    onPressed: () async {
+                      navigateto(context: context, page: Addholiday());
+                    },
+                  ),
+                  SizedBox(width: 10),
+                  FloatingActionButton(
+                    heroTag: "5",
+                    backgroundColor: appcolors.primarycolor,
+                    child: FittedBox(
+                      fit: BoxFit.fill,
+                      child: Text(
+                        " السلف \nوالحوافز ",
+                        style:
+                            TextStyle(fontFamily: "cairo", color: Colors.white),
+                      ),
+                    ),
+                    onPressed: () async {
+                      navigateto(context: context, page: Addmoney());
+                    },
+                  ),
+                ],
+              ),
+            ),
             body: Column(children: [
               Container(
                 height: 50,
@@ -163,6 +244,15 @@ class _attendanceState extends State<attendance> {
                                   navigateto(
                                       context: context,
                                       page: Attendancemoves(
+                                        data: BlocProvider.of<Attendancecuibt>(
+                                                context)
+                                            .attendances[i],
+                                        employerid:
+                                            BlocProvider.of<Attendancecuibt>(
+                                                    context)
+                                                .attendances[i]
+                                                .id!
+                                                .toInt(),
                                         workername:
                                             BlocProvider.of<Attendancecuibt>(
                                                     context)
@@ -195,38 +285,37 @@ class _attendanceState extends State<attendance> {
                                           color: appcolors.primarycolor,
                                           Icons.picture_as_pdf,
                                         )),
-                                    employeename:
-                                        BlocProvider.of<Attendancecuibt>(context).attendances[i].name == null
-                                            ? ""
-                                            : BlocProvider.of<Attendancecuibt>(context)
+                                    employeename: BlocProvider.of<Attendancecuibt>(context).attendances[i].name == null
+                                        ? ""
+                                        : BlocProvider.of<Attendancecuibt>(context)
+                                            .attendances[i]
+                                            .name
+                                            .toString(),
+                                    attendancedays: BlocProvider.of<Attendancecuibt>(context)
                                                 .attendances[i]
-                                                .name
-                                                .toString(),
-                                    attendancedays:
-                                        BlocProvider.of<Attendancecuibt>(context)
-                                                    .attendances[i]
-                                                    .totalAttendance ==
-                                                null
-                                            ? ""
-                                            : BlocProvider.of<Attendancecuibt>(context)
-                                                .attendances[i]
-                                                .totalAttendance
-                                                .toString(),
+                                                .totalAttendance ==
+                                            null
+                                        ? ""
+                                        : BlocProvider.of<Attendancecuibt>(context)
+                                            .attendances[i]
+                                            .totalAttendance
+                                            .toString(),
                                     weekenddays: BlocProvider.of<Attendancecuibt>(context).attendances[i].totalVacation == null
                                         ? ""
                                         : BlocProvider.of<Attendancecuibt>(context)
                                             .attendances[i]
                                             .totalVacation
                                             .toString(),
-                                    notattendacedays:
-                                        BlocProvider.of<Attendancecuibt>(context).attendances[i].totalAbsence == null
-                                            ? ""
-                                            : BlocProvider.of<Attendancecuibt>(context)
-                                                .attendances[i]
-                                                .totalAbsence
-                                                .toString(),
-                                    salary: BlocProvider.of<Attendancecuibt>(context)
-                                        .getsalary(BlocProvider.of<Attendancecuibt>(context).attendances[i]),
+                                    notattendacedays: BlocProvider.of<Attendancecuibt>(context).attendances[i].totalAbsence == null
+                                        ? ""
+                                        : BlocProvider.of<Attendancecuibt>(context)
+                                            .attendances[i]
+                                            .totalAbsence
+                                            .toString(),
+                                    salary: BlocProvider.of<Attendancecuibt>(context).getsalary(
+                                        BlocProvider.of<Attendancecuibt>(context).attendances[i],
+                                        int.parse(BlocProvider.of<Attendancecuibt>(context).year!),
+                                        int.parse(BlocProvider.of<Attendancecuibt>(context).month!)),
                                     textStyle: Styles.gettabletextstyle(context: context)),
                               ),
                           separatorBuilder: (context, i) => Divider(
@@ -237,58 +326,8 @@ class _attendanceState extends State<attendance> {
                               .length);
                 },
               )),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                        color: appcolors.primarycolor,
-                        borderRadius: BorderRadius.circular(7)),
-                    child: IconButton(
-                        onPressed: () async {},
-                        icon: Icon(
-                          color: Colors.white,
-                          Icons.add,
-                        )),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Container(
-                    height: 45,
-                    width: 45,
-                    decoration: BoxDecoration(
-                        color: appcolors.primarycolor,
-                        borderRadius: BorderRadius.circular(7)),
-                    child: IconButton(
-                        onPressed: () async {
-                          final img =
-                              await rootBundle.load('assets/images/logo.jpeg');
-                          final imageBytes = img.buffer.asUint8List();
-                          File file = await Attendancepdf.generatepdf(
-                              context: context,
-                              imageBytes: imageBytes,
-                              date:
-                                  "${BlocProvider.of<Attendancecuibt>(context).month}-${BlocProvider.of<Attendancecuibt>(context).year}",
-                              categories:
-                                  BlocProvider.of<Attendancecuibt>(context)
-                                      .attendances);
-                          Attendancepdf.openfile(file);
-                        },
-                        icon: Icon(
-                          color: Colors.white,
-                          Icons.picture_as_pdf,
-                        )),
-                  ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                ],
-              ),
               SizedBox(
-                height: 10,
+                height: 70,
               )
             ])));
   }

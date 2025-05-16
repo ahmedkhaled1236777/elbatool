@@ -12,7 +12,16 @@ class WorkersCubit extends Cubit<WorkersState> {
   WorkersCubit({required this.workerrepoimp}) : super(WorkersInitial());
   final Workerrepoimp workerrepoimp;
   List<Datum> workers = [];
+  List<String> workersnames = [];
+  Map workerid = {};
+
+  String workername = "اسم العامل";
   List<datamoves> workersmoves = [];
+  changeworker(String value) {
+    workername = value;
+    emit(changeworkerstate());
+  }
+
   addworker({required Workermodelrequest worker}) async {
     emit(addworkerloading());
     var result = await workerrepoimp.addworker(worker: worker);
@@ -52,7 +61,13 @@ class WorkersCubit extends Cubit<WorkersState> {
     result.fold((failure) {
       emit(getworkerfailure(errormessage: failure.error_message));
     }, (Success) {
-      workers = Success.data!;
+      workersnames.clear();
+      workers.clear();
+      Success.data!.forEach((e) {
+        workerid.addAll({e.name!: e.id});
+        workers.add(e);
+        workersnames.add(e.name!);
+      });
       emit(getworkersuccess(successmessage: "تم الحصول علي البيانات بنجاح"));
     });
   }

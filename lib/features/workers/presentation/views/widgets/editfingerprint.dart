@@ -92,7 +92,7 @@ class Editfingerprint extends StatelessWidget {
                         BlocProvider.of<Attendancecuibt>(context).editattendance(
                             attendance: Attendancemodelrequest(
                                 employername: employername,
-                                status: status == "الانصراف" ? "1" : "0",
+                                status: status == "الانصراف" ? "0" : "1",
                                 date: date,
                                 time:
                                     "${BlocProvider.of<DateCubit>(context).timefrom}:00"));

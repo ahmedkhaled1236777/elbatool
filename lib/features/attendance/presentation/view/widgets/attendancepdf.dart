@@ -29,7 +29,7 @@ class Attendancepdf {
     );
     final data = categories.map((item) {
       return [
-        BlocProvider.of<Attendancecuibt>(context).getsalary(item),
+        BlocProvider.of<Attendancecuibt>(context).getsalary(item, 2025, 2),
         item.totalExtraTime,
         item.totalPermissions,
         item.totalVacation,

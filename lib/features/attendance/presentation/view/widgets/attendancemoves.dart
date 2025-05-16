@@ -1,27 +1,36 @@
 import 'package:agman/core/colors/colors.dart';
 import 'package:agman/core/common/navigation.dart';
+import 'package:agman/core/common/widgets/thousand.dart';
+import 'package:agman/features/attendance/presentation/view/cuts/permession.dart';
+import 'package:agman/features/attendance/presentation/view/holidays/holiday.dart';
+import 'package:agman/features/attendance/presentation/view/money/money.dart';
 import 'package:agman/features/attendance/presentation/viewmodel/attendance/attendancecuibt.dart';
 import 'package:agman/features/moldmanufacture/presentation/view/widgets/costgridelement.dart';
+import 'package:agman/features/workers/data/models/workermodel/datum.dart';
 import 'package:agman/features/workers/presentation/views/widgets/workersmoves.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class Attendancemoves extends StatelessWidget {
   final String workername;
+  final int employerid;
+  final Datum data;
   List<Map> costgrid = [
     {
-      "desc": "ساعات العمل",
+      "desc": "ايام الحضور",
       "color": "0xff2f6d80",
     },
-    {"desc": "ايام الغياب", "color": "0xff6aa4b0"},
     {"desc": "ايام الاجازه", "color": "0xfffc3c80"},
-    {"desc": "السلف", "color": "0xff821d80"},
-    {"desc": "الخصومات", "color": "0xff821d10"},
-    {"desc": "ساعات الاضافي", "color": "0xff821d20"},
-    {"desc": "ساعات الاذن", "color": "0xff821d50"},
+    {"desc": "السلف - الحوافز", "color": "0xff821d80"},
+    {"desc": "الغيابات - الخصومات", "color": "0xff821d40"},
+    {"desc": "ساعات الاضافى", "color": "0xff821d54"},
   ];
 
-  Attendancemoves({super.key, required this.workername});
+  Attendancemoves(
+      {super.key,
+      required this.workername,
+      required this.employerid,
+      required this.data});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,17 +68,48 @@ class Attendancemoves extends StatelessWidget {
                 .map((e) => Costgridelement(
                       color: int.parse(e["color"]),
                       desc: e["desc"],
-                      cost: "4",
+                      cost: e["desc"] == "ايام الحضور"
+                          ? "${data.totalAttendance!} يوم"
+                          : e["desc"] == "ايام الاجازه"
+                              ? "${data.totalVacation} يوم"
+                              : e["desc"] == "السلف - الحوافز"
+                                  ? "${gettext(value: data.totalCredit.toString())} ج- ${gettext(value: data.totalDebit.toString())} ج"
+                                  : e["desc"] == "الغيابات - الخصومات"
+                                      ? "${gettext(value: data.totalExtraTime.toString())} ساعه - ${gettext(value: data.totalPermissions.toString())} ساعه"
+                                      : "5 ساعه",
                       onTap: () {
                         navigateto(
                             context: context,
-                            page: Workersmoves(
-                              year:
-                                  "${BlocProvider.of<Attendancecuibt>(context).year}",
-                              workername: workername,
-                              month:
-                                  "${BlocProvider.of<Attendancecuibt>(context).month}",
-                            ));
+                            page: e["desc"] == "ايام الحضور"
+                                ? Workersmoves(
+                                    year:
+                                        "${BlocProvider.of<Attendancecuibt>(context).year}",
+                                    workername: workername,
+                                    month:
+                                        "${BlocProvider.of<Attendancecuibt>(context).month}",
+                                  )
+                                : e["desc"] == "ايام الاجازه"
+                                    ? Holiday(employerid: employerid)
+                                    : e["desc"] == "السلف - الحوافز"
+                                        ? money(
+                                            employerid: employerid,
+                                            month: BlocProvider.of<
+                                                    Attendancecuibt>(context)
+                                                .month!,
+                                            year: BlocProvider.of<
+                                                    Attendancecuibt>(context)
+                                                .year!,
+                                          )
+                                        : permession(
+                                            employename: "",
+                                            employerid: employerid,
+                                            month: BlocProvider.of<
+                                                    Attendancecuibt>(context)
+                                                .month!,
+                                            year: BlocProvider.of<
+                                                    Attendancecuibt>(context)
+                                                .year!,
+                                          ));
                       },
                     ))
                 .toList(),

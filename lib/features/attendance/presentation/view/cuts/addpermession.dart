@@ -1,4 +1,5 @@
 import 'package:agman/features/attendance/presentation/view/widgets/permessionradio.dart';
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,15 +17,28 @@ import 'package:agman/features/attendance/presentation/viewmodel/attendance/atte
 import 'package:agman/features/attendance/presentation/viewmodel/attendance/attendancestate.dart';
 import 'package:agman/features/workers/presentation/viewmodel/cubit/workers_cubit.dart';
 
-class Addpermession extends StatelessWidget {
-  final int employerid;
-  final String employername;
-  TextEditingController permessionhours = TextEditingController();
-  TextEditingController notes = TextEditingController();
-  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+class Addpermession extends StatefulWidget {
+  @override
+  State<Addpermession> createState() => _AddpermessionState();
+}
 
-  Addpermession(
-      {super.key, required this.employerid, required this.employername});
+class _AddpermessionState extends State<Addpermession> {
+  TextEditingController permessionhours = TextEditingController();
+
+  TextEditingController notes = TextEditingController();
+
+  GlobalKey<FormState> formkey = GlobalKey<FormState>();
+  getdata() async {
+    if (BlocProvider.of<WorkersCubit>(context).workersnames.isEmpty) {
+      await BlocProvider.of<WorkersCubit>(context).getworkers();
+    }
+  }
+
+  @override
+  void initState() {
+    getdata();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -37,17 +51,11 @@ class Addpermession extends StatelessWidget {
               backgroundColor: appcolors.maincolor,
               centerTitle: true,
               title: Text(
-                "اضافة اذن",
+                "اضافة غياب او خصم",
                 style: Styles.appbarstyle,
               ),
             ),
             body: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.fill,
-                        image: AssetImage(
-                          "assets/images/home.png",
-                        ))),
                 child: Center(
                     child: Form(
                         key: formkey,
@@ -75,6 +83,19 @@ class Addpermession extends StatelessWidget {
                                     SizedBox(
                                       height: 15,
                                     ),
+                                    BlocBuilder<Attendancecuibt,
+                                        Attendancestate>(
+                                      builder: (context, state) {
+                                        return permessionradio(
+                                            firstradio: "0",
+                                            secondradio: "1",
+                                            firstradiotitle: "ساعات الخصومات",
+                                            secondradiotitle: "ساعات الغياب");
+                                      },
+                                    ),
+                                    SizedBox(
+                                      height: 7,
+                                    ),
                                     BlocBuilder<DateCubit, DateState>(
                                       builder: (context, state) {
                                         return choosedate(
@@ -91,14 +112,70 @@ class Addpermession extends StatelessWidget {
                                     SizedBox(
                                       height: 7,
                                     ),
-                                    BlocBuilder<Attendancecuibt,
-                                        Attendancestate>(
+                                    BlocBuilder<WorkersCubit, WorkersState>(
                                       builder: (context, state) {
-                                        return permessionradio(
-                                            firstradio: "0",
-                                            secondradio: "1",
-                                            firstradiotitle: "اذن",
-                                            secondradiotitle: "اضافى");
+                                        if (state is getworkerloading)
+                                          return loading();
+                                        if (state is getworkerfailure)
+                                          return Text(state.errormessage);
+                                        return Column(children: [
+                                          Container(
+                                              color: Color(0xff535C91),
+                                              child: Center(
+                                                  child: DropdownSearch<String>(
+                                                dropdownButtonProps:
+                                                    DropdownButtonProps(
+                                                        color: Colors.white),
+                                                popupProps: PopupProps.menu(
+                                                    showSelectedItems: true,
+                                                    showSearchBox: true,
+                                                    searchFieldProps:
+                                                        TextFieldProps()),
+                                                selectedItem: BlocProvider.of<
+                                                        WorkersCubit>(context)
+                                                    .workername,
+                                                items: BlocProvider.of<
+                                                        WorkersCubit>(context)
+                                                    .workersnames,
+                                                onChanged: (value) {
+                                                  BlocProvider.of<WorkersCubit>(
+                                                          context)
+                                                      .changeworker(value!);
+                                                },
+                                                dropdownDecoratorProps:
+                                                    DropDownDecoratorProps(
+                                                        baseStyle: TextStyle(
+                                                            color: Colors.white,
+                                                            fontFamily:
+                                                                "cairo"),
+                                                        textAlign:
+                                                            TextAlign.center,
+                                                        dropdownSearchDecoration:
+                                                            InputDecoration(
+                                                          enabled: true,
+                                                          enabledBorder:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff535C91)),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                            borderSide: BorderSide(
+                                                                color: Color(
+                                                                    0xff535C91)),
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                        )),
+                                              ))),
+                                        ]);
                                       },
                                     ),
                                     SizedBox(
@@ -118,10 +195,10 @@ class Addpermession extends StatelessWidget {
                                               BlocProvider.of<Attendancecuibt>(
                                                               context)
                                                           .permessionstatus ==
-                                                      "اذن"
-                                                  ? "عدد ساعات الاذن"
-                                                  : "عدد ساعات الاضافى",
-                                          val: "برجاء ادخال عدد ساعات العمل",
+                                                      "0"
+                                                  ? "عدد ساعات الخصم"
+                                                  : "عدد ساعات الغياب",
+                                          val: "برجاء ادخال عدد الساعات ",
                                         );
                                       },
                                     ),
@@ -149,18 +226,6 @@ class Addpermession extends StatelessWidget {
                                           permessionhours.clear();
                                           notes.clear();
 
-                                          getdata() async {
-                                            await BlocProvider.of<WorkersCubit>(
-                                                    context)
-                                                .getworkersmoves(
-                                              year:
-                                                  "${BlocProvider.of<Attendancecuibt>(context).year}",
-                                              workerid: employername,
-                                              month:
-                                                  "${BlocProvider.of<Attendancecuibt>(context).month}",
-                                            );
-                                          }
-
                                           showtoast(
                                               message: state.successmessage,
                                               toaststate: Toaststate.succes,
@@ -181,26 +246,33 @@ class Addpermession extends StatelessWidget {
                                               showdialogerror(
                                                   error: "برجاء اختيار التاريخ",
                                                   context: context);
+                                            } else if (BlocProvider.of<
+                                                        WorkersCubit>(context)
+                                                    .workername ==
+                                                "اسم العامل") {
+                                              showdialogerror(
+                                                  error:
+                                                      "برجاء اختيار اسم العامل",
+                                                  context: context);
                                             } else {
                                               if (formkey.currentState!.validate())
-                                                BlocProvider.of<Attendancecuibt>(
-                                                        context)
-                                                    .addpermession(
-                                                        permession: Attendancepermessionrequest(
-                                                            status: BlocProvider
-                                                                    .of<Attendancecuibt>(
-                                                                        context)
+                                                BlocProvider.of<Attendancecuibt>(context).addpermession(
+                                                    permession: Attendancepermessionrequest(
+                                                        status:
+                                                            BlocProvider.of<Attendancecuibt>(context)
                                                                 .permessionstatus,
-                                                            employerid:
-                                                                employerid,
-                                                            numberofhours:
-                                                                permessionhours
-                                                                    .text,
-                                                            date: BlocProvider
-                                                                    .of<DateCubit>(
-                                                                        context)
-                                                                .date2,
-                                                            notes: notes.text));
+                                                        employerid:
+                                                            BlocProvider.of<WorkersCubit>(context)
+                                                                    .workerid[
+                                                                BlocProvider.of<WorkersCubit>(context)
+                                                                    .workername],
+                                                        numberofhours:
+                                                            permessionhours
+                                                                .text,
+                                                        date: BlocProvider.of<
+                                                                DateCubit>(context)
+                                                            .date2,
+                                                        notes: notes.text));
                                             }
                                           },
                                         );

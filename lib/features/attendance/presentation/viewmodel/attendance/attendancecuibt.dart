@@ -1,3 +1,8 @@
+import 'package:agman/features/attendance/data/models/holidaymodel/datum.dart';
+import 'package:agman/features/attendance/data/models/holidaymodelrequest.dart';
+import 'package:agman/features/attendance/data/models/moneymodel/datum.dart';
+import 'package:agman/features/attendance/data/models/moneyrequest.dart';
+import 'package:agman/features/attendance/data/models/permessionmodel/datum.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:agman/features/attendance/data/models/attendancemodelrequest.dart';
 import 'package:agman/features/attendance/data/models/attendancemovemodel/datum.dart';
@@ -11,9 +16,15 @@ class Attendancecuibt extends Cubit<Attendancestate> {
   Attendancecuibt(this.attendancerepo) : super(attendanceintial());
   final attendancerepoimp attendancerepo;
   List<Datum> attendances = [];
+
+  List<Datumholiday> holidays = [];
+  List<Datumpermession> permessions = [];
   List<datamoves> employeeattendances = [];
   String? month;
   String? year;
+  String moneyname = "credit";
+  List<moneymoves> moneys = [];
+
   String? attendancestatus;
   String date = "${DateTime.now().month}-${DateTime.now().year}";
 
@@ -23,9 +34,25 @@ class Attendancecuibt extends Cubit<Attendancestate> {
     emit(changedatestate());
   }
 
+  getmoneymoves({required Map<String, dynamic> queryparma}) async {
+    emit(getmoneymoveloading());
+    var result = await attendancerepo.getmoney(queryparma: queryparma);
+    result.fold((failure) {
+      emit(getmoneymovefailure(errormessage: failure.error_message));
+    }, (Success) {
+      moneys = Success.data!;
+      emit(getmoneymovesuccess(successmessage: "تم الحصول علي البيانات بنجاح"));
+    });
+  }
+
   changepermessiontype(String value) {
     permessionstatus = value;
     emit(changepermessionstatus());
+  }
+
+  changemoneytype(String value) {
+    moneyname = value;
+    emit(changemoneytypestate());
   }
 
   editchangeattendancestatus({required String value}) {
@@ -43,13 +70,73 @@ class Attendancecuibt extends Cubit<Attendancestate> {
     });
   }
 
-  addpermession({required Attendancepermessionrequest permession}) async {
+  addholiday({
+    required Holidaymodelrequest holidayrequest,
+  }) async {
+    emit(addholidayloading());
+    var result =
+        await attendancerepo.addholiday(holidayrequest: holidayrequest);
+    result.fold((failure) {
+      emit(addholidayfailure(errormessage: failure.error_message));
+    }, (success) {
+      emit(addholidaysuccess(successmessage: success));
+    });
+  }
+
+  addpermession({
+    required Attendancepermessionrequest permession,
+  }) async {
     emit(addpermessionloading());
     var result = await attendancerepo.addpermession(permession: permession);
     result.fold((failure) {
       emit(addpermessionfailure(errormessage: failure.error_message));
     }, (success) {
       emit(addpermessionsuccess(successmessage: success));
+    });
+  }
+
+  deleteholiday({
+    required int id,
+  }) async {
+    emit(deleteholidayloading());
+    var result = await attendancerepo.deleteholiday(id: id);
+    result.fold((failure) {
+      emit(deleteholidayfailure(errormessage: failure.error_message));
+    }, (success) {
+      holidays.removeWhere((e) {
+        return e.id == id;
+      });
+      emit(deleteholidaysuccess(successmessage: success));
+    });
+  }
+
+  getholiday(
+      {required String month,
+      required int employerid,
+      required String year}) async {
+    emit(getholidayloading());
+    var result = await attendancerepo.getholidays(
+        month: month, employerid: employerid, year: year);
+    result.fold((failure) {
+      emit(getholidayfailure(errormessage: failure.error_message));
+    }, (success) {
+      holidays = success.data!;
+      emit(getholidaysuccess(successmessage: "success"));
+    });
+  }
+
+  getpermessions(
+      {required String month,
+      required int employerid,
+      required String year}) async {
+    emit(getpermessionloading());
+    var result = await attendancerepo.getpermessionss(
+        month: month, employerid: employerid, year: year);
+    result.fold((failure) {
+      emit(getpermessionfailure(errormessage: failure.error_message));
+    }, (success) {
+      permessions = success.data!;
+      emit(getpermessionsuccess(successmessage: "success"));
     });
   }
 
@@ -63,16 +150,16 @@ class Attendancecuibt extends Cubit<Attendancestate> {
     });
   }
 
-  editpermession(
-      {required Attendancepermessionrequest attendance,
-      required int id}) async {
-    emit(editattendanceloading());
-    var result =
-        await attendancerepo.editpermession(attendance: attendance, id: id);
+  deletepermession({required int id}) async {
+    emit(deletepermessionloading());
+    var result = await attendancerepo.deletepermession(id: id);
     result.fold((failure) {
-      emit(editattendancefailure(errormessage: failure.error_message));
+      emit(deletepermessionfailure(errormessage: failure.error_message));
     }, (success) {
-      emit(editattendencesuccess(successmessage: success));
+      permessions.removeWhere((e) {
+        return e.id == id;
+      });
+      emit(deletepermessionsuccess(successmessage: success));
     });
   }
 
@@ -103,8 +190,31 @@ class Attendancecuibt extends Cubit<Attendancestate> {
     });
   }
 
-  getsalary(Datum data) {
-    return "6222";
+  addmoney({required moneyrequset money}) async {
+    emit(addmoneyloading());
+    var result = await attendancerepo.addmoney(moneyrequest: money);
+    result.fold((failure) {
+      emit(addmoneyfailure(errormessage: failure.error_message));
+    }, (success) {
+      emit(addmoneysuccess(successmessage: success));
+    });
+  }
+
+  deletemoney({required int id}) async {
+    emit(deletemoneyloading());
+    var result = await attendancerepo.deletemoney(id: id);
+    result.fold((failure) {
+      emit(deletemoneyfailure(errormessage: failure.error_message));
+    }, (success) {
+      moneys.removeWhere((e) {
+        return e.id == id;
+      });
+      emit(deletemoneysuccess(successmessage: success));
+    });
+  }
+
+  getsalary(Datum data, int month, int year) {
+    return DateTime(year, month + 1, 0).day.toString();
     /* if ((data.totalAttendance! + data.totalVacation!) == 31) {
       return (int.parse(data.salary!) -
               (((double.parse(data.salary!) / 30) /

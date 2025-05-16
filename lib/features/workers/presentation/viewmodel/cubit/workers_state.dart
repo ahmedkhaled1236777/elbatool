@@ -6,6 +6,8 @@ class WorkersInitial extends WorkersState {}
 
 class addworkerloading extends WorkersState {}
 
+class changeworkerstate extends WorkersState {}
+
 class addworkersuccess extends WorkersState {
   final String successmessage;
 

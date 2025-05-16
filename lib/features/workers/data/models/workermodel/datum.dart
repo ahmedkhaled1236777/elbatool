@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class Datum extends Equatable {
-  final num? id;
+  final int? id;
   final String? name;
   final DateTime? employmentDate;
   final String? jobTitle;
@@ -9,24 +9,16 @@ class Datum extends Equatable {
   final String? hourlyRate;
   final String? workedHours;
   final String? phone;
-  final num? numberOfShift;
+  final int? numberOfShift;
   final DateTime? createdAt;
   final DateTime? updatedAt;
-  final num? totalAbsence;
-  final num? totalVacation;
-  final num? totalAttendance;
-  final num? totalPermissions;
-  final num? totalExtraTime;
+  final int? totalAbsence;
+  final int? totalVacation;
+  final int? totalAttendance;
+  final double? totalPermissions;
+  final double? totalExtraTime;
   final String? totalDebit;
   final String? totalCredit;
-  final num? totalBonusHours;
-  final num? totalPenaltyHours;
-  final num? monthlyBonusDays;
-  final num? onTimeDays;
-  final bool? perfectAttendance;
-  final bool? perfectPunctuality;
-  final num? totalRegularHours;
-  final num? adjustedHoursWithBonus;
 
   const Datum({
     this.id,
@@ -47,18 +39,10 @@ class Datum extends Equatable {
     this.totalExtraTime,
     this.totalDebit,
     this.totalCredit,
-    this.totalBonusHours,
-    this.totalPenaltyHours,
-    this.monthlyBonusDays,
-    this.onTimeDays,
-    this.perfectAttendance,
-    this.perfectPunctuality,
-    this.totalRegularHours,
-    this.adjustedHoursWithBonus,
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        id: json['id'] as num?,
+        id: json['id'] as int?,
         name: json['name'] as String?,
         employmentDate: json['employment_date'] == null
             ? null
@@ -68,28 +52,20 @@ class Datum extends Equatable {
         hourlyRate: json['hourly_rate'] as String?,
         workedHours: json['worked_hours'] as String?,
         phone: json['phone'] as String?,
-        numberOfShift: json['number_of_shift'] as num?,
+        numberOfShift: json['number_of_shift'] as int?,
         createdAt: json['created_at'] == null
             ? null
             : DateTime.parse(json['created_at'] as String),
         updatedAt: json['updated_at'] == null
             ? null
             : DateTime.parse(json['updated_at'] as String),
-        totalAbsence: json['total_absence'] as num?,
-        totalVacation: json['total_vacation'] as num?,
-        totalAttendance: json['total_attendance'] as num?,
-        totalPermissions: json['total_permissions'] as num?,
-        totalExtraTime: json['total_extra_time'] as num?,
+        totalAbsence: json['total_absence'] as int?,
+        totalVacation: json['total_vacation'] as int?,
+        totalAttendance: json['total_attendance'] as int?,
+        totalPermissions: (json['total_permissions'] as num?)?.toDouble(),
+        totalExtraTime: (json['total_extra_time'] as num?)?.toDouble(),
         totalDebit: json['total_debit'] as String?,
         totalCredit: json['total_credit'] as String?,
-        totalBonusHours: json['total_bonus_hours'] as num?,
-        totalPenaltyHours: json['total_penalty_hours'] as num?,
-        monthlyBonusDays: json['monthly_bonus_days'] as num?,
-        onTimeDays: json['on_time_days'] as num?,
-        perfectAttendance: json['perfect_attendance'] as bool?,
-        perfectPunctuality: json['perfect_punctuality'] as bool?,
-        totalRegularHours: json['total_regular_hours'] as num?,
-        adjustedHoursWithBonus: json['adjusted_hours_with_bonus'] as num?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -111,14 +87,6 @@ class Datum extends Equatable {
         'total_extra_time': totalExtraTime,
         'total_debit': totalDebit,
         'total_credit': totalCredit,
-        'total_bonus_hours': totalBonusHours,
-        'total_penalty_hours': totalPenaltyHours,
-        'monthly_bonus_days': monthlyBonusDays,
-        'on_time_days': onTimeDays,
-        'perfect_attendance': perfectAttendance,
-        'perfect_punctuality': perfectPunctuality,
-        'total_regular_hours': totalRegularHours,
-        'adjusted_hours_with_bonus': adjustedHoursWithBonus,
       };
 
   @override
@@ -142,14 +110,6 @@ class Datum extends Equatable {
       totalExtraTime,
       totalDebit,
       totalCredit,
-      totalBonusHours,
-      totalPenaltyHours,
-      monthlyBonusDays,
-      onTimeDays,
-      perfectAttendance,
-      perfectPunctuality,
-      totalRegularHours,
-      adjustedHoursWithBonus,
     ];
   }
 }
